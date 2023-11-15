@@ -336,8 +336,8 @@
 
                 var resultado = https + "//" + domain;
 
-                var url = resultado + '/' + 'User/Order?Id=' + result;
-                window.open(url, "_blank");
+                var url = resultado + '/' + 'User/Orders';
+                window.open(url);
 
                 $(".spinerStyle").removeClass('centerSpinner');
                 $(".spinerBackground").removeClass('overlay');

@@ -255,7 +255,7 @@
                 <th>Frete</th>
             </tr>
             <tr ng-repeat="freteResponse in freteResponseList">
-                <td><input type="radio" ng-model="entity.freteSelecionadoId" ng-value="freteResponse.id" ng-change="calculeTotal()"></td>
+                <td><input type="radio" ng-model="entity.freteSelecionadoId" class="form-control" ng-value="freteResponse.id" ng-change="calculeTotal()"></td>
                 <td>{{freteResponse.name}} - R$ {{freteResponse.price}} - Chega entre: {{freteResponse.delivery_range.min}} e {{freteResponse.delivery_range.max}} dias.</td>
             </tr>
         </table>
