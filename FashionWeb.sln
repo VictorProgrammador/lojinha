@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33214.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionWeb", "FashionWeb\FashionWeb.csproj", "{3481D7A6-41D0-431F-ACA3-122161797ABD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionWeb.Domain", "FashionWeb.Domain\FashionWeb.Domain.csproj", "{C95B6407-F2D4-4933-A317-C80A35B35974}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3481D7A6-41D0-431F-ACA3-122161797ABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3481D7A6-41D0-431F-ACA3-122161797ABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3481D7A6-41D0-431F-ACA3-122161797ABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3481D7A6-41D0-431F-ACA3-122161797ABD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C95B6407-F2D4-4933-A317-C80A35B35974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C95B6407-F2D4-4933-A317-C80A35B35974}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C95B6407-F2D4-4933-A317-C80A35B35974}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C95B6407-F2D4-4933-A317-C80A35B35974}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B30467BD-22B7-4A84-8AAC-6CD4B0D966C0}
+	EndGlobalSection
+EndGlobal

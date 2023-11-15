@@ -1,0 +1,5 @@
+server {
+   listen 80;
+   server_name salinasnegocios.com.br;
+   return 301 http://20.62.175.190$request_uri;
+}

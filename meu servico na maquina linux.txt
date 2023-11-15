@@ -1,0 +1,22 @@
+
+[Unit]
+Description=My .NET Core App
+
+[Service]
+WorkingDirectory=/home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish
+ExecStart=/usr/bin/dotnet /home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish/FashionWeb.dll
+Restart=always
+# Restart service after 10 seconds if the dotnet service crashes:
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=dotnet-meuapp
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Development
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+

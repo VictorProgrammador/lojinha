@@ -1,0 +1,66 @@
+﻿@model ValidationModel
+@{
+
+}
+
+<html>
+
+<head>
+    <link rel="stylesheet" href="~/css/style-contact.css" />
+
+    <style>
+    </style>
+
+    <!-- Template Main JS File -->
+    <script src="/js/main.js"></script>
+</head>
+
+<body>
+
+    <div class="spinerBackground">
+        <div class="spinerStyle" id="loading-bar-container">
+
+        </div>
+    </div>
+    <section id="hero">
+        <div class="login position-relative" data-aos="fade-up" data-aos-delay="100" ng-app="myApp" ng-controller="registerController">
+            <form method="post" class="form">
+                <script type="text/ng-template" id="alert.html">
+                    <div ng-transclude></div>
+                </script>
+                <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')"
+                     close="closeAlert($index)">{{alert.msg}}</div>
+                <h2>Registre-se</h2>
+                <div class="group-input">
+                    <label for="name">Nome</label>
+                    <input type="text" ng-model="user.name" name="name" id="name" value="" placeholder="Digite seu nome"
+                           required>
+                </div>
+                <div class="group-input">
+                    <label for="username">Email</label>
+                    <input type="email" ng-model="user.username" name="username" id="username" value=""
+                           placeholder="Digite seu endereço de email" required>
+                </div>
+                <div class="group-input">
+                    <label for="password">Senha</label>
+                    <input type="password" ng-model="user.password" name="password" id="password" value=""
+                           placeholder="Digite sua senha" required>
+                </div>
+                <div class="group-input">
+                    <label for="password-confirmation">Confirmar Senha</label>
+                    <input type="password" ng-model="user.confirmPassword" name="password" id="password-confirmation"
+                           value="" placeholder="Confirme sua senha" required>
+                </div>
+                <p class="submit">
+                    <button class="btn btn-primary" type="button" ng-click="registerUser()"
+                            ng-disabled="disableRegister">
+                        Cadastrar <i class="uil uil-arrow-right"></i>
+                    </button>
+                </p>
+            </form>
+        </div>
+    </section>
+
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Fazer Checkin";
+}
+
+<head>
+    <script src="/js/main.js"></script>
+</head>
+<section class="container profile height-min" ng-app="myApp" ng-controller="checkinController"
+         ng-init="loadProfile('@ViewBag.PersonId')">
+    <script type="text/ng-template" id="alert.html">
+        <div ng-transclude></div>
+    </script>
+    <div class="spinerBackground">
+        <div class="spinerStyle" id="loading-bar-container">
+
+        </div>
+    </div>
+    <div id="popupContainer">
+    </div>
+
+    <div class="content-img">
+        <div class="profile-img">
+            <div ng-show="personBusiness.person.photoUrl != null && personBusiness.person.photoUrl != ''">
+                <img ng-src="{{personBusiness.person.photoUrl}}" height="200" />
+            </div>
+            <div class="content-info">
+                <span class="md-headline">
+                    {{personBusiness.person.name}}
+                    <span class="nota">{{personBusiness.mediaAvaliacoes|number:1}}</span>
+                </span>
+                <div ng-show="personBusiness.category != null && personBusiness.category.name != null">
+                    <p class="md-body-2">
+                        {{personBusiness.category.name}}{{tagsConcatened != null && tagsConcatened != '' ? ':' : ''}} {{ personBusiness.category != null && personBusiness.category.tags != null ? tagsConcatened:'' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div><br />
+    <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')"
+         close="closeAlert($index)">{{alert.msg}}</div><br />
+
+    <md-stepper md-linear md-active-step="currentStep" ng-show="list.raffles.length > 0">
+        <md-step ng-show="currentStep === 0" md-label="Regras">
+            <md-content>
+                <span style="text-align:center; font-weight:bold">ATENÇÃO (O sorteio é feito por @@{{personBusiness.person.instagram}})</span><br />
+                <span>Para participar da brincadeira, é necessário por seu user do Instagram. Clique em participar e tire um print da tela final <strong>marcando o @@salinasnegocios e @@{{personBusiness.person.instagram}} em seu story e deixando até o resultado. </strong></span><br /><br />
+                <span>Vale apenas 1 participação por perfil. O perfil não pode ser fake!</span><br />
+                <span>O resultado vai ser tanto no Instagram quanto por aqui, o ganhador pode entrar em contato.</span>
+            </md-content>
+            <md-actions layout="row" layout-align="end center">
+                <md-button ng-click="nextPage()">Avançar</md-button>
+            </md-actions>
+        </md-step>
+        <md-step ng-show="currentStep === 1" md-label="Informe seu user instagram">
+            <md-content>
+                <label>Insira seu user do Instagram e clique no botão participar que está logo abaixo</label>
+                <input type="text" ng-model="entity.instagram" class="form-control" name="instagram" placeholder="apenas o user sem o @@" /><br />
+                <div class="person-list">
+                    <div class="person-item" ng-repeat="item in list.raffles">
+                        <img ng-src="\{{item.image}}" alt="{{ item.name }}" class="person-image">
+                        <div class="person-content">
+                            <div>
+                                <h2 class="person-name">
+                                    {{ item.name }}
+                                </h2>
+                                <p class="person-description">{{item.description}}</p>
+                                <span><strong>{{item.value | currency}}</strong></span><br />
+                                <span style="color:blue;"><strong>Pedras do sorteio: {{ item.qtdNumber }}</strong></span><br />
+                                <span ng-show="item.isClosed == false" style="color:green;"><strong>Aberto até: {{ item.endDate | date:'dd/MM/yyyy' }}</strong></span>
+                                <span ng-show="item.isClosed == true" style="color:red"><strong>Encerrado</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </md-content>
+            <md-actions layout="row" layout-align="end center">
+                <md-button ng-click="firstPage()">Voltar para as regras</md-button>
+                <md-button ng-click="savePersonBusinessCheckin()">Participar</md-button>
+            </md-actions>
+        </md-step>
+        <md-step ng-show="currentStep === 2" md-label="Parabéns">
+            <md-content>
+                <div ng-repeat="sortedNumber in list.sortedNumber">
+                    <span>Sorteio: {{sortedNumber.Name}} - Sua pedra: {{sortedNumber.Value == 0 ? 'Esse sorteio já atingiu todas as pedras, infelizmente você não conseguiu um número.' : sortedNumber.Value}}</span>
+                </div>
+            </md-content>
+        </md-step>
+    </md-stepper>
+
+    <div ng-show="list.raffles == null || list.raffles.length == 0">
+        <span>Esse perfil não tem sorteios cadastrados.</span>
+    </div>
+
+</section>

@@ -1,0 +1,152 @@
+﻿<head>
+    <style>
+        table.profiles-table {
+            width: 100%;
+        }
+
+        table.profiles-table td {
+            vertical-align: top;
+            text-align: center;
+            width: 33%;
+        }
+
+        div.david-circle {
+            background: url(http://placekitten.com/400/400) center center no-repeat;
+        }
+
+        div.profile-circle {
+            margin-bottom: 30px;
+            width: 150px;
+            height: 150px;
+            border-radius: 75px;
+            -webkit-border-radius: 75px;
+            -moz-border-radius: 75px;
+            display: inline-block;
+        }
+
+        /* button recolor */
+        .nav-pills>li.active>a,
+        .btn-primary {
+            background-color: #6C6C6C !important;
+            border-color: #6C6C6C !important;
+            border-radius: 25px;
+        }
+
+        #ul_top_hypers {
+            display: flex;
+            justify-content: space-around;
+            list-style-type: none;
+        }
+
+
+        .img-crop-wrapper {
+            overflow: hidden;
+            height: 300px;
+            text-align: center;
+        }
+
+        .image-crop-preview {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+            margin: auto;
+        }
+    </style>
+    <script>
+        function selecionarArquivo() {
+            document.getElementById("fileInput").click();
+        }
+    </script>
+</head>
+
+<section>
+    <div class="container pt-5" ng-app="myApp" ng-controller="userProfileController">
+        <script type="text/ng-template" id="alert.html">
+            <div ng-transclude></div>
+        </script>
+        <div class="spinerBackground">
+            <div class="spinerStyle" id="loading-bar-container">
+
+            </div>
+        </div>
+        <div id="popupContainer">
+
+        </div>
+        <form id="formElem">     
+            <br />
+            <div class="row">
+                <div class="col-sm-12">
+                    <md-tabs md-dynamic-height md-border-bottom md-selected="tabSelected" md-on-select="onTabSelected()">
+                        <md-tab label="Meu Perfil"></md-tab>
+                        <md-tab label="Endereço"></md-tab>
+                    </md-tabs>
+                    <md-content class="md-padding">
+                        <md-card ng-show="tabSelected === 0">
+                            <md-card-content>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Nome completo</label>
+                                        <input type="text" ng-model="user.profile.name" class="form-control" id="inputEmail4"
+                                               required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">CPF</label>
+                                        <input type="text" ng-model="user.profile.cpf" class="form-control" id="inputEmail4"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputPassword4">Contato</label>
+                                        <input type="text" ng-model="user.profile.phone2" ui-mask="(99) 9999-9999"
+                                               class="form-control" id="inputPassword4">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 bx-pull-right">
+                                        <button class="btn btn-primary" type="button" ng-click="saveMyProfile()">Salvar</button>
+                                    </div>
+                                </div>
+                            </md-card-content>
+                        </md-card>
+                        <md-card ng-show="tabSelected === 1">
+                            <md-card-content>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Rua/Alameda (com o número da casa e complemento)</label>
+                                        <input type="text" ng-model="user.profile.address" class="form-control" id="inputEmail4"
+                                               placeholder="Exemplo: Rua B, 192 em frente à tal lugar">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputPassword4">Bairro</label>
+                                        <input type="text" ng-model="user.profile.neighborhood" class="form-control"
+                                               id="inputPassword4">
+                                    </div>
+                                </div><br />
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Cidade</label>
+                                        <input type="text" ng-model="user.profile.city" class="form-control" id="inputEmail4">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputPassword4">Código Postal</label>
+                                        <input type="text" ng-model="user.profile.zipcode" class="form-control" id="inputPassword4">
+                                    </div>
+                                </div><br />
+                                <div class="row">
+                                    <div class="col-sm-12 bx-pull-right">
+                                        <button class="btn btn-primary" type="button" ng-click="saveMyProfile()">Salvar</button>
+                                    </div>
+                                </div>
+                            </md-card-content>
+                        </md-card>
+                    </md-content>
+                </div>
+            </div>          
+        </form>
+    </div>
+</section>
+
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>

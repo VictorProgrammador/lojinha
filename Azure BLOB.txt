@@ -1,0 +1,5 @@
+blob key 1: TyXnvuHIe5Bq+Syd0pJX2MwWcYpoq9s1GQLYjpW5l4KbTs7sICAtJ2Hqt0gNhWZLSox2N7j2RDy2+AStz2eXkw==
+endpoint: DefaultEndpointsProtocol=https;AccountName=armazenamento0;AccountKey=TyXnvuHIe5Bq+Syd0pJX2MwWcYpoq9s1GQLYjpW5l4KbTs7sICAtJ2Hqt0gNhWZLSox2N7j2RDy2+AStz2eXkw==;EndpointSuffix=core.windows.net
+
+
+

@@ -1,0 +1,278 @@
+﻿@{
+ 
+}
+<head>
+
+   
+</head>
+
+<div ng-app="myApp" ng-controller="AdminController">
+    <div class="spinerBackground">
+        <div class="spinerStyle" id="loading-bar-container">
+
+        </div>
+    </div>
+    <div id="popupContainer">
+
+    </div>
+    <section id="hero" class="d-flex align-items-center">
+        <div class="container position-relative" data-aos="fade-up" data-aos-delay="100">
+            <div class="row justify-content-center">
+                <div class="row justify-content-center">
+                    <div class="col-xl-12 col-lg-9 text-center">
+                        <label>Digite um nome:</label>
+                        <md-input-container>
+                            <input ng-model="filter.Name" type="text">
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="row justify-content-center">
+                    <div class="col-xl-7 col-lg-9 text-center">
+                        <label>Buscar por categoria:</label>
+                        <md-input-container>
+                            <md-select ng-model="filter.CategoryId">
+                                <md-option ng-repeat="category in list.categories" ng-value="category.id">
+                                    {{category.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-button class="md-icon-button" ng-click="deleteCategory()">
+                            <md-icon aria-label="Deletar item" md-svg-icon="/trash.svg"></md-icon>
+                        </md-button>
+                        <button class="btn btn-bonito" ng-click="getPersonsBusinessManagement()">Pesquisar <md-icon aria-label="Pesquisar item" md-svg-icon="/search.svg"></md-icon></button>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="row justify-content-center">
+                    <div class="col-xl-12 col-lg-9 text-center" layout="column" layout-align="center center">
+                        <md-switch ng-model="filter.IsSubscriber" aria-label="Resposta" ng-true-value="true" ng-false-value="false">Apenas negócios assinantes?</md-switch>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive" ng-show="list.personsBusiness != null && list.personsBusiness.length > 0">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Negócio Aprovado (necessário aprovarmos como admin)</th>
+                            <th>Perfil Vísivel (usuário que configura)</th>
+                            <th>Assinatura (nós que damos acesso)</th>
+                            <th>Duração da assinatura:</th>
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in list.personsBusiness">
+                            <td>{{ item.person.name }}</td>
+                            <td>{{ item.approved == true ? 'Sim' : 'Não' }}</td>
+                            <td>{{ item.isVisible == true ? 'Sim' : 'Não' }}</td>
+                            <td>{{ item.isSubscriber == true ? 'Premium' : 'Gratuita' }}</td>
+                            <td>{{ item.limitSubscription | date:'dd/MM/yyyy' }}</td>
+                            <td><button class="btn btn-sm" ng-click="openModal(item)"><i class="bi bi-pencil"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row" ng-show="list.personsBusiness != null && list.personsBusiness.length > 0">
+                <div class="col-md-12" style="text-align:center">
+                    <ul uib-pagination
+                        ng-model="filter.PageNumber"
+                        total-items="entity.totalItems"
+                        items-per-page="10"
+                        previous-text="Anterior"
+                        next-text="Próxima"
+                        rotate="true"
+                        ng-change="getPersonsBusinessManagement()"
+                        class="pagination-sm"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Editar negócio</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12" layout="column">
+                                <md-switch ng-model="personBusiness.approved" aria-label="Resposta" ng-true-value="true" ng-false-value="false">Aprovar negócio?</md-switch>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" layout="column">
+                                <md-switch ng-model="personBusiness.isSubscriber" aria-label="Resposta" ng-true-value="true" ng-false-value="false">Assinatura Paga?</md-switch>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" layout="column">
+                                <span>Assinatura: {{ personBusiness.limitSubscription | date:'dd/MM/yyyy' }}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="data">Atualizar Assinatura:</label>
+                                <input type="date" id="data" name="data" ng-model="personBusiness.limitSubscription">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" ng-click="save_click()">Salvar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="closeModal()">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<script type="text/javascript">
+    app.controller("AdminController", ["$scope", "$http", "$location", "$anchorScroll", "$filter", "basicService", "utilidadesService", function ($scope, $http, $location, $anchorScroll, $filter, basicService, utilidadesService) {
+
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+
+        $scope.filter = {
+            CategoryId: 0,
+            IsSubscriber: false,
+            PageNumber: 1,
+            PageSize: 10,
+            Name: ''
+        };
+
+        $scope.list = {
+            personsBusiness: [],
+            categories: []
+        };
+
+        $scope.entity = {
+            totalItems: 0,
+            totalPages: 0
+        };
+
+        $scope.personBusiness = {};
+
+        $scope.scrollTo = function (id) {
+            $location.hash(id);
+            $anchorScroll();
+        };
+
+        getPersonsBusinessManagementService = function (param) {
+            return $http.post("/Admin/GetPersonsBusinessManagement", param, headers);
+        }
+
+        savePersonBusinessManagement = function (param) {
+            return $http.post("/Admin/SavePersonBusinessManagement", param, headers);
+        }
+
+        $scope.save_click = function () {
+
+            $(".spinerStyle").addClass('centerSpinner');
+            $(".spinerBackground").addClass('overlay');
+
+            savePersonBusinessManagement($scope.personBusiness).then(function (data) {
+                var result = data.data;
+
+                $scope.closeModal();
+
+                if (result == true) {
+                    utilidadesService.exibirMensagem('Sucesso!', 'Negócio atualizado com sucesso.', true);
+                }
+                else {
+                    utilidadesService.exibirMensagem('Falha', 'Falha ao atualizar negócio.', true);
+                }
+
+                $(".spinerStyle").removeClass('centerSpinner');
+                $(".spinerBackground").removeClass('overlay');
+
+            }, function (error) {
+                $(".spinerStyle").removeClass('centerSpinner');
+                $(".spinerBackground").removeClass('overlay');
+            });
+
+        }
+
+
+        $scope.getPersonsBusinessManagement = function () {
+
+            $(".spinerStyle").addClass('centerSpinner');
+            $(".spinerBackground").addClass('overlay');
+
+            getPersonsBusinessManagementService($scope.filter).then(function (data) {
+                var result = data.data;
+
+                if (result != null && result != undefined && result.results.length > 0) {
+                    $scope.list.personsBusiness = result.results;
+                    $scope.entity.totalItems = result.totalResults;
+                    $scope.filter.PageNumber = result.pageNumber;
+                    $scope.entity.totalPages = result.totalPages;
+                }
+                else {
+                    $scope.list.personsBusiness = [];
+                    $scope.entity.totalItems = 0;
+                    $scope.filter.PageNumber = 1;
+                    $scope.entity.totalPages = 0;
+                }
+
+
+                $(".spinerStyle").removeClass('centerSpinner');
+                $(".spinerBackground").removeClass('overlay');
+
+            }, function (error) {
+                $(".spinerStyle").removeClass('centerSpinner');
+                $(".spinerBackground").removeClass('overlay');
+            });
+        }
+
+        $scope.openModal = function (item) {
+            $scope.personBusiness = item;
+            $('#myModal').modal('show');
+        }
+
+        $scope.closeModal = function () {
+            $scope.personBusiness = {};
+            $('#myModal').modal('hide');
+        }
+
+        $scope.getCategories = function () {
+            basicService.getCategories().then(function (data) {
+                var result = data.data;
+
+                if (result != null && result != undefined)
+                    $scope.list.categories = result;
+
+            }, function (error) {
+                $scope.addErrorAlert("Falha ao carregar categorias. Entre em contato com o suporte!");
+            });
+        }
+
+        $scope.deleteCategory = function () {
+            $scope.filter.CategoryId = 0;
+        }
+
+        $scope.init = function () {
+            $scope.getPersonsBusinessManagement();
+            $scope.getCategories();
+        }
+
+        $scope.init();
+
+    }]);
+</script>
+
+
+<!-- Vendor JS Files -->
+<script src="lib/purecounter/purecounter_vanilla.js"></script>
+<script src="lib/aos/aos.js"></script>
+<script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="lib/glightbox/js/glightbox.min.js"></script>
+<script src="lib/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="lib/swiper/swiper-bundle.min.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>

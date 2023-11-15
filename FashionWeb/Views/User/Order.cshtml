@@ -1,0 +1,161 @@
+﻿@{
+    ViewData["Title"] = "Pedido";
+}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <!-- Template Main JS File -->
+    <script src="/js/main.js"></script>
+
+    <script src="/lib/jquery-mask-plugin-master/dist/jquery.mask.min.js"></script>
+    <script>
+        $('.cep').mask('00000-000', { reverse: true });
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .produto-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .produto-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .produto-titulo {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .produto-descricao {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .produto-valor {
+            font-size: 8px;
+        }
+
+        .botao-preto {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<section class="container profile height-min" ng-app="myApp" ng-controller="orderController"
+         ng-init="loadOrder('@ViewBag.Id')">
+    <script type="text/ng-template" id="alert.html">
+        <div ng-transclude></div>
+    </script>
+    <div class="spinerBackground">
+        <div class="spinerStyle" id="loading-bar-container">
+
+        </div>
+    </div>
+    <div id="popupContainer">
+    </div>
+
+    <div class="produto-container">
+
+        <div class="produto-titulo">Pedido N° {{ order.orderNumber }}</div><br /><br />
+
+        <div ng-show="order.orderProducts != null && order.orderProducts.length > 0">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Valor</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="orderProduct in order.orderProducts">
+                        <td>{{ orderProduct.product.name }}</td>
+                        <td>{{ orderProduct.product.value | currency:"R$" }}</td>
+                        <td><button class="btn btn-danger" ng-click="viewProduct(orderProduct.product.id)">Visualizar</button></td>
+                    </tr>
+                </tbody>
+            </table><br />
+        </div>
+        <br /><br />
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <span>Entrega:</span>
+            </div>
+            <div class="form-group col-md-10">
+                <span>{{ order.rua }}, {{ order.numeroCasa }}, {{ order.bairro }} - {{ order.cidade }} - {{ order.cep }} </span>
+            </div>
+        </div><br />
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <span>Forma de entrega:</span>
+            </div>
+            <div class="form-group col-md-10">
+                <span>{{ order.freteService }}, de {{ order.deliveryRangeMin }} à {{ order.deliveryRangeMax }} dias úteis.</span>
+            </div>
+        </div><br />
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <span>Observação:</span>
+            </div>
+            <div class="form-group col-md-10">
+                <span>{{ order.observation }}</span>
+            </div>
+        </div><br />
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <span>Forma de Pagamento:</span>
+            </div>
+            <div class="form-group col-md-10">
+                <span>{{ order.valorTotal | currency:"R$" }} no cartão de crédito dividido de {{ order.parcelamento }}.</span>
+            </div>
+        </div><br />
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <span>Status:</span>
+            </div>
+            <div class="form-group col-md-10">
+                <span style="color: green">{{ order.orderStatusId == 1 ? 'Aguardando Pagamento' : 'Cancelado' }}</span>
+            </div>
+        </div><br />
+
+    </div>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>

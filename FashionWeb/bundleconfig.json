@@ -1,0 +1,25 @@
+[
+  {
+    "outputFileName": "wwwroot/bundles/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/site.css",
+      "wwwroot/css/style-contact.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/site.min.js",
+    "inputFiles": [
+      "wwwroot/js/app.js",
+      "wwwroot/js/services/basic-service.js",
+      "wwwroot/js/validate.js",
+      "wwwroot/js/controllers/register-controller.js",
+      "wwwroot/js/controllers/recover-password-controller.js",
+      "wwwroot/js/controllers/login-controller.js",
+      "wwwroot/js/controllers/user-profile-controller.js",
+      "wwwroot/js/controllers/user-management-products-controller.js",
+      "wwwroot/js/controllers/user-management-raffle-controller.js",
+      "wwwroot/js/controllers/checkin-controller.js",
+      "wwwroot/js/controllers/user-gallery-controller.js"
+    ]
+  }
+]

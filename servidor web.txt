@@ -1,0 +1,18 @@
+Máquina virtual Ubuntu Server 20.04 LTS - x64 Gen2
+
+arquitetura x64
+
+nome da maquina virtual: salinegocios
+
+azure@20.62.175.190
+
+salinasnegocios
+azure
+Azure123456789
+
+/home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish
+
+/home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish/FashionWeb.dll
+
+
+

@@ -1,0 +1,43 @@
+sudo apt-get install vsftpd
+
+sudo su - (mudar para usuário root)
+echo "" > /etc/vsftpd.conf (limpar todo arquivo de configuração)
+
+sudo nano /etc/vsftpd.conf (editar o arquivo de configuracao)
+
+nano /var/log/vsftpd.log
+
+sudo nano /etc/vsftpd.user_list
+
+listen=YES
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+use_localtime=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+chroot_local_user=YES
+secure_chroot_dir=/var/run/vsftpd/empty
+pam_service_name=vsftpd
+rsa_cert_file=/etc/ssl/private/vsftpd.pem
+userlist_enable=YES
+userlist_file=/etc/vsftpd.user_list
+userlist_deny=NO
+
+
+
+sudo systemctl start vsftpd
+sudo systemctl stop vsftpd
+sudo systemctl restart vsftpd
+
+sudo systemctl status vsftpd
+
+sudo ufw allow 21/tcp
+sudo ufw reload
+
+20.62.175.190
+maquina: salinasnegocios
+login: azure
+senha: Azure123456789

@@ -1,0 +1,28 @@
+﻿<head>
+    <style>
+        .dialog-padding {
+            padding: 5px;
+        }
+        .alignCenterStrong{
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<md-dialog aria-label="{{titulo}}" ng-class="{'dialog-padding': true}">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2 class="md-title" style="color:#fff !important">{{titulo}}</h2>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div class="md-dialog-content" ng-class="strong == true ? 'alignCenterStrong' : '' ">
+            {{mensagem}}
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button ng-click="closeDialog()" class="md-primary">
+            Fechar
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -1,0 +1,389 @@
+﻿@{
+    ViewData["Title"] = "Carrinho";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/lib/creditcard.js/src/creditcard.js" type="text/javascript"></script>
+
+    <!-- Template Main JS File -->
+    <script src="/js/main.js"></script>
+
+    <script src="/lib/jquery-mask-plugin-master/dist/jquery.mask.min.js"></script>
+    <script>
+        $('.cep').mask('00000-000', { reverse: true });
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .cart-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .frete-container {
+            max-width: 600px;
+            margin: 70px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .formaPagamento-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .meioPagamento-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .produto-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .produto-descricao {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .produto-valor {
+            font-size: 8px;
+        }
+
+        .botao-preto {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .links {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+
+<section class="container profile height-min" ng-app="myApp" ng-controller="userCartController"
+         ng-init="loadCart()">
+    <script type="text/ng-template" id="alert.html">
+        <div ng-transclude></div>
+    </script>
+    <div class="spinerBackground">
+        <div class="spinerStyle" id="loading-bar-container">
+
+        </div>
+    </div>
+    <div id="popupContainer">
+    </div>
+
+    <div class="cart-container">
+        <div class="produto-descricao">Carrinho</div>
+
+        <div ng-show="entity.cartProducts == null || entity.cartProducts.length == 0">
+            <div>
+                <span>Nenhum produto adicionado ao carrinho.</span>
+            </div><br />
+        </div>
+
+        <div ng-show="entity.cartProducts != null && entity.cartProducts.length > 0">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Valor</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="cartProduct in entity.cartProducts">
+                        <td>{{ cartProduct.product.name }}</td>
+                        <td>{{ cartProduct.product.value | currency:"R$" }}</td>
+                        <td><button class="btn btn-sm" ng-click="excludeCartProduct(cartProduct.id)"><i class="bi bi-trash"></i></button></td>
+                    </tr>
+                </tbody>
+            </table><br />
+
+            <div>
+                <span style="color: blue">Aceitamos pagamento: <img src="~/img/visa.png" />, <img src="~/img/master.png" />, <img src="~/img/amex.png" />, <img src="~/img/elo.png" />, <img src="~/img/hipercard.png" /> <img src="~/img/mercadopago.png" /></span>
+            </div><br />
+
+            <div>
+                <span style="color: blue"><i class="bi bi-bag-fill"></i> Compra Garantida, receba o produto que está esperando ou devolvemos seu dinheiro.</span>
+            </div><br />
+
+        </div>
+        <br /><br />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="links">
+                    <a href="/" style="color:black">Continuar comprando</a>
+                    <a href="#" style="color:black" ng-show="entity.cartProducts == null" ng-click="showFormaPagamento()">Ir para endereço</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="formaPagamento-container" hidden="hidden">
+        <div class="produto-descricao">Endereço de Entrega</div>
+        <br /><br />
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="nomeTitular">Rua</label>
+                <input type="text" id="rua" name="rua" ng-model="endereco.rua">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="numeroRua">Número</label>
+                <input type="text" id="numeroRua" name="numeroCasa" ng-model="endereco.numeroCasa">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="numeroRua">Complemento</label>
+                <input type="text" id="complemento" name="complemento" ng-model="endereco.complemento">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="nomeTitular">Bairro</label>
+                <input type="text" id="bairro" name="bairro" ng-model="endereco.bairro">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="nomeTitular">Cidade</label>
+                <input type="text" id="cidade" name="cidade" ng-model="endereco.cidade">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="nomeTitular">Código Postal</label>
+                <input type="text" class="cep" name="cep" ng-model="endereco.cep" placeholder="Digite seu CEP" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="links">
+                    <a href="#" style="color:black" ng-click="showContainerCart()">Passo anterior</a>
+                    <a href="#" style="color:black" ng-click="completePayment()">Ir para metódo de envio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="frete-container" hidden="hidden">
+        <div class="produto-descricao">Selecione um meio de envio</div>
+        <br /><br />
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="btn-search" style="width:100%">
+                    <input ng-model="endereco.cep" placeholder="Digite seu CEP"
+                           type="text">
+                    <button class="btn-bonito" ng-click="searchCEP()">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div><br />
+
+        <table class="table table-striped" ng-show="freteResponseList != null && freteResponseList.length > 0">
+            <tr>
+                <th></th>
+                <th>Frete</th>
+            </tr>
+            <tr ng-repeat="freteResponse in freteResponseList">
+                <td><input type="radio" ng-model="entity.freteSelecionadoId" ng-value="freteResponse.id" ng-change="calculeTotal()"></td>
+                <td>{{freteResponse.name}} - R$ {{freteResponse.price}} - Chega entre: {{freteResponse.delivery_range.min}} e {{freteResponse.delivery_range.max}} dias.</td>
+            </tr>
+        </table>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="links">
+                    <a href="#" style="color:black" ng-click="showFormaPagamento()">Passo anterior</a>
+                    <a href="#" style="color:black" ng-click="irMeioPagamento()">Ir para meio de pagamento</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="meioPagamento-container" hidden="hidden">
+        <div class="produto-descricao">Selecione um meio de pagamento</div>
+        <br /><br />
+
+              <table class="table table-striped">
+                  <tr>
+                      <th></th>
+                      <th>Tipo de pagamento</th>
+                      <th>Valor Total</th>
+                  </tr>
+                  <tr>
+                      <td><input type="radio" checked ng-value="1"></td>
+                      <td>Cartão de Crédito</td>
+                      <td>{{valorTotal | currency:"R$"}}</td>
+                  </tr>
+                  <tr>
+                      <td><input type="radio" ng-value="2" ng-disabled="true"></td>
+                      <td>Boleto</td>
+                      <td>Indisponível</td>
+                  </tr>
+              </table>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="links">
+                    <a href="#" style="color:black" ng-click="completePayment()">Passo anterior</a>
+                    <a href="#" style="color:black" ng-click="irPagamento()">Ir para pagamento</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="payment-container" hidden="hidden">
+        <div class="produto-descricao">Finalize o pagamento</div>
+        <br /><br />
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="nomeTitular">Nome do Titular (exatamente como no cartão):</label>
+                <input type="text" id="nomeTitular" name="nomeTitular" oninput="formatarNome(this)" ng-model="card.nomeTitular">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="nomeTitular">CPF do Titular:</label>
+                <input type="text" id="cpfTitular" class="cpfTitular" name="cpfTitular" ng-model="card.cpfTitular">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="nomeTitular">Telefone do Titular (para confirmação bancária caso houver necessidade):</label>
+                <input type="text" id="telefoneTitular" class="telefoneTitular" name="telefoneTitular" ui-mask="(99) 9999-9999" ng-model="card.telefoneTitular">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label>Número de parcelas</label>
+                <select ng-model="parcelamentoSelecionado" class="form-control" ng-options="parcelamento for parcelamento in parcelamentos">
+                    <option value="">Selecione uma opção</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="numeroCartao">Número do Cartão de Crédito: <img ng-src="/{{bandeiraImg}}" /></label>
+                <div class="input-with-icon">
+                    <input type="text" id="numeroCartao" name="numeroCartao" class="numeroCartaoMask" ng-blur="captureBandeira()" ng-pattern="/^[0-9]*$/" placeholder="**** **** **** ****" ng-model="card.numeroCartao">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="validade">Data de Validade:</label>
+                <input type="text" id="validade" name="validade" ui-mask="99/99" placeholder="MM/AA" ng-pattern="/^(0[1-9]|1[0-2])\/[0-9]{2}$/" ng-model="card.validade">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="codigoSeguranca">Código de Segurança:</label>
+                <input type="text" id="codigoSeguranca" name="codigoSeguranca" ui-mask="999" placeholder="***" ng-model="card.cvv">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="links">
+                    <a href="#" style="color:black" ng-click="irMeioPagamento()">Passo anterior</a>
+                    <span style="color:white" class="botao-preto" ng-click="paid()">Efetuar pedido</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<script>
+    $('.numeroCartaoMask').mask('0000 0000 0000 0000', { reverse: true });
+    $('.cpfTitular').mask('000.000.000-00', { reverse: true });
+    $('.cep').mask('00000-000', { reverse: true });
+
+    function formatarNome(input) {
+        // Remove caracteres especiais e acentos
+        let nomeFormatado = input.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+        // Permite apenas letras e espaços
+        nomeFormatado = nomeFormatado.replace(/[^a-zA-Z\s]/g, '');
+
+        // Atualiza o valor no campo de entrada
+        input.value = nomeFormatado;
+    }
+
+</script>

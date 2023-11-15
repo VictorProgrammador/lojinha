@@ -1,0 +1,15 @@
+nome do banco de dados: salinasNegociosDev
+
+nome do servidor: salinasnegociosdev.database.windows.net
+logon do administrador: victor
+senha: Vitor123
+
+
+Standard S0
+10 DTUs, 5 GB de armazenamento
+
+
+Update-Database
+
+
+Server=tcp:salinasnegociosdev.database.windows.net,1433;Initial Catalog=salinasNegociosDev;Persist Security Info=False;User ID=victor;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
