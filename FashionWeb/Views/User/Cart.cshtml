@@ -177,7 +177,7 @@
             <div class="col-md-12">
                 <div class="links">
                     <a href="/" style="color:black">Continuar comprando</a>
-                    <a href="#" style="color:black" ng-show="entity.cartProducts == null" ng-click="showFormaPagamento()">Ir para endereço</a>
+                    <a href="#" style="color:black" ng-show="entity.cartProducts != null && entity.cartProducts.length > 0" ng-click="showFormaPagamento()">Ir para endereço</a>
                 </div>
             </div>
         </div>

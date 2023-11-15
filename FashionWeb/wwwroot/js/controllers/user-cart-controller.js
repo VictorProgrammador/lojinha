@@ -324,8 +324,20 @@
             $(".spinerBackground").addClass('overlay');
 
             basicService.createOrder($scope.OrderEntity).then(function (data) {
-                
-                
+
+                var result = data.data;
+
+                // Obtem a URL completa
+                var url = $location.absUrl();
+                //https
+                var https = url.split('/')[0];
+                // Extrai apenas o domínio
+                var domain = url.split('/')[2];
+
+                var resultado = https + "//" + domain;
+
+                var url = resultado + '/' + 'User/Order?Id=' + result;
+                window.open(url, "_blank");
 
                 $(".spinerStyle").removeClass('centerSpinner');
                 $(".spinerBackground").removeClass('overlay');

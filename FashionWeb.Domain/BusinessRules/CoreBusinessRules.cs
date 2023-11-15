@@ -576,7 +576,7 @@ namespace FashionWeb.Domain.BusinessRules
             return this._coreRepository.ExcludeProductCard(Id);
         }
 
-        public bool SaveOrder(Orderr orderr)
+        public int SaveOrder(Orderr orderr)
         {
             orderr.CreateDate = DateTime.Now;
             orderr.UpdateDate = DateTime.Now;
@@ -608,7 +608,7 @@ namespace FashionWeb.Domain.BusinessRules
             //Limpar carrinho.
             this._coreRepository.DeleteAllCartProduct(orderr.CartId);
 
-            return true;
+            return inserted.Id;
         }
 
         public Orderr GetOrder(int Id)

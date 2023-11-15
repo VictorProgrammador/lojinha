@@ -46,7 +46,7 @@ namespace FashionWeb.Domain.BusinessRules
         bool InsertCartProduct(CartProduct cartProduct);
         List<CartProduct> GetCartProducts(int CartId);
         bool ExcludeProductCard(int Id);
-        bool SaveOrder(Orderr orderr);
+        int SaveOrder(Orderr orderr);
         Orderr GetOrder(int Id);
         List<Orderr> GetOrders(int PersonId);
     }
