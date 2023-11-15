@@ -94,7 +94,6 @@
                 <thead>
                     <tr>
                         <th>N° Pedido</th>
-                        <th>Data</th>
                         <th>Status</th>
                         <th>Valor</th>
                         <th></th>
@@ -103,10 +102,9 @@
                 <tbody>
                     <tr ng-repeat="pedido in pedidos">
                         <td>{{ pedido.orderNumber }}</td>
-                        <td>{{ pedido.createDate | date:'dd/MM/yyyy' }}</td>
                         <td style="color: green">{{ pedido.orderStatusId == 1 ? 'Aguardando Pagamento' : 'Cancelado' }}</td>
                         <td>{{ pedido.valorTotal | currency:"R$" }}</td>
-                        <td><button class="btn btn-danger" ng-click="viewOrder(pedido.id)">Visualizar</button></td>
+                        <td><span ng-click="viewOrder(pedido.id)"><i class="bi bi-eye-fill"></i></span></td>
                     </tr>
                 </tbody>
             </table><br />
