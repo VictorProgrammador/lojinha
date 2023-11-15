@@ -119,6 +119,10 @@
             margin-bottom: 16px;
             box-sizing: border-box;
         }
+
+        .linha-colorida {
+            background-color: lightblue;
+        }
     </style>
 </head>
 
@@ -249,13 +253,13 @@
             </div>
         </div><br />
 
-        <table class="table table-striped" ng-show="freteResponseList != null && freteResponseList.length > 0">
+        <table class="table" ng-show="freteResponseList != null && freteResponseList.length > 0">
             <tr>
                 <th></th>
                 <th>Frete</th>
             </tr>
-            <tr ng-repeat="freteResponse in freteResponseList">
-                <td><input type="radio" ng-model="entity.freteSelecionadoId" class="form-control" ng-value="freteResponse.id" ng-change="calculeTotal()"></td>
+            <tr ng-repeat="freteResponse in freteResponseList" ng-click="calculeTotal($index, freteResponse)" ng-class="{ 'linha-colorida': freteResponse.colorida }">
+                <td><input type="radio" ng-model="entity.freteSelecionadoId" class="form-control" ng-value="freteResponse.id"></td>
                 <td>{{freteResponse.name}} - R$ {{freteResponse.price}} - Chega entre: {{freteResponse.delivery_range.min}} e {{freteResponse.delivery_range.max}} dias.</td>
             </tr>
         </table>

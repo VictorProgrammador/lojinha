@@ -337,7 +337,8 @@
                 var resultado = https + "//" + domain;
 
                 var url = resultado + '/' + 'User/Orders';
-                window.open(url);
+
+                $window.location.href = url;
 
                 $(".spinerStyle").removeClass('centerSpinner');
                 $(".spinerBackground").removeClass('overlay');
@@ -355,9 +356,10 @@
 
     }
 
-    $scope.calculeTotal = function () {
+    $scope.calculeTotal = function (index, freteResponse) {
 
         $scope.valorTotal = 0;
+        $scope.entity.freteSelecionadoId = freteResponse.id;
 
         var freteSelecionado = $scope.freteResponseList.find(function (objeto) {
             return objeto.id === $scope.entity.freteSelecionadoId;
@@ -375,6 +377,12 @@
         });
 
         $scope.valorTotal += parseFloat($scope.frete);
+
+        $scope.freteResponseList.map(function (linha) {
+            linha.colorida = false;
+        });
+
+        $scope.freteResponseList[index].colorida = !$scope.freteResponseList[index].colorida;
     }
 
     $scope.irMeioPagamento = function () {

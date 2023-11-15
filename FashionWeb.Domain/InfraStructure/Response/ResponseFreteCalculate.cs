@@ -19,7 +19,7 @@ namespace FashionWeb.Domain.InfraStructure.Response
         public int custom_delivery_time { get; set; }
         public DeliveryRange custom_delivery_range { get; set; }
         public List<Package> packages { get; set; }
-
+        public bool colorida { get; set; }
         public class DeliveryRange
         {
             public int min { get; set; }
