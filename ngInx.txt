@@ -38,7 +38,7 @@ http {
 
     server {
         listen 80;
-        server_name 20.62.175.190;
+        server_name 20.57.17.237;
 
         location / {
             proxy_pass         http://localhost:5000;
@@ -50,3 +50,5 @@ http {
         }
     }
 }
+
+

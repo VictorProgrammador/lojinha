@@ -2,11 +2,11 @@ git reset --hard HEAD
 
 dotnet publish -c Release -r linux-x64
 
-sudo systemctl restart minha-aplicacao.service
-sudo systemctl status minha-aplicacao.service
+sudo systemctl restart painelchecker.service
+sudo systemctl status painelchecker.service
 
-sudo systemctl start minha-aplicacao.service
-systemctl stop minha-aplicacao.service
+sudo systemctl start painelchecker.service
+systemctl stop painelchecker.service
 
 sudo systemctl restart nginx
 sudo systemctl start nginx
@@ -15,21 +15,21 @@ sudo systemctl stop nginx
 
 sudo systemctl status nginx
 
-sudo rm -rf /home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish
+sudo rm -rf /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/
 
 rodar em ordem
-sudo rm -rf /home/azure/backup
-sudo cp -r /home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads /home/azure/backup
-sudo cp -r /home/azure/backup/* /home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads
+sudo rm -rf /home/azure/backupLoja
+sudo cp -r /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads /home/azure/backupLoja
+sudo cp -r /home/azure/backupLoja/* /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads
 
 
-sudo chown -R www-data:www-data /home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads
-sudo chmod -R 755 /home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads
+sudo chown -R www-data:www-data /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads
+sudo chmod -R 755 /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads
 
 
-sudo chown -R www-data:www-data /home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/html
-sudo chmod -R 755 /home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/html
-sudo chmod -R +rX /home/azure/FashionWeb/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/html
+sudo chown -R www-data:www-data /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/html
+sudo chmod -R 755 /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/html
+sudo chmod -R +rX /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/html
 
 
 
