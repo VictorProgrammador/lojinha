@@ -32,5 +32,6 @@ namespace FashionWeb.Domain.Entities.Order
         public List<OrderProduct> OrderProducts { get; set; }
         public int CartId { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public UserRegister user { get; set; }
     }
 }

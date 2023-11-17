@@ -31,21 +31,52 @@
     $scope.bandeiraImg = 'img/creditCard.png';
 
 
-    $scope.loadCart = function () {
+    $scope.loadCart = function (cartjson) {
+
+        var cart = {};
+
+        var cartTemporarioString = localStorage.getItem("cartTemporario");
+        var cartTemporario = JSON.parse(cartTemporarioString);
+
+        //Se o carrinho temporário existir, apenas adiciona o produto dentro dele.
+        if (cartTemporario != null &&
+            cartTemporario.CartProducts != null &&
+            cartTemporario.CartProducts.length > 0) {
+            if (cartjson != null && cartjson != '') {
+                cart = JSON.parse(cartjson);
+                if (cart != null) {
+                    
+                    var produtoExiste = cartTemporario.CartProducts.some(function (produto) {
+                        return produto.ProductId === cart.CartProducts[0].ProductId;
+                    });
+
+                    if (!produtoExiste)
+                        cartTemporario.CartProducts.push(cart.CartProducts[0]);
+
+                }
+            }
+
+            localStorage.setItem("cartTemporario", JSON.stringify(cartTemporario));
+        }
+        else {
+            if (cartjson != null && cartjson != '') {
+                cart = JSON.parse(cartjson);
+                localStorage.setItem("cartTemporario", JSON.stringify(cart));
+            }
+        }
+
+        var cartTemporarioString = localStorage.getItem("cartTemporario");
+        var cartTemporario = JSON.parse(cartTemporarioString);
 
         $(".spinerStyle").addClass('centerSpinner');
         $(".spinerBackground").addClass('overlay');
 
-        basicService.getCart().then(function (data) {
+        basicService.getCart(cartTemporario).then(function (data) {
             var result = data.data;
 
             if (result != null && result != undefined) {
                 $scope.entity = result;
                 $scope.OrderEntity.cartId = $scope.entity.id;
-            }
-            else {
-                utilidadesService.exibirMensagem('Atenção!', 'Carrinho não foi encontrado!', false);
-                $scope.addErrorAlert("Carrinho não encontrado na base de dados!");
             }
 
             $(".spinerStyle").removeClass('centerSpinner');
@@ -58,19 +89,38 @@
 
     }
 
-    $scope.excludeCartProduct = function (id) {
+    $scope.excludeCartProduct = function (id, ProductId) {
 
-        $(".spinerStyle").addClass('centerSpinner');
-        $(".spinerBackground").addClass('overlay');
+        if (id == null || id == 0) {
 
-        basicService.excludeCartProduct(id).then(function (data) {
-            utilidadesService.exibirMensagem('Sucesso', 'O produto foi excluído do carrinho', false);
-            $scope.loadCart();
-        }, function (error) {
-            $(".spinerStyle").removeClass('centerSpinner');
-            $(".spinerBackground").removeClass('overlay');
-        });
+            var cartTemporarioString = localStorage.getItem("cartTemporario");
+            var cartTemporario = JSON.parse(cartTemporarioString);
 
+            var indiceProduct = cartTemporario.CartProducts.findIndex(function (cart) {
+                return cart.ProductId === ProductId;
+            });
+
+            if (indiceProduct !== -1) {
+                cartTemporario.CartProducts.splice(indiceProduct, 1);
+                utilidadesService.exibirMensagem('Sucesso', 'O produto foi excluído do carrinho', false);
+            }
+
+            localStorage.setItem("cartTemporario", JSON.stringify(cartTemporario));
+
+            $scope.loadCart();         
+        }
+        else {
+            $(".spinerStyle").addClass('centerSpinner');
+            $(".spinerBackground").addClass('overlay');
+
+            basicService.excludeCartProduct(id).then(function (data) {
+                utilidadesService.exibirMensagem('Sucesso', 'O produto foi excluído do carrinho', false);
+                $scope.loadCart();
+            }, function (error) {
+                $(".spinerStyle").removeClass('centerSpinner');
+                $(".spinerBackground").removeClass('overlay');
+            });
+        }
     }
 
     $scope.showContainerCart = function () {
@@ -82,6 +132,9 @@
 
         var divFormaPagamento = document.querySelector('.formaPagamento-container');
         divFormaPagamento.setAttribute('hidden', 'true');
+
+        var divRegistro = document.querySelector('.register-container');
+        divRegistro.setAttribute('hidden', 'true');
 
         var divMeioPagamento = document.querySelector('.meioPagamento-container');
         divMeioPagamento.setAttribute('hidden', 'true');
@@ -101,9 +154,20 @@
         var divCart = document.querySelector('.cart-container');
         divCart.setAttribute('hidden', 'true');
 
+        var divRegistro = document.querySelector('.register-container');
+        divRegistro.setAttribute('hidden', 'true');
+
         var divMeioPagamento = document.querySelector('.meioPagamento-container');
         divMeioPagamento.setAttribute('hidden', 'true');
 
+    }
+
+    $scope.irEndereco = function (username) {
+
+        if (username == null || username == '')
+            $scope.irRegistro();
+        else
+            $scope.completePayment();
     }
 
     $scope.completePayment = function () {
@@ -154,6 +218,9 @@
             var divCart = document.querySelector('.cart-container');
             divCart.setAttribute('hidden', 'true');
 
+            var divRegistro = document.querySelector('.register-container');
+            divRegistro.setAttribute('hidden', 'true');
+
             var divFormaPagamento = document.querySelector('.formaPagamento-container');
             divFormaPagamento.setAttribute('hidden', 'true');
 
@@ -185,6 +252,9 @@
 
         var divMeioPagamento = document.querySelector('.meioPagamento-container');
         divMeioPagamento.setAttribute('hidden', 'true');
+
+        var divRegistro = document.querySelector('.register-container');
+        divRegistro.setAttribute('hidden', 'true');
 
         var divPayment = document.querySelector('.payment-container');
         divPayment.removeAttribute('hidden');
@@ -385,40 +455,108 @@
         $scope.freteResponseList[index].colorida = !$scope.freteResponseList[index].colorida;
     }
 
-    $scope.irMeioPagamento = function () {
-       
+    $scope.irRegistro = function (username) {
+
         if ($scope.endereco.cep == null || $scope.endereco.cep == '') {
             document.querySelector('input[name="cep"]').style.border = '1px solid red';
             return false;
         }
-        else {
+        else
+        {
             document.querySelector('input[name="cep"]').style.border = '1px solid #ccc';
 
             if ($scope.entity.freteSelecionadoId != null && $scope.entity.freteSelecionadoId > 0) {
+                if (username == null || username == '') {
+                    var divFrete = document.querySelector('.frete-container');
+                    divFrete.setAttribute('hidden', 'true');
 
-                var divFrete = document.querySelector('.frete-container');
-                divFrete.setAttribute('hidden', 'true');
+                    var divFormaPagamento = document.querySelector('.formaPagamento-container');
+                    divFormaPagamento.setAttribute('hidden', 'true');
 
-                var divFormaPagamento = document.querySelector('.formaPagamento-container');
-                divFormaPagamento.setAttribute('hidden', 'true');
+                    var divPayment = document.querySelector('.cart-container');
+                    divPayment.setAttribute('hidden', 'true');
 
-                var divPayment = document.querySelector('.cart-container');
-                divPayment.setAttribute('hidden', 'true');
+                    var divMeioPagamento = document.querySelector('.meioPagamento-container');
+                    divMeioPagamento.setAttribute('hidden', 'true');
 
-                var divMeioPagamento = document.querySelector('.meioPagamento-container');
-                divMeioPagamento.setAttribute('hidden', 'true');
+                    var divPaymentContainer = document.querySelector('.payment-container');
+                    divPaymentContainer.setAttribute('hidden', 'true');
 
-                var divPaymentContainer = document.querySelector('.payment-container');
-                divPaymentContainer.setAttribute('hidden', 'true');
+                    var divMeioPagamento = document.querySelector('.meioPagamento-container');
+                    divMeioPagamento.setAttribute('hidden', 'true');
 
-                var divMeioPagamento = document.querySelector('.meioPagamento-container');
-                divMeioPagamento.removeAttribute('hidden');
-
+                    var divRegistro = document.querySelector('.register-container');
+                    divRegistro.removeAttribute('hidden');
+                }
+                else {
+                    $scope.irMeioPagamento();
+                }
             }
             else {
                 utilidadesService.exibirMensagem('Atenção', 'É necessário selecionar um serviço de frete!', false);
             }
+        }        
+    }
+
+    $scope.validadeUserToMeioPagamento = function () {
+
+        var allValidate = true;
+
+        if (document.getElementById('name').value == undefined ||
+            document.getElementById('name').value == '') {
+            document.querySelector('input[name="name"]').style.border = '1px solid red';
+            allValidate = false;
         }
+        else {
+            document.querySelector('input[name="name"]').style.border = '1px solid #ccc';
+        }
+
+        if (document.getElementById('username').value == undefined ||
+            document.getElementById('username').value == '') {
+            document.querySelector('input[name="username"]').style.border = '1px solid red';
+            allValidate = false;
+        }
+        else {
+            document.querySelector('input[name="username"]').style.border = '1px solid #ccc';
+        }
+
+
+        if (document.getElementById('password').value == undefined ||
+            document.getElementById('password').value == '') {
+            document.querySelector('input[name="password"]').style.border = '1px solid red';
+            allValidate = false;
+        }
+        else {
+            document.querySelector('input[name="password"]').style.border = '1px solid #ccc';
+        }
+
+        if (allValidate)
+            $scope.irMeioPagamento();
+
+    }
+
+    $scope.irMeioPagamento = function () {
+
+        var divFrete = document.querySelector('.frete-container');
+        divFrete.setAttribute('hidden', 'true');
+
+        var divFormaPagamento = document.querySelector('.formaPagamento-container');
+        divFormaPagamento.setAttribute('hidden', 'true');
+
+        var divPayment = document.querySelector('.cart-container');
+        divPayment.setAttribute('hidden', 'true');
+
+        var divMeioPagamento = document.querySelector('.meioPagamento-container');
+        divMeioPagamento.setAttribute('hidden', 'true');
+
+        var divPaymentContainer = document.querySelector('.payment-container');
+        divPaymentContainer.setAttribute('hidden', 'true');
+
+        var divRegistro = document.querySelector('.register-container');
+        divRegistro.setAttribute('hidden', 'true');
+
+        var divMeioPagamento = document.querySelector('.meioPagamento-container');
+        divMeioPagamento.removeAttribute('hidden');
     }
 
     $scope.searchCEP = function () {

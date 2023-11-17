@@ -74,9 +74,6 @@
         getPersonBusinessArchives: function (param) {
             return $http.post("/Home/GetPersonBusinessArchives", param, headers);
         },
-        createOrder: function (param) {
-            return $http.post("/CheckoutApi/CreateOrder", param, headers);
-        },
         getProduct: function (param) {
             return $http.post("/Home/GetProduct", param, headers);
         },
@@ -84,16 +81,16 @@
             return $http.post("/Home/SaveProductCart", param, headers);
         },
         getCart: function (param) {
-            return $http.post("/User/GetCart", param, headers);
+            return $http.post("/Home/GetCart", param, headers);
         },
         excludeCartProduct: function (param) {
             return $http.post("/User/ExcludeCartProduct", param, headers);
         },
         searchCEP: function (param) {
-            return $http.post("/User/SearchCEP", param, headers);
+            return $http.post("/Home/SearchCEP", param, headers);
         },
         createOrder: function (param) {
-            return $http.post("/User/CreateOrder", param, headers);
+            return $http.post("/Home/CreateOrder", param, headers);
         },
         getOrder: function (param) {
             return $http.post("/User/GetOrder", param, headers);

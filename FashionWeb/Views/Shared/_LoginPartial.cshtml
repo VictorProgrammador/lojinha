@@ -14,7 +14,6 @@
                 @if (User.IsInRole("USUARIO") || User.IsInRole("ADMINISTRADOR"))
                 {
                     <li><a asp-controller="User" asp-action="Profile"> <i class="bi bi-person"></i> Meu Perfil</a></li>
-                    <li><a asp-controller="User" asp-action="Cart"><i class="bi bi-cart"></i> Carrinho</a></li>
                     <li><a asp-controller="User" asp-action="Orders"><i class="bi bi-cart"></i> Pedidos</a></li>
                 }
                 @if (User.IsInAllRoles("ADMINISTRADOR"))
@@ -37,6 +36,9 @@
     }
     else
     {
+        <li class="nav-link scrollto">
+            <a class="nav-link" asp-controller="Home" asp-action="Cart"><i class="bi bi-cart"></i> Carrinho</a>
+        </li>
         <li class="nav-link scrollto">
             <a class="nav-link" asp-controller="Home" asp-action="Register">Cadastro</a>
         </li>

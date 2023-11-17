@@ -44,6 +44,16 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
+        .register-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
         .frete-container {
             max-width: 600px;
             margin: 70px auto;
@@ -128,7 +138,7 @@
 
 
 <section class="container profile height-min" ng-app="myApp" ng-controller="userCartController"
-         ng-init="loadCart()">
+         ng-init="loadCart('@ViewBag.Cart')">
     <script type="text/ng-template" id="alert.html">
         <div ng-transclude></div>
     </script>
@@ -162,7 +172,7 @@
                     <tr ng-repeat="cartProduct in entity.cartProducts">
                         <td>{{ cartProduct.product.name }}</td>
                         <td>{{ cartProduct.product.value | currency:"R$" }}</td>
-                        <td><button class="btn btn-sm" ng-click="excludeCartProduct(cartProduct.id)"><i class="bi bi-trash"></i></button></td>
+                        <td><button class="btn btn-sm" ng-click="excludeCartProduct(cartProduct.id, cartProduct.productId)"><i class="bi bi-trash"></i></button></td>
                     </tr>
                 </tbody>
             </table><br />
@@ -268,7 +278,36 @@
             <div class="col-md-12">
                 <div class="links">
                     <a href="#" style="color:black" ng-click="showFormaPagamento()">Passo anterior</a>
-                    <a href="#" style="color:black" ng-click="irMeioPagamento()">Ir para meio de pagamento</a>
+                    <a href="#" style="color:black" ng-click="irRegistro('@User.Identity.Name')">Próxima etapa</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="register-container" hidden="hidden">
+        <div class="produto-descricao">Registre-se</div>
+        <br /><br />
+
+        <div class="group-input">
+            <label for="name">Nome</label>
+            <input type="text" ng-model="OrderEntity.user.name" name="name" id="name" value="" placeholder="Digite seu nome">
+        </div>
+        <div class="group-input">
+            <label for="username">Email</label>
+            <input type="email" ng-model="OrderEntity.user.username" name="username" id="username" value=""
+                   placeholder="Digite seu endereço de email">
+        </div>
+        <div class="group-input">
+            <label for="password">Senha</label>
+            <input type="password" ng-model="OrderEntity.user.password" name="password" id="password" value=""
+                   placeholder="Digite sua senha">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="links">
+                    <a href="#" style="color:black" ng-click="completePayment()">Passo anterior</a>
+                    <a href="#" style="color:black" ng-click="validadeUserToMeioPagamento()">Ir para pagamento</a>
                 </div>
             </div>
         </div>
@@ -278,28 +317,28 @@
         <div class="produto-descricao">Selecione um meio de pagamento</div>
         <br /><br />
 
-              <table class="table table-striped">
-                  <tr>
-                      <th></th>
-                      <th>Tipo de pagamento</th>
-                      <th>Valor Total</th>
-                  </tr>
-                  <tr>
-                      <td><input type="radio" checked ng-value="1"></td>
-                      <td>Cartão de Crédito</td>
-                      <td>{{valorTotal | currency:"R$"}}</td>
-                  </tr>
-                  <tr>
-                      <td><input type="radio" ng-value="2" ng-disabled="true"></td>
-                      <td>Boleto</td>
-                      <td>Indisponível</td>
-                  </tr>
-              </table>
+        <table class="table table-striped">
+            <tr>
+                <th></th>
+                <th>Tipo de pagamento</th>
+                <th>Valor Total</th>
+            </tr>
+            <tr>
+                <td><input type="radio" checked ng-value="1"></td>
+                <td>Cartão de Crédito</td>
+                <td>{{valorTotal | currency:"R$"}}</td>
+            </tr>
+            <tr>
+                <td><input type="radio" ng-value="2" ng-disabled="true"></td>
+                <td>Boleto</td>
+                <td>Indisponível</td>
+            </tr>
+        </table>
 
         <div class="row">
             <div class="col-md-12">
                 <div class="links">
-                    <a href="#" style="color:black" ng-click="completePayment()">Passo anterior</a>
+                    <a href="#" style="color:black" ng-click="irEndereco('@User.Identity.Name')">Passo anterior</a>
                     <a href="#" style="color:black" ng-click="irPagamento()">Ir para pagamento</a>
                 </div>
             </div>

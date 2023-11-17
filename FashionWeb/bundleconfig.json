@@ -23,7 +23,8 @@
       "wwwroot/js/controllers/user-management-products-controller.js",
       "wwwroot/js/controllers/user-management-raffle-controller.js",
       "wwwroot/js/controllers/checkin-controller.js",
-      "wwwroot/js/controllers/user-gallery-controller.js"
+      "wwwroot/js/controllers/user-gallery-controller.js",
+      "wwwroot/js/controllers/user-cart-controller.js"
     ]
   }
 ]

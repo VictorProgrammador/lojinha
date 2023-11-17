@@ -886,130 +886,13 @@ namespace FashionWeb.Controllers
 
             return Json(this._coreBusinessRules.SavePersonBusinessArchive(personBusinessArchive));
         }
-
-        public IActionResult Cart()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> GetCart()
-        {
-            //Aqui eu preciso puxar o usuário que está executando a ação.
-            var aspUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            var user = this._personBusinessRules.GetUserTiny(new Guid(aspUser.Id));
-
-            Cart cart = new Cart();
-
-            if (user != null && user.PersonId > 0)
-            {
-                cart = this._coreBusinessRules.GetCart(user.PersonId);
-
-                if(cart == null || cart.Id == 0)
-                {
-                    this._coreBusinessRules.InsertCart(new Domain.Entities.Cart()
-                    {
-                        PersonId = user.PersonId
-                    });
-
-                    cart = this._coreBusinessRules.GetCart(user.PersonId);
-                }
-
-                cart.CartProducts = this._coreBusinessRules.GetCartProducts(cart.Id);
-            }
-            else
-            {
-                return RedirectToAction("Login");
-            }
-
-            return Json(cart);
-        }
-
+    
         [HttpPost]
         public IActionResult ExcludeCartProduct([FromBody] int id)
         {
             return Json(this._coreBusinessRules.ExcludeProductCard(id));
         }
-
-        [HttpPost]
-        public async Task<IActionResult> SearchCEP([FromBody] Location endereco)
-        {
-            //dynamic token = GetMelhorEnvioToken().Result;
-
-            List<Domain.InfraStructure.Response.ResponseFreteCalculate> responseFrete = new List<Domain.InfraStructure.Response.ResponseFreteCalculate>();
-
-            try
-            {
-                string apiUrl = "https://sandbox.melhorenvio.com.br/api/v2/me/shipment/calculate";
-                string accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NTYiLCJqdGkiOiJhNTJjOTAxNDI1YzVmZDMxNmZhODk4ZWM1MDY1ZmE2OWYxZjY0ZTU4NTc2ZTg4NTFiNzY2MjM3NmEyZDgxNzg2ZjlhNzE4YTA1Nzc4MDU3MiIsImlhdCI6MTY5OTczNzg3MC45MDQ4MjksIm5iZiI6MTY5OTczNzg3MC45MDQ4MzIsImV4cCI6MTczMTM2MDI3MC44ODc1ODksInN1YiI6IjlhOTZiZGQ4LWEyNDEtNDljNi04MjYzLTRmMWY5MzMzMDBlNSIsInNjb3BlcyI6WyJjYXJ0LXJlYWQiLCJjYXJ0LXdyaXRlIiwiY29tcGFuaWVzLXJlYWQiLCJjb21wYW5pZXMtd3JpdGUiLCJjb3Vwb25zLXJlYWQiLCJjb3Vwb25zLXdyaXRlIiwibm90aWZpY2F0aW9ucy1yZWFkIiwib3JkZXJzLXJlYWQiLCJwcm9kdWN0cy1yZWFkIiwicHJvZHVjdHMtZGVzdHJveSIsInByb2R1Y3RzLXdyaXRlIiwicHVyY2hhc2VzLXJlYWQiLCJzaGlwcGluZy1jYWxjdWxhdGUiLCJzaGlwcGluZy1jYW5jZWwiLCJzaGlwcGluZy1jaGVja291dCIsInNoaXBwaW5nLWNvbXBhbmllcyIsInNoaXBwaW5nLWdlbmVyYXRlIiwic2hpcHBpbmctcHJldmlldyIsInNoaXBwaW5nLXByaW50Iiwic2hpcHBpbmctc2hhcmUiLCJzaGlwcGluZy10cmFja2luZyIsImVjb21tZXJjZS1zaGlwcGluZyIsInRyYW5zYWN0aW9ucy1yZWFkIiwidXNlcnMtcmVhZCIsInVzZXJzLXdyaXRlIiwid2ViaG9va3MtcmVhZCIsIndlYmhvb2tzLXdyaXRlIiwid2ViaG9va3MtZGVsZXRlIiwidGRlYWxlci13ZWJob29rIl19.Ls9rRtb1tSXOL-GudLslx5hSUgirdKd24ecNf_L6tFVvcXm8fMiyA86NUYBGWzf6PEN-ZYBg4Azii2kvu71DN2NbUx6Roc54s7LW8pg30c0eANrZwOk29envvcj-ZED22ziM3eGMvx6WPGWNQ3fCEROrbgoGB_D5T1-ju_t_EjX6Dgnj_g4sM9Rev2k1qtiWfCeAAalUK_iX-lz5ewKfKq-u0TDGBHGiAFJAH1uCzF4O9lFTfT6s1ALOP2UaUB29WTqJ5aNSYOqe3Q6vrvCrDEopKGvmmMcgOQ2Dbs9LvnLSAa9lBQXBoBq6DPmfk8vAOp0c67uI3JGZ4QjT1JaB0wyP4qkoLZIZ8zS3sPd0lAia6CsmNYeRL9GWDn84qQhIDBG9aM1wx2zeeNIvJrN4dW-kZ9CENalvHDcnX6zPEGzj4IaCyIQ3GctHanOhIy2DNC3VvFwS8rIYsyJBH5ey3HFQ3_go633tNRfoxZPIQp7uCD6E9LEzzekxKOLP-BswwDsqO2aMx1oWhnEzyphUVOfuc0wv9DhSvUvX7dEXI29_D2M6etP9_M4UTrAPBzUSMrsQQzlTgQiGkTNoF8NDmVnET_Q0uxylFQp9xUvy7lKhHHSH7qkwekXlGOCl01OHA5RhCLsEoiA3roDVU3TpbxGCiXA5AmMiaYxG2DjYCmA";
-
-
-                using (HttpClient client = new HttpClient())
-                {
-
-                    // Configura os parâmetros da solicitação
-                    var requestData = new
-                    {
-                        from = new
-                        {
-                            postal_code = "96020360"
-                        },
-                        to = new
-                        {
-                            postal_code = endereco.Cep
-                        },
-                        products = new[]
-                        {
-                            new
-                            {
-                                id = "x",
-                                width = 11,
-                                height = 17,
-                                length = 11,
-                                weight = 0.3,
-                                insurance_value = 10.1,
-                                quantity = 1
-                            }
-                        },
-                        options = new
-                        {
-                            receipt = false,
-                            own_hand = false
-                        },
-                        services = "1,2"
-                    };
-
-                    // Converte os parâmetros em formato JSON
-                    var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-                    content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-
-                    var request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-                    request.Content = content;
-                    request.Headers.Add("Authorization", $"Bearer {accessToken}");
-                    //request.Headers.Add("User-Agent", "vitorgabrielprogrammer@gmail.com");
-
-                    // Faz a solicitação POST para calcular o frete
-                    HttpResponseMessage response = await client.SendAsync(request);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseContent = await response.Content.ReadAsStringAsync();
-                        responseFrete = JsonConvert.DeserializeObject<List<Domain.InfraStructure.Response.ResponseFreteCalculate>>(responseContent);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Erro na solicitação: {response.StatusCode}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro: {ex.Message}");
-            }
-
-
-            return Json(responseFrete);
-        }
-
+     
         public async Task<string> GetMelhorEnvioToken()
         {
             string responseContent = "";
@@ -1046,36 +929,6 @@ namespace FashionWeb.Controllers
                 }
             }
             return token;
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> CreateOrder([FromBody] Orderr orderr)
-        {
-            //Aqui eu preciso puxar o usuário que está executando a ação.
-            var aspUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            var user = this._personBusinessRules.GetUserTiny(new Guid(aspUser.Id));
-
-            if (user != null && user.PersonId > 0)
-            {
-                orderr.PersonId = user.PersonId;
-            }
-            else
-            {
-                return RedirectToAction("Login");
-            }
-
-            var request = HttpContext.Request;
-            var domain = $"{request.Scheme}://{request.Host}";
-
-            var webRoot = _hostingEnvironment.WebRootPath;
-            var filePath = Path.Combine(webRoot, "html");
-            string templatePath = $@"{filePath}/padrao.html";
-            var fileContent = System.IO.File.ReadAllText(templatePath);
-
-
-            var send = Domain.Utils.SendEmail.Send(fileContent, $@"<p>Avisaremos quando a administradora do seu cartão aprovar a compra.</p>", "Pedido realizado com sucesso", aspUser.UserName);
-
-            return Json(this._coreBusinessRules.SaveOrder(orderr));
         }
 
         [HttpPost]
