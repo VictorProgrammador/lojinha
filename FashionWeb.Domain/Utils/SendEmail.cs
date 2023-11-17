@@ -18,7 +18,7 @@ namespace FashionWeb.Domain.Utils
             {
                 SmtpClient client = new SmtpClient("smtpout.secureserver.net", 80);
                 client.EnableSsl = false;
-                client.Credentials = new NetworkCredential("comercial@digitalshop.com.br", "123456");
+                client.Credentials = new NetworkCredential("comercial@oshopdigital.com", "Vitorsal123");
 
                 var html = "";
                 html = htmltemplate;
@@ -27,7 +27,7 @@ namespace FashionWeb.Domain.Utils
 
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("comercial@digitalshop.com.br", "Digital Shop"),
+                    From = new MailAddress("comercial@oshopdigital.com", "O Shop Digital"),
                     Subject = subject,
                     Body = html,
                     IsBodyHtml = true,

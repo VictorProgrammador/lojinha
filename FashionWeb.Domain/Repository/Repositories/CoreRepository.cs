@@ -1661,8 +1661,124 @@ namespace FashionWeb.Domain.Repository.Repositories
         public List<Orderr> GetOrders(int PersonId)
         {
             var db = _connectionFactory.GetConnection();
-            var result = db.Query<Orderr>("SELECT * FROM Orderr where PersonId = @PersonId", new { PersonId = PersonId }).ToList();
+            var result = db.Query<Orderr>("SELECT Orderrr.* FROM Orderr Orderrr where Orderrr.PersonId = @PersonId", new { PersonId = PersonId }).ToList();
             return result;
+        }
+
+        public OrderStatus GetOrderStatus(int Id)
+        {
+            var db = _connectionFactory.GetConnection();
+            var result = db.QuerySingleOrDefault<OrderStatus>(@"SELECT * 
+                                                            FROM OrderStatus 
+                                                            where Id = @Id", new { Id = Id });
+            return result;
+        }
+
+        public PagedResult<Orderr> GetOrders(SearchPersonBusiness searchPersonBusiness)
+        {
+            var result = new PagedResult<Orderr>();
+
+            var countSql = @$"SELECT COUNT(*) FROM Orderr Orderr ";
+
+            if (searchPersonBusiness.OrderStatusId > 0)
+            {
+                countSql += " AND Orderr.OrderStatusId = @OrderStatusId ";
+            }
+
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                var totalCount = db.ExecuteScalar<int>(countSql, new { OrderStatusId = searchPersonBusiness.OrderStatusId });
+                var totalPages = (int)Math.Ceiling((double)totalCount / searchPersonBusiness.PageSize);
+
+                var orderBy = $"[Orderr].CreateDate {(searchPersonBusiness.sortAscending ? "ASC" : "DESC")}";
+
+                // Define as cláusulas LIMIT e OFFSET para a consulta
+                var Limit = searchPersonBusiness.PageSize;
+                var Offset = (searchPersonBusiness.PageNumber - 1) * searchPersonBusiness.PageSize;
+
+                // Define a consulta SQL para puxar as entidades
+                var sql = $@"SELECT [Orderr].Id,
+                                    [Orderr].OrderNumber,
+                                    [Orderr].ValorTotal,
+                                    [Orderr].CreateDate,
+                                    [Orderr].PersonId,
+                                    [Orderr].CardId,
+                                    [Orderr].[OrderStatusId],
+                                    [Card].CpfTitular,
+                                    [Card].Cvv,
+                                    [Card].NomeTitular,
+                                    [Card].NumeroCartao,
+                                    [Card].TelefoneTitular,
+                                    [Card].Validade
+                                    FROM [Orderr] 
+                                    INNER JOIN [Card]
+                                    ON [Card].[Id] = [Orderr].[CardId]
+                                    WHERE 1 = 1";
+
+
+                if (searchPersonBusiness.OrderStatusId > 0)
+                {
+                    sql += " AND [Orderr].[OrderStatusId] = @OrderStatusId ";
+                }
+
+                sql += $" ORDER BY {orderBy} OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY ";
+
+                var entities = db.Query<Orderr, Card, Orderr>(sql, (orderr, card) =>
+                {
+                    orderr.Card = card;
+                    return orderr;
+                }, new { OrderStatusId = searchPersonBusiness.OrderStatusId, Offset = Offset, Limit = Limit }, splitOn: "CardId").ToList();
+
+
+                if (entities.Count == 0)
+                {
+                    return new PagedResult<Orderr>
+                    {
+                        PageNumber = searchPersonBusiness.PageNumber,
+                        PageSize = searchPersonBusiness.PageSize,
+                        TotalResults = totalCount,
+                        TotalPages = totalPages,
+                        Results = entities,
+                    };
+                }
+
+                result = new PagedResult<Orderr>
+                {
+                    PageNumber = searchPersonBusiness.PageNumber,
+                    PageSize = searchPersonBusiness.PageSize,
+                    TotalResults = totalCount,
+                    TotalPages = totalPages,
+                    Results = entities,
+                };
+
+                db.Close();
+            }
+
+            return result;
+        }
+
+        public bool UpdateOrderStatus(Orderr orderr)
+        {
+            var updateOrderStatus = @"UPDATE [Orderr] set OrderStatusId = @OrderStatusId WHERE Id = @Id";
+            int id = 0;
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                id = db.Execute(updateOrderStatus, new
+                {
+                    OrderStatusId = orderr.OrderStatusId,
+                    Id = orderr.Id
+                });
+
+                db.Close();
+            }
+
+            return id > 0 ? true : false;
         }
 
     }

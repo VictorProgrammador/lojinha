@@ -1,10 +1,12 @@
 ﻿using FashionWeb.Domain.BusinessRules;
 using FashionWeb.Domain.Entities;
+using FashionWeb.Domain.Entities.Order;
 using FashionWeb.Domain.InfraStructure.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace FashionWeb.Controllers
@@ -34,12 +36,53 @@ namespace FashionWeb.Controllers
             return View();
         }
 
+        public IActionResult Orders()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult GetPersonsBusinessManagement([FromBody] SearchPersonBusiness filter)
         {
             filter.sortColumn = "Approved";
             filter.sortAscending = true;
             return Json(this._coreBusinessRules.GetPersonsBusinessManagement(filter));
+        }
+
+        [HttpPost]
+        public IActionResult GetOrders([FromBody] SearchPersonBusiness filter)
+        {
+            filter.sortAscending = false;
+            return Json(this._coreBusinessRules.GetOrders(filter));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveOrder([FromBody] Orderr order)
+        {
+            if (order.OrderStatus.Name == "Pedido Cancelado")
+            {
+                order.OrderStatusId = 2;
+            }
+
+            if (order.OrderStatus.Name == "Pagamento Aprovado")
+            {
+                order.OrderStatusId = 3;
+            }
+
+            UserInfo userInfo = this._coreBusinessRules.GetUserByPersonId(order.PersonId);
+            var user = await _userManager.FindByIdAsync(userInfo.AspNetUserId.ToString());
+
+            var request = HttpContext.Request;
+            var domain = $"{request.Scheme}://{request.Host}";
+
+            var webRoot = _hostingEnvironment.WebRootPath;
+            var filePath = Path.Combine(webRoot, "html");
+            string templatePath = $@"{filePath}/padrao.html";
+            var fileContent = System.IO.File.ReadAllText(templatePath);
+
+            var send = Domain.Utils.SendEmail.Send(fileContent, $@"<p>Seu pedido {order.OrderNumber} no valor de R${order.ValorTotal} foi atualizado. Status atual: {order.OrderStatus.Name}</p>", $"{order.OrderStatus.Name}", user.UserName);
+
+            return Json(this._coreBusinessRules.UpdateOrderStatus(order));
         }
 
         [HttpPost]

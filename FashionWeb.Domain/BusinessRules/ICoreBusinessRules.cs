@@ -49,5 +49,7 @@ namespace FashionWeb.Domain.BusinessRules
         int SaveOrder(Orderr orderr);
         Orderr GetOrder(int Id);
         List<Orderr> GetOrders(int PersonId);
+        PagedResult<Orderr> GetOrders(SearchPersonBusiness filter);
+        bool UpdateOrderStatus(Orderr orderr);
     }
 }

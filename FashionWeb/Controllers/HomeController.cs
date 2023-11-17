@@ -289,7 +289,7 @@ namespace FashionWeb.Controllers
                 string templatePath = $@"{filePath}/padrao.html";
                 var fileContent = System.IO.File.ReadAllText(templatePath);
 
-                //var send = SendEmail.Send(fileContent, $@"<p>Seu usuário: {userinfo.UserName}</p><p>Senha inicial: {model.password}</p>", "Bem-vindo a Digital Shop!", model.username);
+                var send = SendEmail.Send(fileContent, $@"<p>Seu usuário: {userinfo.UserName}</p><p>Senha inicial: {model.password}</p>", "Bem-vindo ao Shop Digital", model.username);
 
                 return Json(true);
             }

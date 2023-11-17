@@ -1,0 +1,244 @@
+﻿@{
+
+}
+<head>
+
+
+</head>
+
+<div ng-app="myApp" ng-controller="AdminOrdersController">
+    <div class="spinerBackground">
+        <div class="spinerStyle" id="loading-bar-container">
+
+        </div>
+    </div>
+    <div id="popupContainer">
+
+    </div><br />
+    <section id="hero" class="d-flex align-items-center">
+        <div class="container position-relative" data-aos="fade-up" data-aos-delay="100">
+            <div class="table-responsive" ng-show="list.orders != null && list.orders.length > 0">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N° Pedido</th>
+                            <th>Valor Total</th>
+                            <th>Status</th>
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in list.orders">
+                            <td>{{ item.orderNumber }}</td>
+                            <td>{{ item.valorTotal }}</td>
+                            <td>{{ item.orderStatus.name }}</td>
+                            <td><button class="btn btn-sm" ng-click="openModal(item)"><i class="bi bi-pencil"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row" ng-show="list.orders != null && list.orders.length > 0">
+                <div class="col-md-12" style="text-align:center">
+                    <ul uib-pagination
+                        ng-model="filter.PageNumber"
+                        total-items="entity.totalItems"
+                        items-per-page="10"
+                        previous-text="Anterior"
+                        next-text="Próxima"
+                        rotate="true"
+                        ng-change="getOrdersFunc()"
+                        class="pagination-sm"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Editar pedido</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Status</label>
+                                <select ng-model="order.orderStatus.name" class="form-control" ng-options="status for status in list.status">
+                                    <option value="">Selecione uma opção</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>CPF:</label>
+                                <span>{{order.card.cpfTitular}}</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Nome Titular:</label>
+                                <span>{{order.card.nomeTitular}}</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Telefone do Titular:</label>
+                                <span>{{order.card.telefoneTitular}}</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Cartão:</label>
+                                <span>{{order.card.numeroCartao}}</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Validade:</label>
+                                <span>{{order.card.validade}}</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Código Segurança:</label>
+                                <span>{{order.card.cvv}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" ng-click="save_click()">Salvar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="closeModal()">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<script type="text/javascript">
+    app.controller("AdminOrdersController", ["$scope", "$http", "$location", "$anchorScroll", "$filter", "basicService", "utilidadesService", function ($scope, $http, $location, $anchorScroll, $filter, basicService, utilidadesService) {
+
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+
+        $scope.filter = {
+            OrderStatusId: 0,
+            PageNumber: 1,
+            PageSize: 10
+        };
+
+        $scope.list = {
+            orders: [],
+            status: ['Pedido Realizado', 'Pedido Cancelado', 'Pagamento Aprovado']
+        };
+
+        $scope.entity = {
+            totalItems: 0,
+            totalPages: 0
+        };
+
+        $scope.order = {};
+
+        $scope.scrollTo = function (id) {
+            $location.hash(id);
+            $anchorScroll();
+        };
+
+        getOrders = function (param) {
+            return $http.post("/Admin/GetOrders", param, headers);
+        }
+
+        saveOrder = function (param) {
+            return $http.post("/Admin/SaveOrder", param, headers);
+        }
+
+        $scope.save_click = function () {
+
+            $(".spinerStyle").addClass('centerSpinner');
+            $(".spinerBackground").addClass('overlay');
+
+            saveOrder($scope.order).then(function (data) {
+                var result = data.data;
+
+                $scope.closeModal();
+
+                if (result == true) {
+                    utilidadesService.exibirMensagem('Sucesso!', 'Pedido atualizado com sucesso.', true);
+                }
+                else {
+                    utilidadesService.exibirMensagem('Falha', 'Falha ao atualizar pedido.', true);
+                }
+
+                $(".spinerStyle").removeClass('centerSpinner');
+                $(".spinerBackground").removeClass('overlay');
+
+            }, function (error) {
+                $(".spinerStyle").removeClass('centerSpinner');
+                $(".spinerBackground").removeClass('overlay');
+            });
+
+        }
+
+
+        $scope.getOrdersFunc = function () {
+
+            $(".spinerStyle").addClass('centerSpinner');
+            $(".spinerBackground").addClass('overlay');
+
+            getOrders($scope.filter).then(function (data) {
+                var result = data.data;
+
+                if (result != null && result != undefined && result.results.length > 0) {
+                    $scope.list.orders = result.results;
+                    $scope.entity.totalItems = result.totalResults;
+                    $scope.filter.PageNumber = result.pageNumber;
+                    $scope.entity.totalPages = result.totalPages;
+                }
+                else {
+                    $scope.list.orders = [];
+                    $scope.entity.totalItems = 0;
+                    $scope.filter.PageNumber = 1;
+                    $scope.entity.totalPages = 0;
+                }
+
+
+                $(".spinerStyle").removeClass('centerSpinner');
+                $(".spinerBackground").removeClass('overlay');
+
+            }, function (error) {
+                $(".spinerStyle").removeClass('centerSpinner');
+                $(".spinerBackground").removeClass('overlay');
+            });
+        }
+
+        $scope.openModal = function (item) {
+            $scope.order = item;
+            $('#myModal').modal('show');
+        }
+
+        $scope.closeModal = function () {
+            $scope.order = {};
+            $('#myModal').modal('hide');
+        }
+
+
+        $scope.init = function () {
+            $scope.getOrdersFunc();
+        }
+
+        $scope.init();
+
+    }]);
+</script>
+
+
+<!-- Vendor JS Files -->
+<script src="lib/purecounter/purecounter_vanilla.js"></script>
+<script src="lib/aos/aos.js"></script>
+<script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="lib/glightbox/js/glightbox.min.js"></script>
+<script src="lib/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="lib/swiper/swiper-bundle.min.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>

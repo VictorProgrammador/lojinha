@@ -7,6 +7,7 @@ using System.Linq;
 using FashionWeb.Domain.InfraStructure.Request;
 using FashionWeb.Domain.InfraStructure.Response;
 using FashionWeb.Domain.Entities.Order;
+using FashionWeb.Domain.Utils;
 
 namespace FashionWeb.Domain.BusinessRules
 {
@@ -615,13 +616,43 @@ namespace FashionWeb.Domain.BusinessRules
         {
             Orderr order = this._coreRepository.GetOrder(Id);
             order.OrderProducts = this._coreRepository.GetOrderProducts(Id);
+            order.OrderStatus = this._coreRepository.GetOrderStatus(order.OrderStatusId);
 
             return order;
         }
 
         public List<Orderr> GetOrders(int PersonId)
         {
-            return this._coreRepository.GetOrders(PersonId);
+            var orders = this._coreRepository.GetOrders(PersonId);
+
+            if(orders != null && orders.Count() > 0)
+            {
+                foreach(var order in orders)
+                    order.OrderStatus = this._coreRepository.GetOrderStatus(order.OrderStatusId);
+            }
+
+            return orders;
+        }
+
+        public PagedResult<Orderr> GetOrders(SearchPersonBusiness filter)
+        {
+            var orders = this._coreRepository.GetOrders(filter);
+
+            if (orders != null && orders.Results != null && orders.Results.Count() > 0)
+            {
+                foreach (var order in orders.Results)
+                {
+                    var newOrder = this._coreRepository.GetOrder(order.Id);
+                    order.OrderStatus = this._coreRepository.GetOrderStatus(newOrder.OrderStatusId);
+                }
+            }
+
+            return orders;
+        }
+
+        public bool UpdateOrderStatus(Orderr orderr)
+        {        
+            return this._coreRepository.UpdateOrderStatus(orderr);
         }
     }
 }

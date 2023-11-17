@@ -20,6 +20,7 @@
                 @if (User.IsInAllRoles("ADMINISTRADOR"))
                 {
                     <li><a asp-controller="User" asp-action="Products"> <i class="bi bi-person-gear"></i> Produtos</a></li>
+                    <li><a asp-controller="Admin" asp-action="Orders"> <i class="bi bi-person-gear"></i> Gestão de Pedidos</a></li>
                     <li><a asp-controller="Admin" asp-action="ManagementUsers"> <i class="bi bi-person-gear"></i> Administrador</a></li>
                 }
                 <li>

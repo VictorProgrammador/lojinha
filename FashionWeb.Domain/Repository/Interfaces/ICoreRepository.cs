@@ -72,5 +72,8 @@ namespace FashionWeb.Domain.Repository.Interfaces
         Orderr GetOrder(int Id);
         List<OrderProduct> GetOrderProducts(int Id);
         List<Orderr> GetOrders(int PersonId);
+        OrderStatus GetOrderStatus(int Id);
+        PagedResult<Orderr> GetOrders(SearchPersonBusiness filter);
+        bool UpdateOrderStatus(Orderr orderr);
     }
 }

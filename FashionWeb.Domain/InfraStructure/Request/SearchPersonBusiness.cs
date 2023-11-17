@@ -23,5 +23,6 @@ namespace FashionWeb.Domain.InfraStructure.Request
         public int PageSize { get; set; }
         public string sortColumn { get; set; }
         public bool sortAscending { get; set; }
+        public int OrderStatusId { get; set; }
     }
 }

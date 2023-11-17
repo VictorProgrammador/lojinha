@@ -102,7 +102,7 @@
                 <tbody>
                     <tr ng-repeat="pedido in pedidos">
                         <td>{{ pedido.orderNumber }}</td>
-                        <td style="color: green">{{ pedido.orderStatusId == 1 ? 'Aguardando Pagamento' : 'Cancelado' }}</td>
+                        <td style="color: green">{{ pedido.orderStatus.name }}</td>
                         <td>{{ pedido.valorTotal | currency:"R$" }}</td>
                         <td><span ng-click="viewOrder(pedido.id)"><i class="bi bi-eye-fill"></i></span></td>
                     </tr>

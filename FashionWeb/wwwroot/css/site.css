@@ -1425,7 +1425,6 @@ main {
     font-size: var(--h3-font-size);
     margin-bottom: var(--mb-0-25);
     font-weight: var(--font-medium);
-    text-transform: lowercase;
 }
 
 .person-name span{

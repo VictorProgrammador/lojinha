@@ -30,19 +30,22 @@ namespace FashionWeb.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IPersonBusinessRules _personBusinessRules;
         private readonly ICoreBusinessRules _coreBusinessRules;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly ILogWritter _logWritter;
         private readonly UserManager<IdentityUser> _userManager;
         public UserController(IWebHostEnvironment webHostEnvironment,
             IPersonBusinessRules personBusinessRules,
             ICoreBusinessRules coreBusinessRules,
             ILogWritter logWritter,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IWebHostEnvironment hostingEnvironment)
         {
             _webHostEnvironment = webHostEnvironment;
             _personBusinessRules = personBusinessRules;
             _userManager = userManager;
             _logWritter = logWritter;
             _coreBusinessRules = coreBusinessRules;
+            _hostingEnvironment = hostingEnvironment;
         }
         public IActionResult Profile()
         {
@@ -900,6 +903,17 @@ namespace FashionWeb.Controllers
             if (user != null && user.PersonId > 0)
             {
                 cart = this._coreBusinessRules.GetCart(user.PersonId);
+
+                if(cart == null || cart.Id == 0)
+                {
+                    this._coreBusinessRules.InsertCart(new Domain.Entities.Cart()
+                    {
+                        PersonId = user.PersonId
+                    });
+
+                    cart = this._coreBusinessRules.GetCart(user.PersonId);
+                }
+
                 cart.CartProducts = this._coreBusinessRules.GetCartProducts(cart.Id);
             }
             else
@@ -1049,6 +1063,17 @@ namespace FashionWeb.Controllers
             {
                 return RedirectToAction("Login");
             }
+
+            var request = HttpContext.Request;
+            var domain = $"{request.Scheme}://{request.Host}";
+
+            var webRoot = _hostingEnvironment.WebRootPath;
+            var filePath = Path.Combine(webRoot, "html");
+            string templatePath = $@"{filePath}/padrao.html";
+            var fileContent = System.IO.File.ReadAllText(templatePath);
+
+
+            var send = Domain.Utils.SendEmail.Send(fileContent, $@"<p>Avisaremos quando a administradora do seu cartão aprovar a compra.</p>", "Pedido realizado com sucesso", aspUser.UserName);
 
             return Json(this._coreBusinessRules.SaveOrder(orderr));
         }
