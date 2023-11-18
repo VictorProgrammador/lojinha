@@ -14,5 +14,6 @@ namespace FashionWeb.Domain.Entities
         public string Complemento { get; set; }
         public string NumeroCasa { get; set; }
         public string Rua { get; set; }
+        public bool HasDigitalFrete { get; set; }
     }
 }

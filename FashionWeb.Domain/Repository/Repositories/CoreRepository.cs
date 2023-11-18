@@ -1466,6 +1466,7 @@ namespace FashionWeb.Domain.Repository.Repositories
 
                 result = db.Query<CartProduct, Product, CartProduct>(sql, (CartProduct, Product) =>
                 {
+                    CartProduct.ProductId = Product.Id;
                     CartProduct.Product = Product;
                     return CartProduct;
                 }, new { CartId = CartId }, splitOn: "ProductId").ToList();

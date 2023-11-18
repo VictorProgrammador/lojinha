@@ -9,6 +9,10 @@
     $scope.endereco = {};
     $scope.card = {};
 
+    $scope.cupom = "";
+    $scope.hasDigitalFrete = false;
+    $scope.cupomAplicado = false;
+
     $scope.OrderEntity = {};
 
     $scope.parcelamentos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -77,6 +81,17 @@
             if (result != null && result != undefined) {
                 $scope.entity = result;
                 $scope.OrderEntity.cartId = $scope.entity.id;
+
+                if ($scope.entity.cartProducts != null && $scope.entity.cartProducts.length > 0) {
+
+                    var hasDigitalFrete = $scope.entity.cartProducts.some(function (produto) {
+                        return produto.product.name.includes("Gift");
+                    });
+
+                    if (hasDigitalFrete)
+                        $scope.hasDigitalFrete = true;
+
+                }
             }
 
             $(".spinerStyle").removeClass('centerSpinner');
@@ -562,6 +577,9 @@
     $scope.searchCEP = function () {
         $(".spinerStyle").addClass('centerSpinner');
         $(".spinerBackground").addClass('overlay');
+
+        $scope.endereco.hasDigitalFrete = $scope.hasDigitalFrete;
+
         basicService.searchCEP($scope.endereco).then(function (data) {
 
             var result = data.data;
@@ -574,6 +592,25 @@
             $(".spinerStyle").removeClass('centerSpinner');
             $(".spinerBackground").removeClass('overlay');
         });
+
+    }
+
+    $scope.aplicarCupom = function () {
+
+        if ($scope.cupomAplicado) {
+            utilidadesService.exibirMensagem('Atenção', 'Cupom já aplicado à compra!', false);
+        }
+        else {
+
+            if ($scope.hasDigitalFrete && $scope.cupom == "SHOP50" && $scope.cupomAplicado == false) {
+                $scope.valorTotal = $scope.valorTotal / 2;
+                $scope.cupomAplicado = true;
+            }
+            else {
+                utilidadesService.exibirMensagem('Atenção', 'Cupom não reconhecido!', false);
+            }
+           
+        }
 
     }
 

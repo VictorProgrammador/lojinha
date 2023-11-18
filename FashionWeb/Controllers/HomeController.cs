@@ -550,13 +550,29 @@ namespace FashionWeb.Controllers
                         cart = this._coreBusinessRules.GetCart(user.PersonId);
                     }
 
-                    //Insere o produto no carrinho.
-                    this._coreBusinessRules.InsertCartProduct(new CartProduct()
-                    {
-                        ProductId = Id,
-                        CartId = cart.Id
-                    });
+                    var cartProducts = this._coreBusinessRules.GetCartProducts(cart.Id);
 
+                    if(cartProducts != null && cartProducts.Count() > 0)
+                    {
+                        if(cartProducts.Where(x=> x.ProductId == Id).Count() == 0)
+                        {
+                            //Insere o produto no carrinho.
+                            this._coreBusinessRules.InsertCartProduct(new CartProduct()
+                            {
+                                ProductId = Id,
+                                CartId = cart.Id
+                            });
+                        }
+                    }
+                    else
+                    {
+                        //Insere o produto no carrinho.
+                        this._coreBusinessRules.InsertCartProduct(new CartProduct()
+                        {
+                            ProductId = Id,
+                            CartId = cart.Id
+                        });
+                    }
                 }
             }
 
@@ -646,10 +662,10 @@ namespace FashionWeb.Controllers
                             new
                             {
                                 id = "x",
-                                width = 11,
-                                height = 17,
-                                length = 11,
-                                weight = 0.3,
+                                width = 30,
+                                height = 30,
+                                length = 30,
+                                weight = 1,
                                 insurance_value = 10.1,
                                 quantity = 1
                             }
@@ -677,7 +693,7 @@ namespace FashionWeb.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         string responseContent = await response.Content.ReadAsStringAsync();
-                        responseFrete = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Domain.InfraStructure.Response.ResponseFreteCalculate>>(responseContent);
+                        responseFrete = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Domain.InfraStructure.Response.ResponseFreteCalculate>>(responseContent);                   
                     }
                     else
                     {
@@ -690,6 +706,41 @@ namespace FashionWeb.Controllers
                 Console.WriteLine($"Erro: {ex.Message}");
             }
 
+            if (endereco.HasDigitalFrete)
+            {
+                if (responseFrete != null && responseFrete.Count() > 0)
+                {
+                    responseFrete.Add(new Domain.InfraStructure.Response.ResponseFreteCalculate()
+                    {
+                        id = responseFrete.LastOrDefault().id + 1,
+                        name = "Digital",
+                        price = "0",
+                        custom_price = "0",
+                        delivery_time = 1,
+                        delivery_range = new Domain.InfraStructure.Response.ResponseFreteCalculate.DeliveryRange()
+                        {
+                            min = 0,
+                            max = 1
+                        }
+                    });
+                }
+                else
+                {
+                    responseFrete.Add(new Domain.InfraStructure.Response.ResponseFreteCalculate()
+                    {
+                        id = 1,
+                        name = "Digital",
+                        price = "0",
+                        custom_price = "0",
+                        delivery_time = 1,
+                        delivery_range = new Domain.InfraStructure.Response.ResponseFreteCalculate.DeliveryRange()
+                        {
+                            min = 0,
+                            max = 1
+                        }
+                    });
+                }
+            }
 
             return Json(responseFrete);
         }
