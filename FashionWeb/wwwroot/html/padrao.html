@@ -1,201 +1,420 @@
-﻿<!doctype html>
-<html>
+﻿<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"
+  style="width:100%;font-family:arial, 'helvetica neue', helvetica, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
+
 <head>
-    <meta name="viewport" content="width=device-width">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>O Shop Digital</title>
-    <style>
-         /* -------------------------------------
-            GLOBAL
-        ------------------------------------- */
-                * {
-                    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-                    font-size: 100%;
-                    line-height: 1.6em;
-                    margin: 0;
-                    padding: 0;
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <meta name="x-apple-disable-message-reformatting">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+  <style type="text/css">
+    #outlook a {
+      padding: 0;
+      text-decoration: none !important;
+    }
 
-                /*img {
-                    max-width: 600px;
-                    width: 100%;
-                }*/
+    #gmail a {
+      padding: 0;
+      text-decoration: none !important;
+    }
 
-                body {
-                    -webkit-font-smoothing: antialiased;
-                    height: 100%;
-                    -webkit-text-size-adjust: none;
-                    width: 100% !important;
-                }
-                /* -------------------------------------
-            ELEMENTS
-        ------------------------------------- */
-                a {
-                    color: #348eda;
-                }
+    .ExternalClass {
+      width: 100%;
+    }
 
-                .btn-primary {
-                    Margin-bottom: 10px;
-                    width: auto !important;
-                }
+    .es-wrapper-color {
+      display: block;
+    }
 
-                    .btn-primary td {
-                        background-color: #348eda;
-                        border-radius: 25px;
-                        font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-                        font-size: 14px;
-                        text-align: center;
-                        vertical-align: top;
-                    }
+    .ExternalClass,
+    .ExternalClass p,
+    .ExternalClass span,
+    .ExternalClass font,
+    .ExternalClass td,
+    .ExternalClass div {
+      line-height: 100%;
+    }
 
-                        .btn-primary td a {
-                            background-color: #348eda;
-                            border: solid 1px #348eda;
-                            border-radius: 25px;
-                            border-width: 10px 20px;
-                            display: inline-block;
-                            color: #ffffff;
-                            cursor: pointer;
-                            font-weight: bold;
-                            line-height: 2;
-                            text-decoration: none;
-                        }
+    .es-button {
+      mso-style-priority: 100 !important;
+      text-decoration: none !important;
+    }
 
-                .last {
-                    margin-bottom: 0;
-                }
+    a[x-apple-data-detectors] {
+      color: inherit !important;
+      text-decoration: none !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      line-height: inherit !important;
+    }
 
-                .first {
-                    margin-top: 0;
-                }
+    .es-desk-hidden {
+      display: none;
+      float: left;
+      overflow: hidden;
+      width: 0;
+      max-height: 0;
+      line-height: 0;
+      mso-hide: all;
+    }
 
-                .padding {
-                    padding: 10px 0;
-                }
-                /* -------------------------------------
-                    BODY
-                ------------------------------------- */
-                table.body-wrap {
-                    padding: 20px;
-                    width: 100%;
-                }
+    @media only screen and (max-width:600px) {
 
-                    table.body-wrap .container {
-                        border: 1px solid #f0f0f0;
-                    }
-                /* -------------------------------------
-                    FOOTER
-                ------------------------------------- */
-                table.footer-wrap {
-                    clear: both !important;
-                    width: 100%;
-                }
+      p,
+      ul li,
+      ol li,
+      a {
+        font-size: 16px !important;
+        line-height: 150% !important
+      }
 
-                .footer-wrap .container p {
-                    color: #666666;
-                    font-size: 12px;
-                }
+      h1 {
+        font-size: 30px !important;
+        text-align: center;
+        line-height: 120% !important
+      }
 
-                table.footer-wrap a {
-                    color: #999999;
-                }
-                /* -------------------------------------
-            TYPOGRAPHY
-        ------------------------------------- */
-                h1,
-                h2,
-                h3 {
-                    color: #111111;
-                    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-                    font-weight: 200;
-                    line-height: 1.2em;
-                    margin: 40px 0 10px;
-                }
+      h2 {
+        font-size: 26px !important;
+        text-align: center;
+        line-height: 120% !important
+      }
 
-                h1 {
-                    font-size: 36px;
-                }
+      h3 {
+        font-size: 20px !important;
+        text-align: center;
+        line-height: 120% !important
+      }
 
-                h2 {
-                    font-size: 28px;
-                }
+      h1 a {
+        font-size: 30px !important
+      }
 
-                h3 {
-                    font-size: 22px;
-                }
+      h2 a {
+        font-size: 26px !important
+      }
 
-                p,
-                ul,
-                ol {
-                    font-size: 14px;
-                    font-weight: normal;
-                    margin-bottom: 10px;
-                }
+      h3 a {
+        font-size: 20px !important
+      }
 
-                    ul li,
-                    ol li {
-                        margin-left: 5px;
-                        list-style-position: inside;
-                    }
-                /* ---------------------------------------------------
-                    RESPONSIVENESS
-                ------------------------------------------------------ */
-                /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
-                .container {
-                    clear: both !important;
-                    display: block !important;
-                    Margin: 0 auto !important;
-                    max-width: 600px !important;
-                }
-                /* Set the padding on the td rather than the div for Outlook compatibility */
-                .body-wrap .container {
-                    padding: 20px;
-                }
-                /* This should also be a block element, so that it will fill 100% of the .container */
-                .content {
-                    display: block;
-                    margin: 0 auto;
-                    max-width: 600px;
-                }
-                    /* Let's make sure tables in the content area are 100% wide */
-                    .content table {
-                        width: 100%;
-                    }
-    </style>
+      .es-menu td a {
+        font-size: 16px !important
+      }
+
+      .es-header-body p,
+      .es-header-body ul li,
+      .es-header-body ol li,
+      .es-header-body a {
+        font-size: 16px !important
+      }
+
+      .es-footer-body p,
+      .es-footer-body ul li,
+      .es-footer-body ol li,
+      .es-footer-body a {
+        font-size: 16px !important
+      }
+
+      .es-infoblock p,
+      .es-infoblock ul li,
+      .es-infoblock ol li,
+      .es-infoblock a {
+        font-size: 12px !important
+      }
+
+      *[class="gmail-fix"] {
+        display: none !important
+      }
+
+      .es-m-txt-c,
+      .es-m-txt-c h1,
+      .es-m-txt-c h2,
+      .es-m-txt-c h3 {
+        text-align: center !important
+      }
+
+      .es-m-txt-r,
+      .es-m-txt-r h1,
+      .es-m-txt-r h2,
+      .es-m-txt-r h3 {
+        text-align: right !important
+      }
+
+      .es-m-txt-l,
+      .es-m-txt-l h1,
+      .es-m-txt-l h2,
+      .es-m-txt-l h3 {
+        text-align: left !important
+      }
+
+      .es-m-txt-r img,
+      .es-m-txt-c img,
+      .es-m-txt-l img {
+        display: inline !important
+      }
+
+      .es-button-border {
+        display: block !important
+      }
+
+      .es-btn-fw {
+        border-width: 10px 0px !important;
+        text-align: center !important
+      }
+
+      .es-adaptive table,
+      .es-btn-fw,
+      .es-btn-fw-brdr,
+      .es-left,
+      .es-right {
+        width: 100% !important
+      }
+
+      .es-content table,
+      .es-header table,
+      .es-footer table,
+      .es-content,
+      .es-footer,
+      .es-header {
+        width: 100% !important;
+        max-width: 600px !important
+      }
+
+      .es-adapt-td {
+        display: block !important;
+        width: 100% !important
+      }
+
+      .adapt-img {
+        width: 100% !important;
+        height: auto !important
+      }
+
+      .es-m-p0 {
+        padding: 0px !important
+      }
+
+      .es-m-p0r {
+        padding-right: 0px !important
+      }
+
+      .es-m-p0l {
+        padding-left: 0px !important
+      }
+
+      .es-m-p0t {
+        padding-top: 0px !important
+      }
+
+      .es-m-p0b {
+        padding-bottom: 0 !important
+      }
+
+      .es-m-p20b {
+        padding-bottom: 20px !important
+      }
+
+      .es-mobile-hidden,
+      .es-hidden {
+        display: none !important
+      }
+
+      tr.es-desk-hidden,
+      td.es-desk-hidden,
+      table.es-desk-hidden {
+        width: auto !important;
+        overflow: visible !important;
+        float: none !important;
+        max-height: inherit !important;
+        line-height: inherit !important
+      }
+
+      tr.es-desk-hidden {
+        display: table-row !important
+      }
+
+      table.es-desk-hidden {
+        display: table !important
+      }
+
+      td.es-desk-menu-hidden {
+        display: table-cell !important
+      }
+
+      .es-menu td {
+        width: 1% !important
+      }
+
+      table.es-table-not-adapt,
+      .esd-block-html table {
+        width: auto !important
+      }
+
+      table.es-social {
+        display: inline-block !important
+      }
+
+      table.es-social td {
+        display: inline-block !important
+      }
+
+      a.es-button,
+      button.es-button {
+        font-size: 20px !important;
+        display: block !important;
+        border-width: 10px 0px 10px 0px !important
+      }
+    }
+  </style>
 </head>
 
-<body bgcolor="#f6f6f6">
-    
-    <!-- body -->
-    <table class="body-wrap" bgcolor="#f6f6f6">
-        <tr>
-            <td></td>
-            <td class="container" bgcolor="#FFFFFF">
-                <!-- content -->
-                <div class="content">
-                    <table>
-                        <tr>
-                            <td align="center" style="text-align: center;">
-                                <img src="https://oshopdigital.com/img/digitalShop.png" alt="">
-                            </td>
+<body bgcolor="#F0F0F0"
+  style="width:100%;font-family:arial, 'helvetica neue', helvetica, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
+  <div class="es-wrapper-color" style="background-color:#F6F6F6">
+    <table bgcolor="#F0F0F0" cellpadding="0" cellspacing="0" class="es-wrapper" width="100%"
+      style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;background-position:center top; box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);">
+      <tr style="border-collapse:collapse">
+        <td valign="top" style="padding:0;Margin:0">
+          <table cellpadding="0" cellspacing="0" class="es-content" align="center"
+            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%; box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);">
+            <tr style="border-collapse:collapse; box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);">
+              <td align="center" style="padding:0;Margin:0">
+                <table class="es-content-body" align="center" cellpadding="0" cellspacing="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#FFFFFF;width:600px; box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+                  mso-effects-shadow-color: #000000;
+        mso-effects-shadow-alpha: 30%;
+        mso-effects-shadow-dpiradius: 4.0pt;
+        mso-effects-shadow-dpidistance: 3.0pt;
+        mso-effects-shadow-angledirection: 2700000;
+        mso-effects-shadow-pctsx: 100%;
+        mso-effects-shadow-pctsy: 100%;">
+                  <tr style="border-collapse:collapse; box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);background-color: #424345;"  bgcolor="#424345">
+                    <td align="left"
+                      style="Margin:0;padding-top:20px;padding-bottom:20px;padding-left:20px;padding-right:20px; box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);">
+                      <table cellpadding="0" cellspacing="0" class="es-left" align="left"
+                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:left">
+                        <tr style="border-collapse:collapse">
+                          <td class="es-m-p20b" align="left" style="padding:0;Margin:0;width:270px">
+                            <table cellpadding="0" cellspacing="0" width="100%" role="presentation"
+                              style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                              <tr style="border-collapse:collapse">
+                                <td align="left" style="padding:0;Margin:0;font-size:0px">
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
                         </tr>
-                    </table>
-                    <table>
-                        
-                        <tr>
-                            <td>
-                                <h3>[Title]</h3> 
-                                <br>
-                                <p>[Conteudo]</p>
-                            </td>
+                      </table>
+                      <table cellpadding="0" cellspacing="0" class="es-right" align="right"
+                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:right">
+                        <tr style="border-collapse:collapse">
+                          <td align="left" style="padding:0;Margin:0;width:270px">
+                            <table cellpadding="0" cellspacing="0" width="100%" role="presentation"
+                              style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                              <tr style="border-collapse:collapse">
+                                <td align="center" style="padding:0;Margin:0;padding-bottom:20px;padding-top:40px">
+                                  <p
+                                    style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:28px;color:#FFF">
+                                    <b> [Title] </b>
+                                  </p>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
                         </tr>
-                    </table>
-                </div>
-                <!-- /content -->
-            </td>
-            <td></td>
-        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr style="border-collapse:collapse">
+                    <td align="left" style="padding:0;Margin:0;padding-top:20px;padding-left:20px;padding-right:20px">
+                      <table cellpadding="0" cellspacing="0" width="100%"
+                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                        <tr style="border-collapse:collapse">
+                          <td align="center" valign="top" style="padding:0;Margin:0;width:560px">
+                            <table cellpadding="0" cellspacing="0" width="100%" role="presentation"
+                              style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                              <tr style="border-collapse:collapse">
+                                <td align="left" style="padding:0;Margin:0">
+                                  <p style="padding-top: 10px">[Conteudo]</p>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr style="border-collapse:collapse">
+                    <td align="left" style="padding:0;Margin:0;padding-top:20px;padding-left:20px;padding-right:20px">
+                      <table cellpadding="0" cellspacing="0" width="100%"
+                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                        <tr style="border-collapse:collapse">
+                          <td align="center" valign="top" style="padding:0;Margin:0;width:560px">
+                            <table cellpadding="0" cellspacing="0" width="100%" role="presentation"
+                              style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                              <tr style="border-collapse:collapse">
+                                <td align="right" style="padding:0;Margin:0;padding-right:25px">
+                                  <p
+                                    style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#FF9100">
+                                    <b>O SHOP DIGITAL</b><br>
+                                    <br>
+                                  </p>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr style="border-collapse:collapse">
+                    <td align="left" bgcolor="#424345"
+                      style="padding:0;Margin:0;padding-top:20px;padding-left:20px;padding-right:20px;background-color:#424345">
+                      <table cellpadding="0" cellspacing="0" width="100%"
+                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                        <tr style="border-collapse:collapse">
+                          <td align="center" valign="top" style="padding:0;Margin:0;width:560px">
+                            <table cellpadding="0" cellspacing="0" width="100%" role="presentation"
+                              style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                              <tr style="border-collapse:collapse">
+                                <td align="left" style="padding:0;Margin:0">
+                                  <p
+                                    style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#FFFFFF">
+                                    <b>Em caso de dúvidas, envie uma mensagem para:
+                                  </p>
+                                </td>
+                              </tr>
+                              <tr style="border-collapse:collapse">
+                                <td align="left" style="padding:0;Margin:0;padding-top:5px; color: #000 !important;">
+                                  <p
+                                    style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#FFFFFF !important">
+                                    
+                                    &nbsp;&nbsp;
+                                    <b style="color: #FFFFFF !important;">comercial&#64;oshopdigital&#46;com
+                                      <br><br></b>
+                                  </p>
+                                  <br>
+                                  <br>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
     </table>
-
+  </div>
 </body>
+
 </html>

@@ -584,6 +584,7 @@ namespace FashionWeb.Domain.BusinessRules
             orderr.OrderStatusId = (int)OrderStatus.OrderStatusType.Realizado;
             orderr.Observation = "Seu pedido foi recebido, aguarde à aprovação pela administradora do cartão de crédito.";
             orderr.OrderNumber = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper();
+            orderr.Revelado = false;
 
             orderr.Card.CreateDate = DateTime.Now;
 
@@ -644,6 +645,7 @@ namespace FashionWeb.Domain.BusinessRules
                 {
                     var newOrder = this._coreRepository.GetOrder(order.Id);
                     order.OrderStatus = this._coreRepository.GetOrderStatus(newOrder.OrderStatusId);
+                    order.Revelado = newOrder.Revelado;
                 }
             }
 
@@ -653,6 +655,11 @@ namespace FashionWeb.Domain.BusinessRules
         public bool UpdateOrderStatus(Orderr orderr)
         {        
             return this._coreRepository.UpdateOrderStatus(orderr);
+        }
+
+        public bool UpdateOrderRevelado(int Id)
+        {
+            return this._coreRepository.UpdateOrderRevelado(Id);
         }
     }
 }

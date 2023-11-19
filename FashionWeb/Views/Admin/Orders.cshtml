@@ -18,20 +18,20 @@
     <section id="hero" class="d-flex align-items-center">
         <div class="container position-relative" data-aos="fade-up" data-aos-delay="100">
             <div class="table-responsive" ng-show="list.orders != null && list.orders.length > 0">
-                <table class="table table-striped table-bordered">
+                <table class="table">
                     <thead>
                         <tr>
-                            <th>N° Pedido</th>
-                            <th>Valor Total</th>
-                            <th>Status</th>
+                            <th>Pedido</th>
+                            <th>Data</th>
+                            <th>Valor</th>
                             <th>Editar</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in list.orders">
-                            <td>{{ item.orderNumber }}</td>
-                            <td>{{ item.valorTotal }}</td>
-                            <td>{{ item.orderStatus.name }}</td>
+                        <tr ng-repeat="item in list.orders" ng-style="{ 'background-color': item.revelado ? 'aqua' : 'yellow' }">
+                            <td><span ng-click="viewOrder(item.id)"><i class="bi bi-eye-fill"></i></span></td>
+                            <td>{{ item.createDate | date:'dd/MM HH:mm' }}</td>
+                            <td>{{ item.valorTotal | currency:"R$" }}</td>
                             <td><button class="btn btn-sm" ng-click="openModal(item)"><i class="bi bi-pencil"></i></button></td>
                         </tr>
                     </tbody>
@@ -65,41 +65,45 @@
                                     <option value="">Selecione uma opção</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>CPF:</label>
-                                <span>{{order.card.cpfTitular}}</span>
+                        </div><br />
+                        <span class="btn" ng-style="{ 'background-color': order.revelado ? 'aqua' : 'yellow' }" ng-click="revelarCard(order.id)">Revelar Card</span>
+                        <br /><br /><br />
+                        <div class="card-container" hidden="hidden">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>CPF:</label>
+                                    <span>{{order.card.cpfTitular}}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Nome Titular:</label>
-                                <span>{{order.card.nomeTitular}}</span>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Nome Titular:</label>
+                                    <span>{{order.card.nomeTitular}}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Telefone do Titular:</label>
-                                <span>{{order.card.telefoneTitular}}</span>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Telefone do Titular:</label>
+                                    <span>{{order.card.telefoneTitular}}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Cartão:</label>
-                                <span>{{order.card.numeroCartao}}</span>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Cartão:</label>
+                                    <span>{{order.card.numeroCartao}}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Validade:</label>
-                                <span>{{order.card.validade}}</span>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Validade:</label>
+                                    <span>{{order.card.validade}}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Código Segurança:</label>
-                                <span>{{order.card.cvv}}</span>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Código Segurança:</label>
+                                    <span>{{order.card.cvv}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -129,7 +133,7 @@
 
         $scope.list = {
             orders: [],
-            status: ['Pedido Realizado', 'Pedido Cancelado', 'Pagamento Aprovado']
+            status: ['Pedido Realizado', 'Pedido Cancelado']
         };
 
         $scope.entity = {
@@ -150,6 +154,10 @@
 
         saveOrder = function (param) {
             return $http.post("/Admin/SaveOrder", param, headers);
+        }
+
+        revelarCard = function (param) {
+            return $http.post("/Admin/RevelarCard", param, headers);
         }
 
         $scope.save_click = function () {
@@ -213,12 +221,65 @@
 
         $scope.openModal = function (item) {
             $scope.order = item;
+
+            var divCard = document.querySelector('.card-container');
+            divCard.setAttribute('hidden', 'true');
+
             $('#myModal').modal('show');
         }
 
         $scope.closeModal = function () {
             $scope.order = {};
             $('#myModal').modal('hide');
+        }
+
+        $scope.viewOrder = function (Id) {
+            $(".spinerStyle").addClass('centerSpinner');
+            $(".spinerBackground").addClass('overlay');
+
+            // Obtem a URL completa
+            var url = $location.absUrl();
+            //https
+            var https = url.split('/')[0];
+            // Extrai apenas o domínio
+            var domain = url.split('/')[2];
+
+            var resultado = https + "//" + domain;
+
+            var url = resultado + '/' + 'User/Order?Id=' + Id;
+            window.open(url, "_blank");
+
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+        }
+
+        $scope.revelarCard = function (id) {
+
+            $(".spinerStyle").addClass('centerSpinner');
+            $(".spinerBackground").addClass('overlay');
+
+            revelarCard(id).then(function (data) {
+                var result = data.data;
+
+                if (result == true) {
+                    utilidadesService.exibirMensagem('Sucesso!', 'Card revelado com sucesso.', true);
+                }
+                else {
+                    utilidadesService.exibirMensagem('Falha', 'Falha ao revelar card.', true);
+                }
+
+                var divCard = document.querySelector('.card-container');
+                divCard.removeAttribute('hidden');
+
+                $(".spinerStyle").removeClass('centerSpinner');
+                $(".spinerBackground").removeClass('overlay');
+
+            }, function (error) {
+                $(".spinerStyle").removeClass('centerSpinner');
+                $(".spinerBackground").removeClass('overlay');
+            });
+
+
         }
 
 

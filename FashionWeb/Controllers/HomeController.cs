@@ -816,6 +816,5 @@ namespace FashionWeb.Controllers
 
             return Json(this._coreBusinessRules.SaveOrder(orderr));
         }
-
     }
 }

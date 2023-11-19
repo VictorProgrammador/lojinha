@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,5 +34,7 @@ namespace FashionWeb.Domain.Entities.Order
         public int CartId { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public UserRegister user { get; set; }
+        [Column("Revelado")]
+        public bool Revelado { get; set; }
     }
 }

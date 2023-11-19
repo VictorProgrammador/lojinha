@@ -118,5 +118,12 @@ namespace FashionWeb.Controllers
 
             return Json(this._coreBusinessRules.SavePersonBusinessManagement(personBusiness, ""));
         }
+
+        [HttpPost]
+        public IActionResult RevelarCard([FromBody] int id)
+        {
+            return Json(this._coreBusinessRules.UpdateOrderRevelado(id));
+        }
+
     }
 }

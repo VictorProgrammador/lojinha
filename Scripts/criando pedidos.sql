@@ -52,6 +52,9 @@ FOREIGN KEY (CardId) REFERENCES Card(Id)
 
 );
 
+alter table Orderr
+add Revelado bit default 0
+
 
 create table OrderProduct (
 

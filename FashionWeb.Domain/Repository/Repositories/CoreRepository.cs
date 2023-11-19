@@ -1535,7 +1535,7 @@ namespace FashionWeb.Domain.Repository.Repositories
 
         public bool SaveOrder(Orderr order)
         {
-            var insertOrder = @"INSERT INTO [Orderr] VALUES (@PersonId, @OrderNumber, @CreateDate, @UpdateDate, @OrderStatusId, @Observation, @CardId, @FreteService, @DeliveryRangeMin, @DeliveryRangeMax, @FretePrice, @Parcelamento, @ValorTotal, @Bairro, @Cep, @Cidade, @Complemento, @NumeroCasa, @Rua)";
+            var insertOrder = @"INSERT INTO [Orderr] VALUES (@PersonId, @OrderNumber, @CreateDate, @UpdateDate, @OrderStatusId, @Observation, @CardId, @FreteService, @DeliveryRangeMin, @DeliveryRangeMax, @FretePrice, @Parcelamento, @ValorTotal, @Bairro, @Cep, @Cidade, @Complemento, @NumeroCasa, @Rua, @Revelado)";
             int id = 0;
 
             using (var db = _connectionFactory.GetConnection())
@@ -1562,7 +1562,8 @@ namespace FashionWeb.Domain.Repository.Repositories
                     Cidade = order.Cidade,
                     Complemento = order.Complemento,
                     NumeroCasa = order.NumeroCasa,
-                    Rua = order.Rua
+                    Rua = order.Rua,
+                    Revelado = order.Revelado
                 });
 
                 db.Close();
@@ -1707,6 +1708,7 @@ namespace FashionWeb.Domain.Repository.Repositories
                                     [Orderr].CreateDate,
                                     [Orderr].PersonId,
                                     [Orderr].CardId,
+                                    [Orderr].Revelado,
                                     [Orderr].[OrderStatusId],
                                     [Card].CpfTitular,
                                     [Card].Cvv,
@@ -1774,6 +1776,26 @@ namespace FashionWeb.Domain.Repository.Repositories
                 {
                     OrderStatusId = orderr.OrderStatusId,
                     Id = orderr.Id
+                });
+
+                db.Close();
+            }
+
+            return id > 0 ? true : false;
+        }
+
+        public bool UpdateOrderRevelado(int Id)
+        {
+            var updateOrderRevelado = @"UPDATE [Orderr] set Revelado = 1 WHERE Id = @Id";
+            int id = 0;
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                id = db.Execute(updateOrderRevelado, new
+                {
+                    Id = Id
                 });
 
                 db.Close();
