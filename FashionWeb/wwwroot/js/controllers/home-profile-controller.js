@@ -43,5 +43,12 @@
 
     }
 
+    function adicionarAoCarrinho() {
+        fbq('track', 'AddToCart', {
+            value: $scope.entity.value,
+            currency: 'BRL'
+        });
+    }
+
   
 }]);

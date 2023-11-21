@@ -190,8 +190,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="links">
-                    <a href="/" style="color:black">Continuar comprando</a>
-                    <a href="#" style="color:black" ng-show="entity.cartProducts != null && entity.cartProducts.length > 0" ng-click="showFormaPagamento()">Ir para endereço</a>
+                    <a href="/" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;">Continuar comprando</a>
+                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;" ng-show="entity.cartProducts != null && entity.cartProducts.length > 0" ng-click="showFormaPagamento()">Finalizar compra</a>
                 </div>
             </div>
         </div>
@@ -200,6 +200,19 @@
     <div class="formaPagamento-container" hidden="hidden">
         <div class="produto-descricao">Endereço de Entrega</div>
         <br /><br />
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="nomeTitular">Código Postal</label>
+
+                <div class="btn-search" style="width:100%">
+                    <input type="text" class="cep" name="cep" ng-model="endereco.cep" placeholder="Digite seu CEP">
+                    <button class="btn-bonito" ng-click="consultaViaCep()">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div><br />
 
         <div class="form-row">
             <div class="form-group col-md-12">
@@ -230,18 +243,11 @@
             </div>
         </div>
 
-        <div class="form-row">
-            <div class="form-group col-md-12">
-                <label for="nomeTitular">Código Postal</label>
-                <input type="text" class="cep" name="cep" ng-model="endereco.cep" placeholder="Digite seu CEP" />
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-md-12">
                 <div class="links">
-                    <a href="#" style="color:black" ng-click="showContainerCart()">Passo anterior</a>
-                    <a href="#" style="color:black" ng-click="completePayment()">Ir para metódo de envio</a>
+                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;" ng-click="showContainerCart()">Passo anterior</a>
+                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;" ng-click="completePayment()">Ir para metódo de envio</a>
                 </div>
             </div>
         </div>
@@ -277,8 +283,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="links">
-                    <a href="#" style="color:black" ng-click="showFormaPagamento()">Passo anterior</a>
-                    <a href="#" style="color:black" ng-click="irRegistro('@User.Identity.Name')">Próxima etapa</a>
+                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;" ng-click="showFormaPagamento()">Passo anterior</a>
+                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;" ng-click="irRegistro('@User.Identity.Name')">Próxima etapa</a>
                 </div>
             </div>
         </div>
@@ -306,8 +312,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="links">
-                    <a href="#" style="color:black" ng-click="completePayment()">Passo anterior</a>
-                    <a href="#" style="color:black" ng-click="validadeUserToMeioPagamento()">Ir para pagamento</a>
+                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;" ng-click="completePayment()">Passo anterior</a>
+                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;" ng-click="validadeUserToMeioPagamento()">Ir para pagamento</a>
                 </div>
             </div>
         </div>
@@ -350,8 +356,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="links">
-                    <a href="#" style="color:black" ng-click="irEndereco('@User.Identity.Name')">Passo anterior</a>
-                    <a href="#" style="color:black" ng-click="irPagamento()">Ir para pagamento</a>
+                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;" ng-click="irEndereco('@User.Identity.Name')">Passo anterior</a>
+                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;" ng-click="irPagamento()">Finalizar pagamento</a>
                 </div>
             </div>
         </div>
@@ -414,8 +420,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="links">
-                    <a href="#" style="color:black" ng-click="irMeioPagamento()">Passo anterior</a>
-                    <span style="color:white" class="botao-preto" ng-click="paid()" onclick="pagarCompra()">Efetuar pedido</span>
+                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;" ng-click="irMeioPagamento()">Passo anterior</a>
+                    <span style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;" class="botao-preto" ng-click="paid()" onclick="pagarCompra()">Efetuar pedido</span>
                 </div>
             </div>
         </div>

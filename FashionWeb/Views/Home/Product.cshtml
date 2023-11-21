@@ -92,7 +92,7 @@
             <div class="row" style="text-align:center">
                 <div class="col-md-12">
                     <div class="produto-valor">
-                        <button type="submit" class="botao-preto" onclick="adicionarAoCarrinho()"> Adicionar ao carrinho </button>
+                        <button type="submit" class="botao-preto" ng-click="adicionarAoCarrinho()"> Adicionar ao carrinho </button>
                     </div>
                 </div>
             </div>
@@ -124,11 +124,3 @@
 
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
-<script>
-    fbq('track', 'ViewContent');
-
-    function adicionarAoCarrinho() {
-        fbq('track', 'AddToCart');
-    }
-
-</script>

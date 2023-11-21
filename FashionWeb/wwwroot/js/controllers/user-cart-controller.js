@@ -91,6 +91,17 @@
                     if (hasDigitalFrete)
                         $scope.hasDigitalFrete = true;
 
+                    var totalValueCheckout = 0;
+
+                    $scope.entity.cartProducts.map(function (produto) {
+                        totalValueCheckout += produto.product.value;
+                    });
+
+                    fbq('track', 'InitiateCheckout', {
+                        value: totalValueCheckout,
+                        currency: 'BRL'
+                    });
+
                 }
             }
 
@@ -410,6 +421,11 @@
 
             basicService.createOrder($scope.OrderEntity).then(function (data) {
 
+                fbq('track', 'Purchase', {
+                    value: $scope.valorTotal,
+                    currency: 'BRL'
+                });
+
                 var result = data.data;
 
                 // Obtem a URL completa
@@ -614,6 +630,62 @@
 
     }
 
+    async function searchViaCep(cep) {
+        try {
+            // Construa a URL de consulta
+            const url = `https://viacep.com.br/ws/${cep}/json/`;
 
+            // Faça a solicitação usando Fetch
+            const resposta = await fetch(url);
+
+            // Verifique se a solicitação foi bem-sucedida (status 200 OK)
+            if (!resposta.ok) {
+                utilidadesService.exibirMensagem('Atenção', 'Erro ao consultar CEP!', false);
+            }
+
+            // Parseie a resposta como JSON
+            const dadosEndereco = await resposta.json();
+
+            // Verifique se a resposta contém um erro
+            if (dadosEndereco.erro) {
+                utilidadesService.exibirMensagem('Atenção', 'Cep não encontrado!', false);
+            }
+
+            // Retorne os dados do endereço
+            return dadosEndereco;
+        } catch (erro) {
+            console.error(erro.message);
+            return null;
+        }
+    }
+
+    $scope.consultaViaCep = function () {
+
+        console.log($scope.endereco.cep);
+
+        if ($scope.endereco.cep != null &&
+            $scope.endereco.cep != '') {
+            searchViaCep($scope.endereco.cep)
+                .then(dados => {
+                    if (dados != null && dados.cep != '') {
+
+                        $scope.$apply(function ($scope) {
+                            $scope.endereco.rua = dados.logradouro;
+                            $scope.endereco.cidade = dados.localidade;
+                            $scope.endereco.bairro = dados.bairro;
+                            $scope.endereco.complemento = dados.complemento;
+                        });
+
+                    } else {
+                        utilidadesService.exibirMensagem('Atenção', 'CEP não encontrado ou ocorreu um erro, digite manualmente.', false);
+                    }
+                })
+                .catch(erro => console.error(erro));
+        }
+        else {
+            utilidadesService.exibirMensagem('Atenção', 'Cep não informado!', false);
+        }
+
+    }
 
 }]);
