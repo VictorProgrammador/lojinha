@@ -586,7 +586,7 @@ input{
   justify-content: center;
   border-radius: 10px;
   padding: 30px;
-  background: url('/img/Banner-home-desk.png');
+  background: url('/img/Banner-home-desk.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -622,7 +622,7 @@ input{
 
 @media screen and (max-width: 600px) {
   .banner-desk{
-    background: url('/img/Banner-home-mobile.png');
+    background: url('/img/Banner-home-mobile.jpg');
     background-size: cover;
     background-position: center;
     height:250px;
