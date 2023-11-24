@@ -1349,28 +1349,21 @@ namespace FashionWeb.Domain.Repository.Repositories
                                     [Product].Name,
                                     [Product].Value,
                                     [Product].Description,
-                                    [Product].AcceptComplement,
-                                    [Product].IsComplement,
-                                    [Product].MaxComplement,
                                     [Product].Image,
-                                    [Product].CreateDate,
-                                    [Product].PersonBusinessId
+                                    [Product].CreateDate
                                     FROM [Product] 
-                                    WHERE [IsDigitalShop] = 1 ";
+                                    INNER JOIN Category category
+                                    ON category.Id = [Product].CategoryId
+                                    WHERE [Product].[IsDigitalShop] = 1 ";
 
                 if(searchPersonBusinessProducts.CategoryId > 0)
                 {
                     sql += " AND [CategoryId] = @CategoryId";
                 }
 
-                if (searchPersonBusinessProducts.AllProducts)
-                {
-                    sql += $" ORDER BY {orderBy} ";
-                }
-                else
-                {
-                    sql += $" ORDER BY {orderBy} OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY ";
-                }
+                sql += " GROUP BY category.Id, [Product].Id, [Product].Name, [Product].Value, [Product].Description, [Product].Image, [Product].CreateDate";
+
+                sql += $" ORDER BY [category].Id asc OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY ";
 
                 var entities = db.Query<Product>(sql, new { CategoryId = searchPersonBusinessProducts.CategoryId, Offset = Offset, Limit = Limit }).ToList();
 
