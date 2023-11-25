@@ -622,6 +622,10 @@
                 $scope.valorTotal = $scope.valorTotal / 2;
                 $scope.cupomAplicado = true;
             }
+            else if ($scope.hasDigitalFrete && $scope.cupom == "SHOP100" && $scope.cupomAplicado == false) {
+                $scope.valorTotal = 0;
+                $scope.cupomAplicado = true;
+            }
             else {
                 utilidadesService.exibirMensagem('Atenção', 'Cupom não reconhecido!', false);
             }
