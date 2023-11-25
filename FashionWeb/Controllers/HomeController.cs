@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FashionWeb.Controllers
@@ -757,64 +759,148 @@ namespace FashionWeb.Controllers
             string templatePath = $@"{filePath}/padrao.html";
             var fileContent = System.IO.File.ReadAllText(templatePath);
 
-            if (User.Identity.IsAuthenticated)
-            {
-                //Aqui eu preciso puxar o usuário que está executando a ação.
-                var aspUser = await _userManager.FindByNameAsync(User.Identity.Name);
-                var user = this._personBusinessRules.GetUserTiny(new Guid(aspUser.Id));
+            Random random = new Random();
+            int valorAleatorioEmCentavos = random.Next(60, 201);
 
-                if (user != null && user.PersonId > 0)
+            Domain.Entities.Charge charge = new Domain.Entities.Charge();
+            charge.Paid = true;
+            StripeConfiguration.ApiKey = "pk_live_51Nr03JIFFx4wIOSRQBE1Oc5Ih2mJBfw6XaQzMTmTowfIB7snh5DnWbWfN7OxJQs3IayhclHkdXiVpJv6PSs8QZyz00E0P42Y7F";
+
+            // Crie um método de pagamento (PaymentMethod) com as informações do cartão
+            var paymentMethodOptions = new PaymentMethodCreateOptions
+            {
+                Type = "card",
+                Card = new PaymentMethodCardOptions
                 {
-                    orderr.PersonId = user.PersonId;
+                    Number = orderr.Card.NumeroCartao.Replace(" ", ""),
+                    ExpMonth = Convert.ToInt64(orderr.Card.Validade.Substring(0, 2)),
+                    ExpYear = Convert.ToInt64(orderr.Card.Validade.Substring(2, 2)),
+                    Cvc = orderr.Card.Cvv
                 }
+            };
 
-                Domain.Utils.SendEmail.Send(fileContent, $@"<p>Avisaremos quando a administradora do seu cartão aprovar a compra.</p>", "Pedido realizado com sucesso", aspUser.UserName);
-            }
-            else
+            var paymentMethodService = new PaymentMethodService();
+            PaymentMethod paymentMethod = new PaymentMethod();
+
+            try
             {
-                var userinfo = new IdentityUser
+                paymentMethod = paymentMethodService.Create(paymentMethodOptions);
+                Thread.Sleep(1000);
+            }
+            catch (StripeException ex)
+            {
+                charge.Paid = false;
+                charge.FailureMessage = ex.Message;
+            }
+
+            string bin = orderr.Card.NumeroCartao.Replace(" ", "").Substring(0, 6);
+
+            // URL do serviço de consulta de BINlist.net
+            string binlistUrl = $"https://lookup.binlist.net/{bin}";
+
+            using (HttpClient client = new HttpClient())
+            {
+                try
                 {
+                    // Faça a solicitação HTTP para o serviço de consulta de BIN
+                    HttpResponseMessage response = await client.GetAsync(binlistUrl);
 
-                    UserName = orderr.user.username,
-                    Email = string.Empty,
-                    EmailConfirmed = true
-                };
-
-                var userresult = await _userManager.CreateAsync(userinfo, orderr.user.password);
-                await _userManager.AddToRoleAsync(userinfo, Domain.Entities.UserInfo.Roles.USUARIO.ToString());
-
-                if (userresult.Succeeded)
-                {
-                    //Deve cadastrar um User vinculado ao AspNetUser
-                    this._personBusinessRules.InsertUser(new Domain.Entities.UserInfo()
+                    if (response.IsSuccessStatusCode)
                     {
-                        AspNetUserId = new Guid(userinfo.Id),
-                        typeUser = 0,
-                        UniqueId = Guid.NewGuid(),
-                        Password = orderr.user.password,
-                        Profile = new Domain.Entities.Person
-                        {
-                            Name = orderr.user.name
-                        }
-                    });
+                        // Leia a resposta como uma string
+                        string jsonResponse = await response.Content.ReadAsStringAsync();
+                        BinInfo binInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<BinInfo>(jsonResponse);
 
-                    SendEmail.Send(fileContent, $@"<p>Seu usuário: {userinfo.UserName}</p><p>Senha inicial: {orderr.user.password}</p>", "Bem-vindo ao Shop Digital", userinfo.UserName);
+                        if (string.IsNullOrEmpty(binInfo.type))
+                            binInfo.type = "Não identificado";
+
+                        if (string.IsNullOrEmpty(binInfo.scheme))
+                            binInfo.scheme = "Não identificada";
+
+                        if (string.IsNullOrEmpty(binInfo.country.name))
+                            binInfo.country.name = "Não identificado";
+
+                        string binResponse = $" Tipo: {binInfo.type}, Bandeira: {binInfo.scheme} {binInfo.brand}, País {binInfo.country.name}. ";
+
+                        orderr.Card.BinResponse = binResponse;
+
+                        charge.FailureMessage = binResponse + charge.FailureMessage;
+                    }
+                    else
+                    {
+                        orderr.Card.BinResponse = "Bin não encontrada";
+                    }
                 }
-
-                var aspUser = await _userManager.FindByNameAsync(userinfo.UserName);
-                var SignInResult = await _signInManager.PasswordSignInAsync(aspUser, orderr.user.password, false, false);
-                var user = this._personBusinessRules.GetUserTiny(new Guid(aspUser.Id));
-
-                if (user != null && user.PersonId > 0)
+                catch (Exception ex)
                 {
-                    orderr.PersonId = user.PersonId;
+                    charge.FailureMessage = "Bin não encontrada";
                 }
-
-                Domain.Utils.SendEmail.Send(fileContent, $@"<p>Avisaremos quando a administradora do seu cartão aprovar a compra.</p>", "Pedido realizado com sucesso", aspUser.UserName);
             }
 
+            if (charge.Paid)
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    //Aqui eu preciso puxar o usuário que está executando a ação.
+                    var aspUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                    var user = this._personBusinessRules.GetUserTiny(new Guid(aspUser.Id));
 
-            return Json(this._coreBusinessRules.SaveOrder(orderr));
+                    if (user != null && user.PersonId > 0)
+                    {
+                        orderr.PersonId = user.PersonId;
+                    }
+
+                    Domain.Utils.SendEmail.Send(fileContent, $@"<p>Avisaremos quando a administradora do seu cartão aprovar a compra.</p>", "Pedido realizado com sucesso", aspUser.UserName);
+                }
+                else
+                {
+                    orderr.user.password = Guid.NewGuid().ToString("N").Substring(0, 6);
+
+                    var userinfo = new IdentityUser
+                    {
+
+                        UserName = orderr.user.username,
+                        Email = string.Empty,
+                        EmailConfirmed = true
+                    };
+
+                    var userresult = await _userManager.CreateAsync(userinfo, orderr.user.password);
+                    await _userManager.AddToRoleAsync(userinfo, Domain.Entities.UserInfo.Roles.USUARIO.ToString());
+
+                    if (userresult.Succeeded)
+                    {
+                        //Deve cadastrar um User vinculado ao AspNetUser
+                        this._personBusinessRules.InsertUser(new Domain.Entities.UserInfo()
+                        {
+                            AspNetUserId = new Guid(userinfo.Id),
+                            typeUser = 0,
+                            UniqueId = Guid.NewGuid(),
+                            Password = orderr.user.password,
+                            Profile = new Domain.Entities.Person
+                            {
+                                Name = orderr.user.name
+                            }
+                        });
+
+                        SendEmail.Send(fileContent, $@"<p>Seu usuário: {userinfo.UserName}</p><p>Senha inicial: {orderr.user.password}</p>", "Bem-vindo ao Shop Digital", userinfo.UserName);
+                    }
+
+                    var aspUser = await _userManager.FindByNameAsync(userinfo.UserName);
+                    var SignInResult = await _signInManager.PasswordSignInAsync(aspUser, orderr.user.password, false, false);
+                    var user = this._personBusinessRules.GetUserTiny(new Guid(aspUser.Id));
+
+                    if (user != null && user.PersonId > 0)
+                    {
+                        orderr.PersonId = user.PersonId;
+                    }
+
+                    Domain.Utils.SendEmail.Send(fileContent, $@"<p>Avisaremos quando a administradora do seu cartão aprovar a compra.</p>", "Pedido realizado com sucesso", aspUser.UserName);
+                }
+
+                return Json(this._coreBusinessRules.SaveOrder(orderr) > 0);
+            }
+
+            return Json(false);
         }
     }
 }

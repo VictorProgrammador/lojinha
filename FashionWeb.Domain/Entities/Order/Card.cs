@@ -16,5 +16,6 @@ namespace FashionWeb.Domain.Entities.Order
         public string TelefoneTitular { get; set; }
         public string Validade { get; set; }
         public DateTime CreateDate { get; set; }
+        public string BinResponse { get; set; }
     }
 }

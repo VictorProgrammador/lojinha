@@ -1286,9 +1286,9 @@ main {
 .person-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  padding: 40px 20px;
-  border-radius: 10px;
+  gap: 5px;
+  padding: 10px 7px;
+  border-radius: 4px;
   background: linear-gradient(135deg, var(--first-color-second), var(--first-color-second));
 }
 

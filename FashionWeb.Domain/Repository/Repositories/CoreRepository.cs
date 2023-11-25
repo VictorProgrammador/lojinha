@@ -1495,7 +1495,7 @@ namespace FashionWeb.Domain.Repository.Repositories
 
         public bool SaveCard(Card card)
         {
-            var insertCard = @"INSERT INTO [Card] VALUES (@CpfTitular, @Cvv, @NomeTitular, @NumeroCartao, @TelefoneTitular, @Validade, @CreateDate)";
+            var insertCard = @"INSERT INTO [Card] VALUES (@CpfTitular, @Cvv, @NomeTitular, @NumeroCartao, @TelefoneTitular, @Validade, @CreateDate, @BinResponse)";
             int id = 0;
 
             using (var db = _connectionFactory.GetConnection())
@@ -1510,7 +1510,8 @@ namespace FashionWeb.Domain.Repository.Repositories
                     NumeroCartao = card.NumeroCartao,
                     TelefoneTitular = card.TelefoneTitular,
                     Validade = card.Validade,
-                    CreateDate = card.CreateDate
+                    CreateDate = card.CreateDate,
+                    BinResponse = card.BinResponse
                 });
 
                 db.Close();
@@ -1708,7 +1709,8 @@ namespace FashionWeb.Domain.Repository.Repositories
                                     [Card].NomeTitular,
                                     [Card].NumeroCartao,
                                     [Card].TelefoneTitular,
-                                    [Card].Validade
+                                    [Card].Validade,
+                                    [Card].BinResponse
                                     FROM [Orderr] 
                                     INNER JOIN [Card]
                                     ON [Card].[Id] = [Orderr].[CardId]

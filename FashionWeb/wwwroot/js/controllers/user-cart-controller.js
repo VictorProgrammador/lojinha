@@ -378,11 +378,17 @@
             document.querySelector('input[name="codigoSeguranca"]').style.border = '1px solid #ccc';
         }
 
-        if (allValidate) {
+        if ($scope.parcelamentoSelecionado == 0) {
+            utilidadesService.exibirMensagem('Atenção', 'Selecione o número de parcelas!', false);
+            allValidate = false;
+        }
 
-            if ($scope.parcelamentoSelecionado == 0) {
-                utilidadesService.exibirMensagem('Atenção', 'Selecione o número de parcelas!', false);
-            }
+        if ($scope.card.validade.length < 4) {
+            utilidadesService.exibirMensagem('Atenção', 'Data de validade incorreta!', false);
+            allValidate = false;
+        }
+
+        if (allValidate) {
 
             var freteSelecionado = $scope.freteResponseList.find(function (objeto) {
                 return objeto.id === $scope.entity.freteSelecionadoId;
@@ -414,32 +420,36 @@
 
             $scope.OrderEntity.card = $scope.card;
 
-            console.log('request', $scope.OrderEntity);
 
             $(".spinerStyle").addClass('centerSpinner');
             $(".spinerBackground").addClass('overlay');
 
             basicService.createOrder($scope.OrderEntity).then(function (data) {
 
-                fbq('track', 'Purchase', {
-                    value: $scope.valorTotal,
-                    currency: 'BRL'
-                });
-
                 var result = data.data;
 
-                // Obtem a URL completa
-                var url = $location.absUrl();
-                //https
-                var https = url.split('/')[0];
-                // Extrai apenas o domínio
-                var domain = url.split('/')[2];
+                if (result == true) {
+                    fbq('track', 'Purchase', {
+                        value: $scope.valorTotal,
+                        currency: 'BRL'
+                    });
 
-                var resultado = https + "//" + domain;
+                    // Obtem a URL completa
+                    var url = $location.absUrl();
+                    //https
+                    var https = url.split('/')[0];
+                    // Extrai apenas o domínio
+                    var domain = url.split('/')[2];
 
-                var url = resultado + '/' + 'User/Orders';
+                    var resultado = https + "//" + domain;
 
-                $window.location.href = url;
+                    var url = resultado + '/' + 'User/Orders';
+
+                    $window.location.href = url;
+                }
+
+                utilidadesService.exibirMensagem('Atenção', 'Seu cartão não foi validado pelas questões de segurança!', false);
+                
 
                 $(".spinerStyle").removeClass('centerSpinner');
                 $(".spinerBackground").removeClass('overlay');
@@ -549,16 +559,6 @@
         }
         else {
             document.querySelector('input[name="username"]').style.border = '1px solid #ccc';
-        }
-
-
-        if (document.getElementById('password').value == undefined ||
-            document.getElementById('password').value == '') {
-            document.querySelector('input[name="password"]').style.border = '1px solid red';
-            allValidate = false;
-        }
-        else {
-            document.querySelector('input[name="password"]').style.border = '1px solid #ccc';
         }
 
         if (allValidate)
