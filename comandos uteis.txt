@@ -23,6 +23,7 @@ sudo cp -r /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/w
 sudo cp -r /home/azure/backupLoja/* /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads
 
 
+
 sudo chown -R www-data:www-data /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads
 sudo chmod -R 755 /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads
 
