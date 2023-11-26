@@ -424,6 +424,71 @@ namespace FashionWeb.Controllers
         }
 
         [HttpPost]
+        [RequestSizeLimit(long.MaxValue)]
+        public async Task<IActionResult> SaveMyProductFile(Microsoft.AspNetCore.Http.IFormFile file)
+        {
+            string productValue = Request.Form["product"];
+            if (string.IsNullOrEmpty(productValue) || !User.Identity.IsAuthenticated)
+            {
+                return Json(false);
+            }
+
+            Domain.Entities.Product product = null;
+            Models.ValidationModel validationModel = new Models.ValidationModel(new System.Collections.Generic.List<string>());
+
+            // Obtenha o caminho da pasta wwwroot
+            var webRootPath = _webHostEnvironment.WebRootPath;
+
+            try
+            {
+                product = JsonConvert.DeserializeObject<Domain.Entities.Product>(productValue);
+                string folderUserPath = Path.Combine(webRootPath, "uploads", User.Identity.Name);
+
+                if (!Directory.Exists(folderUserPath))
+                {
+                    //Se o diretório de arquivos do usuário não existir, vamos criar uma pra ele!
+                    Directory.CreateDirectory(folderUserPath);
+                }
+
+                if (file.Length > 0)
+                {
+                    string fileExtension = Path.GetExtension(file.FileName);
+                    string newArchive = Guid.NewGuid().ToString() + fileExtension;
+                    string imgProduct = Path.Combine(folderUserPath, newArchive);
+
+                    string pathLastArchive = webRootPath + "\\" + product.Image;
+
+                    if (!string.IsNullOrEmpty(product.Image))
+                    {
+                        //Se já existe uma foto de perfil, vamos apagar para não deixar o servidor pesado.
+                        if (System.IO.File.Exists(pathLastArchive))
+                        {
+                            System.IO.File.Delete(pathLastArchive);
+                        }
+                    }
+
+                    using (var stream = new FileStream(imgProduct, FileMode.Create))
+                    {
+                        // Copia o conteúdo do arquivo para o fluxo
+                        file.CopyTo(stream);
+                    }
+
+                    product.Image = Path.Combine(@"uploads", User.Identity.Name, newArchive);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logWritter.Writer($"excessão gerada: {ex.Message}");
+                validationModel.success = false;
+                validationModel.errorList.Add("Tivemos problema com a tua imagem. Entre em contato com o suporte ou suba um arquivo diferente!");
+                return Json(validationModel);
+            }
+
+            return Json(this._coreBusinessRules.SaveProduct(product));
+        }
+
+        [HttpPost]
         public IActionResult SaveMyProduct(string file)
         {
             string productValue = Request.Form["product"];
@@ -1063,6 +1128,77 @@ namespace FashionWeb.Controllers
                 _logWritter.Writer($"excessão gerada: {ex.Message}");
                 validationModel.success = false;
                 validationModel.errorList.Add("Tivemos problema com teu arquivo. Entre em contato com o suporte ou suba um arquivo diferente!");
+                return Json(validationModel);
+            }
+
+            return Json(this._coreBusinessRules.SaveProductArchive(productArchive));
+        }
+
+
+        [HttpPost]
+        [RequestSizeLimit(long.MaxValue)]
+        public async Task<IActionResult> SaveProductVideo(Microsoft.AspNetCore.Http.IFormFile file)
+        {
+            string productArchiveValue = Request.Form["productArchive"];
+            if (string.IsNullOrEmpty(productArchiveValue) || !User.Identity.IsAuthenticated)
+            {
+                return Json(false);
+            }
+
+            Models.ValidationModel validationModel = new Models.ValidationModel(new System.Collections.Generic.List<string>());
+
+            if (file == null || file.Length == 0)
+            {
+                validationModel.success = false;
+                validationModel.errorList.Add("Arquivo inválido ou não anexado!");
+                return Json(validationModel);
+            }
+
+            // Obtenha o caminho da pasta wwwroot
+            var webRootPath = _webHostEnvironment.WebRootPath;
+            ProductArchive productArchive = null;
+
+            try
+            {
+
+                productArchive = JsonConvert.DeserializeObject<ProductArchive>(productArchiveValue);
+
+
+                string fileExtension = Path.GetExtension(file.FileName);
+                string newArchive = Guid.NewGuid().ToString() + fileExtension.ToLower();
+                productArchive.Name = newArchive;
+                productArchive.Extension = fileExtension.ToLower();
+                productArchive.UserPath = User.Identity.Name.Replace("@", "").Replace(".", "");
+
+                //Subir pra azure
+                string connectionString = "DefaultEndpointsProtocol=https;AccountName=armazenamento0;AccountKey=TyXnvuHIe5Bq+Syd0pJX2MwWcYpoq9s1GQLYjpW5l4KbTs7sICAtJ2Hqt0gNhWZLSox2N7j2RDy2+AStz2eXkw==;EndpointSuffix=core.windows.net";
+                string containerName = productArchive.UserPath;
+                string blobName = productArchive.Name;
+
+                productArchive.Url = @$"https://armazenamento0.blob.core.windows.net/{containerName}/{blobName}";
+
+                // Criar cliente BlobServiceClient
+                BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+
+                // Criar um contêiner se não existir
+                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+
+                // Enviar o conteúdo do arquivo para o Azure Blob Storage
+                using (var stream = file.OpenReadStream())
+                {
+                    System.Threading.CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                    CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+
+                    await containerClient.UploadBlobAsync(blobName, stream, cancellationToken: cancellationToken);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                validationModel.success = false;
+                validationModel.errorList.Add("Ocorreu um erro. Contate a Administração!");
                 return Json(validationModel);
             }
 

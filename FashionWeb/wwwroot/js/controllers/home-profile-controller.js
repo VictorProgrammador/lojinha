@@ -53,7 +53,7 @@
             var result = data.data;
 
             if (result != null && result != undefined) {
-                $scope.entity = result;
+                $scope.entity = result;                
                 $scope.previewImages.push('/' + $scope.entity.image);
                 $scope.previewSelected = '/' + $scope.entity.image;
                 $scope.getProductArchives();

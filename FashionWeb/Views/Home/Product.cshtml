@@ -70,6 +70,16 @@
             filter: 0 !important;
         }
 
+        #zoomable-image {
+            width: 200px; /* Largura inicial da imagem */
+            transition: width 0.3s ease-in-out; /* Adiciona uma transição suave */
+        }
+
+            /* Estilo quando o mouse está sobre a imagem */
+            #zoomable-image:hover {
+                width: 300px; /* Largura aumentada ao passar o mouse */
+            }
+
     </style>
 </head>
 
@@ -89,17 +99,19 @@
     <div class="produto-container">
         <div class="produto-descricao" style="text-align:center">{{entity.name}}</div><br />
         <div style="text-align:center">
-            <img class="produto-img" ng-src="{{previewSelected}}" alt="{{previewSelected}}">
+            <img class="produto-img" id="zoomable-image" ng-src="{{previewSelected}}" alt="{{previewSelected}}">
         </div><br />
 
         <div class="swiper container-categorias">
             <div class="header-catergorias">
                 <h3></h3>
             </div>
+            <div class="produto-descricao" style="text-align:center">
+                {{entity.value | currency:"R$"}}
+            </div><br />
             <div class="content-pagination-buttons">
-                <div class="produto-descricao">
-                    {{entity.value | currency:"R$"}}
-                </div><br />
+                <div class="button-next"><i class="bi bi-arrow-left-circle"></i></div>
+                <div class="button-prev"><i class="bi bi-arrow-right-circle"></i></div>
             </div>
             <div class="contegorias swiper-wrapper">
                 <label class="categoria swiper-slide" ng-repeat="previewImage in previewImages" ng-class="{'active': previewImage == previewSelected}">
@@ -142,3 +154,59 @@
 
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
+<script src="/lib/swiper/swiper-bundle.min.js"></script>
+
+<script>
+
+    var swiper = new Swiper(".mySwiper", {
+        loop: true,
+        grabCursor: true,
+        spaceBetween: 30,
+        autoplay: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            dynamicBullets: true,
+        },
+        breakpoints: {
+            976: {
+                slidesPerView: 3,
+            },
+            568: {
+                slidesPerView: 2,
+            },
+        }
+    });
+
+    var swiperCategory = new Swiper(".container-categorias", {
+        grabCursor: true,
+        freeMode: true,
+        pagination: {
+            el: ".swiper-pagination",
+            dynamicBullets: true,
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".button-prev",
+            prevEl: ".button-next",
+        },
+        breakpoints: {
+            1150: {
+                slidesPerView: 9,
+            },
+            650: {
+                slidesPerView: 5,
+            }
+        }
+    });
+
+    // Adiciona o comportamento de zoom ao elemento de imagem
+    document.getElementById('zoomable-image').addEventListener('mouseenter', function () {
+        this.style.width = '300px'; // Largura aumentada ao passar o mouse
+    });
+
+    document.getElementById('zoomable-image').addEventListener('mouseleave', function () {
+        this.style.width = '200px'; // Largura inicial ao retirar o mouse
+    });
+
+</script>

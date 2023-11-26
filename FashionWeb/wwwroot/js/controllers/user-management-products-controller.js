@@ -95,8 +95,16 @@
         return $http.post("/User/SaveMyProduct", param, headersProduct);
     }
 
+    saveMyProductFile = function (param, headersProduct) {
+        return $http.post("/User/SaveMyProductFile", param, headersProduct);
+    }
+
     saveProductArchive = function (param, headersProduct) {
         return $http.post("/User/SaveProductArchive", param, headersProduct);
+    }
+
+    saveProductVideo = function (param, headersProduct) {
+        return $http.post("/User/SaveProductVideo", param, headersProduct);
     }
 
     excluirProductArchive = function (param) {
@@ -159,6 +167,8 @@
 
     $scope.saveProductArchive = function () {
 
+        var saveFunc = saveProductArchive;
+
         var formData = new FormData($("#formElem")[0]);
         if (document.getElementById('productArchiveFile').value == null ||
             document.getElementById('productArchiveFile').value == undefined ||
@@ -166,6 +176,10 @@
             document.getElementById('productArchiveFile').value.endsWith('jpeg') ||
             document.getElementById('productArchiveFile').value.endsWith('png')) {
             formData.append('file', $scope.myCroppedImage);
+        }
+        else {
+            formData.append('file', $scope.file);
+            saveFunc = saveProductVideo;
         }
 
         $scope.productArchive.productId = $scope.entity.id;
@@ -176,8 +190,7 @@
         $(".spinerStyle").addClass('centerSpinner');
         $(".spinerBackground").addClass('overlay');
 
-
-        saveProductArchive(formData, {
+        saveFunc(formData, {
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined }
         }).then(function (data) {
@@ -200,6 +213,7 @@
             $(".spinerStyle").removeClass('centerSpinner');
             $(".spinerBackground").removeClass('overlay');
         });
+
     }
 
     $scope.getCategories = function () {
@@ -224,6 +238,7 @@
             }
         }
 
+        var saveFunc = saveMyProduct;
         $scope.entity.personBusinessId = $scope.personBusiness.id;
 
         var formData = new FormData($("#formElem")[0]);
@@ -235,6 +250,10 @@
             document.getElementById('imageFile').value.endsWith('png')) {
             formData.append('file', $scope.myCroppedImage);
         }
+        else {
+            formData.append('file', $scope.file);
+            saveFunc = saveMyProductFile;
+        }
 
         var product = $scope.entity;
 
@@ -243,7 +262,7 @@
         $(".spinerStyle").addClass('centerSpinner');
         $(".spinerBackground").addClass('overlay');
 
-        saveMyProduct(formData, {
+        saveFunc(formData, {
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined }
         }).then(function (data) {
@@ -376,13 +395,16 @@
     var handleFileSelect = function (evt) {
         var file = evt.currentTarget.files[0];
         $scope.file = file;
-        var reader = new FileReader();
-        reader.onload = function (evt) {
-            $scope.$apply(function ($scope) {
-                $scope.myImage = evt.target.result;
-            });
-        };
-        reader.readAsDataURL(file);
+
+        if ($scope.file.type != 'image/webp') {
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                $scope.$apply(function ($scope) {
+                    $scope.myImage = evt.target.result;
+                });
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     angular.element(document.querySelector('#imageFile')).on('change', handleFileSelect);
