@@ -661,5 +661,21 @@ namespace FashionWeb.Domain.BusinessRules
         {
             return this._coreRepository.UpdateOrderRevelado(Id);
         }
+
+        public bool SaveProductArchive(ProductArchive productArchive)
+        {
+            productArchive.CreateDate = DateTime.Now;
+            return this._coreRepository.SaveProductArchive(productArchive);
+        }
+        public bool ExcluirProductArchive(ProductArchive productArchive)
+        {
+            return this._coreRepository.ExcluirProductArchive(productArchive);
+        }
+
+        public List<ProductArchive> GetProductArchives(int ProductId)
+        {
+            return this._coreRepository.GetProductArchives(ProductId);
+        }
+
     }
 }

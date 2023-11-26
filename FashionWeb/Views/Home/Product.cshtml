@@ -65,6 +65,11 @@
             font-size: 16px;
             cursor: pointer;
         }
+
+        .container-categorias .contegorias .categoria.active img {
+            filter: 0 !important;
+        }
+
     </style>
 </head>
 
@@ -84,7 +89,40 @@
     <div class="produto-container">
         <div class="produto-descricao" style="text-align:center">{{entity.name}}</div><br />
         <div style="text-align:center">
-            <img class="produto-img" ng-src="/{{entity.image}}" alt="{{entity.name}}">
+            <img class="produto-img" ng-src="{{previewSelected}}" alt="{{previewSelected}}">
+        </div><br />
+
+        <div class="swiper container-categorias">
+            <div class="header-catergorias">
+                <h3></h3>
+            </div>
+            <div class="content-pagination-buttons">
+                <div class="produto-descricao">
+                    {{entity.value | currency:"R$"}}
+                </div><br />
+            </div>
+            <div class="contegorias swiper-wrapper">
+                <label class="categoria swiper-slide" ng-repeat="previewImage in previewImages" ng-class="{'active': previewImage == previewSelected}">
+                    <img ng-src="{{previewImage}}" width="100" style="text-align:right;" ng-click="changePreviewImage(previewImage)">
+                </label>
+            </div>
+        </div><br />
+
+        <div>
+            <span>
+                <strong>Vendido e entregue por O Shop Digital.</strong>
+            </span>
+        </div>
+        <div>
+            <span>
+                O Shop Digital garante a sua compra, do pedido à entrega.
+            </span>
+        </div><br />
+
+        <div class="produto-descricao">Informações do Produto</div>
+
+        <div>
+            <span>{{entity.name}}, {{entity.description}}</span>
         </div><br />
 
         <form action="@Url.Action("SaveProductCart", "Home")" method="post">
@@ -98,26 +136,6 @@
             </div>
         </form><br /><br />
 
-        <div>
-            <span>
-                Vendido e entregue por O Shop Digital.
-            </span>
-        </div>
-        <div>
-            <span>
-                O Shop Digital garante a sua compra, do pedido à entrega.
-            </span>
-        </div><br />
-
-        <div>
-            <span>{{entity.value | currency:"R$"}} no cartão de crédito ou Boleto.</span>
-        </div><br />
-
-        <div class="produto-descricao">Informações do Produto</div>
-
-        <div>
-            <span>{{entity.name}}, {{entity.description}}</span>
-        </div><br />
     </div>
 
 </section>

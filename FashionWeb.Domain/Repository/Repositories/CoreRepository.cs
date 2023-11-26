@@ -1799,5 +1799,58 @@ namespace FashionWeb.Domain.Repository.Repositories
             return id > 0 ? true : false;
         }
 
+        public bool SaveProductArchive(ProductArchive productArchive)
+        {
+            var insertProductArchive = @"INSERT INTO ProductArchive VALUES (@ProductId, @Name, @Extension, @Url, @CreateDate, @Description, @UserPath)";
+            int id = 0;
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                id = db.Execute(insertProductArchive, new
+                {
+                    ProductId = productArchive.ProductId,
+                    Name = productArchive.Name,
+                    Extension = productArchive.Extension,
+                    Url = productArchive.Url,
+                    CreateDate = productArchive.CreateDate,
+                    Description = productArchive.Description,
+                    UserPath = productArchive.UserPath
+                });
+
+                db.Close();
+            }
+
+            return id > 0 ? true : false;
+        }
+        public bool ExcluirProductArchive(ProductArchive productArchive)
+        {
+            var excluirProductArchive = @"DELETE ProductArchive WHERE Id = @Id";
+
+            int rowsAffect = 0;
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                rowsAffect = db.Execute(excluirProductArchive, new
+                {
+                    Id = productArchive.Id
+                });
+
+                db.Close();
+            }
+
+            return rowsAffect > 0 ? true : false;
+        }
+
+        public List<ProductArchive> GetProductArchives(int ProductId)
+        {
+            var db = _connectionFactory.GetConnection();
+            var result = db.Query<ProductArchive>("SELECT * from ProductArchive where ProductId = @ProductId", new { ProductId = ProductId }).ToList();
+            return result;
+        }
+
     }
 }

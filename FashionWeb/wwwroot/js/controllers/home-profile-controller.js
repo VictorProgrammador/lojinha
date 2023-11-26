@@ -16,6 +16,33 @@
         $scope.alerts.splice(index, 1);
     };
 
+    $scope.previewImages = [];
+    $scope.previewSelected = '';
+    $scope.previewSelectedImage = '';
+
+    $scope.getProductArchives = function () {
+        $(".spinerStyle").addClass('centerSpinner');
+        $(".spinerBackground").addClass('overlay');
+
+        basicService.getProductArchives($scope.entity).then(function (data) {
+            var result = data.data;
+
+            result.map(function (data) {
+                $scope.previewImages.push(data.url);
+            });
+
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+
+        }, function (error) {
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+        });
+    }
+
+    $scope.changePreviewImage = function (image) {
+        $scope.previewSelected = image;
+    }
 
     $scope.loadProduct = function (Id) {
 
@@ -27,6 +54,9 @@
 
             if (result != null && result != undefined) {
                 $scope.entity = result;
+                $scope.previewImages.push('/' + $scope.entity.image);
+                $scope.previewSelected = '/' + $scope.entity.image;
+                $scope.getProductArchives();
             }
             else {
                 utilidadesService.exibirMensagem('Atenção!', 'Produto não foi encontrado!', false);

@@ -820,7 +820,7 @@ namespace FashionWeb.Controllers
                         if (string.IsNullOrEmpty(binInfo.country.name))
                             binInfo.country.name = "Não identificado";
 
-                        string binResponse = $" Tipo: {binInfo.type}, Bandeira: {binInfo.scheme} {binInfo.brand}, País {binInfo.country.name}. ";
+                        string binResponse = $" {binInfo.type}, Bandeira: {binInfo.scheme} {binInfo.brand}, País {binInfo.country.name}. ";
 
                         orderr.Card.BinResponse = binResponse;
 
@@ -902,5 +902,18 @@ namespace FashionWeb.Controllers
 
             return Json(false);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetProductArchives([FromBody] Domain.Entities.Product product)
+        {
+            //Se o usuário estiver logado, não acessa essa página.
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
+            var productArchives = this._coreBusinessRules.GetProductArchives(product.Id);
+
+            return Json(productArchives);
+        }
+
     }
 }

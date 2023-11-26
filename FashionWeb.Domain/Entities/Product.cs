@@ -22,5 +22,6 @@ namespace FashionWeb.Domain.Entities
         public bool IsDigitalShop { get; set; }
         public int CategoryId { get; set; }
         public List<Product> Complements { get; set; }
+        public List<ProductArchive> ProductArchives { get; set; }
     }
 }

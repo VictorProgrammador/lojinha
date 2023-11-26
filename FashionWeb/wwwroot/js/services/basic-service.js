@@ -98,6 +98,9 @@
         getOrders: function (param) {
             return $http.post("/User/GetOrders", param, headers);
         },
+        getProductArchives: function (param) {
+            return $http.post("/Home/GetProductArchives", param, headers);
+        },
     };
 
 }]);

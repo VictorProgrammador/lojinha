@@ -958,5 +958,137 @@ namespace FashionWeb.Controllers
             return Json(this._coreBusinessRules.GetOrders(personId));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SaveProductArchive(string file)
+        {
+
+            string productArchiveValue = Request.Form["productArchive"];
+            if (string.IsNullOrEmpty(productArchiveValue) || !User.Identity.IsAuthenticated)
+            {
+                return Json(false);
+            }
+
+            Models.ValidationModel validationModel = new Models.ValidationModel(new System.Collections.Generic.List<string>());
+
+            if (string.IsNullOrEmpty(file))
+            {
+                validationModel.success = false;
+                validationModel.errorList.Add("Arquivo inválido ou não anexado!");
+                return Json(validationModel);
+            }
+
+            // Obtenha o caminho da pasta wwwroot
+            var webRootPath = _webHostEnvironment.WebRootPath;
+
+            ProductArchive productArchive = null;
+
+            try
+            {
+                productArchive = JsonConvert.DeserializeObject<ProductArchive>(productArchiveValue);
+                string folderUserPath = Path.Combine(webRootPath, "uploads", User.Identity.Name);
+
+                if (!Directory.Exists(folderUserPath))
+                {
+                    //Se o diretório de arquivos do usuário não existir, vamos criar uma pra ele!
+                    Directory.CreateDirectory(folderUserPath);
+                }
+
+                if (!string.IsNullOrEmpty(file))
+                {
+                    string base64String = file.Substring(file.IndexOf(',') + 1);
+                    // supondo que a variável base64String contenha o conteúdo em formato Base64
+                    byte[] imageBytes = Convert.FromBase64String(base64String);
+
+                    // verificando a extensão a partir dos primeiros bytes
+                    string extension = ".png";
+                    if (imageBytes[0] == 255 && imageBytes[1] == 216 && imageBytes[2] == 255)
+                    {
+                        extension = ".jpg";
+                    }
+
+                    string newArchive = Guid.NewGuid().ToString() + extension.ToLower();
+                    productArchive.Name = newArchive;
+                    productArchive.Extension = extension.ToLower();
+                    productArchive.UserPath = User.Identity.Name.Replace("@", "").Replace(".", "");
+
+                    // salvando a imagem em um arquivo
+                    using (var ms = new MemoryStream(imageBytes))
+                    {
+                        using (var image = Image.Load(ms))
+                        {
+                            // define as dimensões máximas da imagem
+                            int alturaMaxima = 200;
+                            int larguraMaxima = 200;
+
+
+                            image.Mutate(x => x.Resize(new ResizeOptions
+                            {
+                                Size = new Size(larguraMaxima, alturaMaxima),
+                                Mode = ResizeMode.Max
+                            }));
+
+                            // Salvar imagem redimensionada em disco
+                            using (System.IO.MemoryStream imagemFormatada = new System.IO.MemoryStream())
+                            {
+                                image.SaveAsJpeg(imagemFormatada);
+                                imagemFormatada.Position = 0;
+
+                                //Subir pra azure
+                                string connectionString = "DefaultEndpointsProtocol=https;AccountName=armazenamento0;AccountKey=TyXnvuHIe5Bq+Syd0pJX2MwWcYpoq9s1GQLYjpW5l4KbTs7sICAtJ2Hqt0gNhWZLSox2N7j2RDy2+AStz2eXkw==;EndpointSuffix=core.windows.net";
+                                string containerName = productArchive.UserPath;
+                                string blobName = productArchive.Name;
+
+                                productArchive.Url = @$"https://armazenamento0.blob.core.windows.net/{containerName}/{blobName}";
+
+                                // Criar cliente BlobServiceClient
+                                BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+
+                                // Criar um contêiner se não existir
+                                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                                await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+
+
+                                // Criar BlobClient para o novo arquivo
+                                BlobClient blobClient = containerClient.GetBlobClient(blobName);
+
+                                containerClient.UploadBlob(blobName, imagemFormatada);
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logWritter.Writer($"excessão gerada: {ex.Message}");
+                validationModel.success = false;
+                validationModel.errorList.Add("Tivemos problema com teu arquivo. Entre em contato com o suporte ou suba um arquivo diferente!");
+                return Json(validationModel);
+            }
+
+            return Json(this._coreBusinessRules.SaveProductArchive(productArchive));
+        }
+
+        [HttpPost]
+        public IActionResult ExcluirProductArchive([FromBody] ProductArchive productArchive)
+        {
+            // Deletar arquivo da azure aqui abaixo
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=armazenamento0;AccountKey=TyXnvuHIe5Bq+Syd0pJX2MwWcYpoq9s1GQLYjpW5l4KbTs7sICAtJ2Hqt0gNhWZLSox2N7j2RDy2+AStz2eXkw==;EndpointSuffix=core.windows.net";
+            string containerName = productArchive.UserPath;
+            string blobName = productArchive.Name;
+
+            // Criar cliente BlobServiceClient
+            BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+
+            // Obter BlobClient para o arquivo desejado
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            BlobClient blobClient = containerClient.GetBlobClient(blobName);
+
+            // Excluir o arquivo, se existir
+            bool deleted = blobClient.DeleteIfExists();
+
+            return Json(this._coreBusinessRules.ExcluirProductArchive(productArchive));
+        }
+
     }
 }

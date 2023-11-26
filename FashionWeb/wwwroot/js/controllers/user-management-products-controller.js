@@ -55,9 +55,36 @@
         $('#myModal').modal('show');
     }
 
+    $scope.productArchive = {};
+
     $scope.closeModal = function () {
         $scope.entity = {};
         $('#myModal').modal('hide');
+    }
+
+    $scope.editImages = function (item) {
+        $scope.entity = item;
+        $scope.openModalImages();
+    }
+
+    $scope.openModalImages = function () {
+        $scope.myCroppedImage = '';
+        $scope.myImage = '';
+        $scope.file = null;
+        $scope.showImageCropped = false;
+
+        document.getElementById('productArchiveFile').value = null;
+        $scope.productArchive = {};
+
+        $scope.getProductArchives();
+
+        $('#modalImages').modal('show');
+    }
+
+    $scope.closeModalImages = function () {
+        $scope.entity = {};
+        $scope.productArchive = {};
+        $('#modalImages').modal('hide');
     }
 
     const headers = {
@@ -68,8 +95,111 @@
         return $http.post("/User/SaveMyProduct", param, headersProduct);
     }
 
+    saveProductArchive = function (param, headersProduct) {
+        return $http.post("/User/SaveProductArchive", param, headersProduct);
+    }
+
+    excluirProductArchive = function (param) {
+        return $http.post("/User/ExcluirProductArchive", param, headers);
+    }
+
+    getProductArchives = function (param) {
+        return $http.post("/Home/GetProductArchives", param, headers);
+    }
+
     excluirProduto = function (param) {
         return $http.post("/User/ExcluirProduto", param, headers);
+    }
+
+    $scope.getProductArchives = function () {
+        $(".spinerStyle").addClass('centerSpinner');
+        $(".spinerBackground").addClass('overlay');
+
+        getProductArchives($scope.entity).then(function (data) {
+            var result = data.data;
+
+            $scope.entity.productArchives = result;
+
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+
+        }, function (error) {
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+        });
+    }
+
+    $scope.excludeProductArchive = function (item) {
+
+        $(".spinerStyle").addClass('centerSpinner');
+        $(".spinerBackground").addClass('overlay');
+
+        excluirProductArchive(item).then(function (data) {
+            var result = data.data;
+
+            if (result == true) {
+                utilidadesService.exibirMensagem('Sucesso!', 'Arquivo excluído com sucesso.', true);
+            }
+            else {
+                utilidadesService.exibirMensagem('Falha', 'Falha ao excluir o arquivo.', true);
+            }
+
+
+            $scope.closeModalImages();
+
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+
+        }, function (error) {
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+        });
+
+    }
+
+    $scope.saveProductArchive = function () {
+
+        var formData = new FormData($("#formElem")[0]);
+        if (document.getElementById('productArchiveFile').value == null ||
+            document.getElementById('productArchiveFile').value == undefined ||
+            document.getElementById('productArchiveFile').value.endsWith('jpg') ||
+            document.getElementById('productArchiveFile').value.endsWith('jpeg') ||
+            document.getElementById('productArchiveFile').value.endsWith('png')) {
+            formData.append('file', $scope.myCroppedImage);
+        }
+
+        $scope.productArchive.productId = $scope.entity.id;
+
+        var productArchive = $scope.productArchive;
+        formData.append('productArchive', JSON.stringify(productArchive));
+
+        $(".spinerStyle").addClass('centerSpinner');
+        $(".spinerBackground").addClass('overlay');
+
+
+        saveProductArchive(formData, {
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        }).then(function (data) {
+            var result = data.data;
+
+            $scope.closeModalImages();
+
+            if (result == true) {
+                utilidadesService.exibirMensagem('Sucesso!', 'Ação realizada com sucesso. Se tiver subido imagem, atualize sua tela para ver ela no produto!', true);
+            }
+            else {
+                utilidadesService.exibirMensagem('Falha', 'Falha ao realizar essa ação.', true);
+            }
+
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+
+            $window.location.reload();
+        }, function (error) {
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+        });
     }
 
     $scope.getCategories = function () {
@@ -256,6 +386,7 @@
     };
 
     angular.element(document.querySelector('#imageFile')).on('change', handleFileSelect);
+    angular.element(document.querySelector('#productArchiveFile')).on('change', handleFileSelect);
 
     $scope.init = function () {
         $scope.getMyProducts();

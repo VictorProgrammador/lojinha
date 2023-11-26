@@ -70,19 +70,17 @@
                     <thead>
                         <tr>
                             <th>Nome</th>
-                            <th>Valor R$</th>
-                            <th>Data Criação</th>
                             <th>Excluir</th>
                             <th>Editar</th>
+                            <th>Imagens</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="item in list.products">
                             <td>{{ item.name }}</td>
-                            <td>{{ item.value | currency }}</td>
-                            <td>{{ item.createDate | date:'dd/MM/yyyy' }}</td>
                             <td><button class="btn btn-sm" ng-click="excludeProduct(item)"><i class="bi bi-trash"></i></button></td>
                             <td><button class="btn btn-sm" ng-click="editProduct(item)"><i class="bi bi-pencil"></i></button></td>
+                            <td><button class="btn btn-sm" ng-click="editImages(item)"><i class="bi bi-card-image"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -101,6 +99,64 @@
                 </div>
             </div>
         </md-content>
+
+        <div class="modal fade" id="modalImages" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Imagens do produto</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <table class="table table-striped" ng-show="entity != null && entity.productArchives != null && entity.productArchives.length > 0">
+                            <thead>
+                                <tr>
+                                    <th>Imagem</th>
+                                    <th>Descrição</th>
+                                    <th>Excluir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="productArchive in entity.productArchives">
+                                    <td><img src="{{productArchive.url}}" width="25"/></td>
+                                    <td>{{productArchive.description}}</td>
+                                    <td><button class="btn btn-sm" ng-click="excludeProductArchive(productArchive)"><i class="bi bi-trash"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="inputEmail4">Descrição</label>
+                                <input type="text" class="form-control" ng-model="productArchive.description" id="inputEmail4">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="inputEmail4">Subir uma imagem</label>
+                                <input class="btn btn-primary" type="file" name="file" accept=".jpg, .jpeg, .png"
+                                       ng-model="file" id="productArchiveFile">
+                            </div>
+                        </div>
+                        <div class="form-row" ng-show="showImageCropped == true">
+                            <div class="form-group col-md-12">
+                                <div class="img-crop-wrapper">
+                                    <img-crop image="myImage" result-image="myCroppedImage" result-image-format="jpeg"
+                                              area-type="square" aspect-ratio="16/9" on-load-done="showImageToCropped()"
+                                              on-load-error="imageLoadError()">
+                                        <img ng-src="myImage" class="image-crop-preview" style="width: 500px; height: 300px;">
+                                    </img-crop>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" ng-click="saveProductArchive()">Salvar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="closeModalImages()">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">

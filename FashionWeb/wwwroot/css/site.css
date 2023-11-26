@@ -999,7 +999,7 @@ main {
 }
 
 .container-categorias .contegorias .categoria:hover img{
-  filter: invert(100%);
+  
 }
 
 .container-categorias .contegorias .categoria:hover span{
@@ -1016,7 +1016,7 @@ main {
 }
 
 .container-categorias .contegorias .categoria.active img{
-  filter: invert(100%);
+  
 }
 
 .container-categorias .contegorias .categoria.active span{
