@@ -765,7 +765,8 @@ namespace FashionWeb.Domain.Repository.Repositories
                                     [Product].PersonBusinessId,
                                     [Product].CategoryId,
                                     [Product].SubCategoryId,
-                                    [Product].ProductTypeId
+                                    [Product].ProductTypeId,
+                                    [Product].BrandId
                                     FROM [Product] 
                                     WHERE [PersonBusinessId] = @PersonBusinessId";
 
@@ -809,7 +810,7 @@ namespace FashionWeb.Domain.Repository.Repositories
 
         public bool InsertProduct(Product product)
         {
-            var insertProduct = @"INSERT INTO [Product] VALUES (@Name, @Value, @CreateDate, @PersonBusinessId, @Description, @Image, @AcceptComplement, @IsComplement, @MaxComplement, @CategoryId, @IsDigitalShop, @SubCategoryId, @ProductTypeId)";
+            var insertProduct = @"INSERT INTO [Product] VALUES (@Name, @Value, @CreateDate, @PersonBusinessId, @Description, @Image, @AcceptComplement, @IsComplement, @MaxComplement, @CategoryId, @IsDigitalShop, @SubCategoryId, @ProductTypeId, @BrandId)";
             int id = 0;
 
             using (var db = _connectionFactory.GetConnection())
@@ -830,7 +831,8 @@ namespace FashionWeb.Domain.Repository.Repositories
                     CategoryId = product.CategoryId,
                     IsDigitalShop = true,
                     SubCategoryId = product.SubCategoryId,
-                    ProductTypeId = product.ProductTypeId
+                    ProductTypeId = product.ProductTypeId,
+                    BrandId = product.BrandId
                 });
 
                 db.Close();
@@ -841,7 +843,7 @@ namespace FashionWeb.Domain.Repository.Repositories
 
         public bool UpdateProduct(Product product)
         {
-            var updateProduct = @"UPDATE [Product] SET Name = @Name, Description = @Description, Value = @Value, Image = @Image, AcceptComplement = @AcceptComplement, IsComplement = @IsComplement, MaxComplement = @MaxComplement, CategoryId = @CategoryId, SubCategoryId = @SubCategoryId, ProductTypeId = @ProductTypeId WHERE Id = @Id";
+            var updateProduct = @"UPDATE [Product] SET Name = @Name, Description = @Description, Value = @Value, Image = @Image, AcceptComplement = @AcceptComplement, IsComplement = @IsComplement, MaxComplement = @MaxComplement, CategoryId = @CategoryId, SubCategoryId = @SubCategoryId, ProductTypeId = @ProductTypeId, BrandId = @BrandId WHERE Id = @Id";
 
             int rowsAffect = 0;
 
@@ -861,7 +863,8 @@ namespace FashionWeb.Domain.Repository.Repositories
                     Id = product.Id,
                     CategoryId = product.CategoryId,
                     SubCategoryId = product.SubCategoryId,
-                    ProductTypeId = product.ProductTypeId
+                    ProductTypeId = product.ProductTypeId,
+                    BrandId = product.BrandId
                 });
 
                 db.Close();
@@ -1853,22 +1856,36 @@ namespace FashionWeb.Domain.Repository.Repositories
        
         public List<ProductArchive> GetProductArchives(int ProductId)
         {
-            var db = _connectionFactory.GetConnection();
-            var result = db.Query<ProductArchive>("SELECT * from ProductArchive where ProductId = @ProductId", new { ProductId = ProductId }).ToList();
+            var result = new List<ProductArchive>();
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                result = db.Query<ProductArchive>("SELECT * from ProductArchive where ProductId = @ProductId", new { ProductId = ProductId }).ToList();
+
+                db.Close();
+            }
+
             return result;
         }
 
         public List<SubCategory> GetSubCategories(int? CategoryId)
         {
             var result = new List<SubCategory>();
-            var db = _connectionFactory.GetConnection();
 
-            if(CategoryId > 0)
+            using (var db = _connectionFactory.GetConnection())
             {
-                result = db.Query<SubCategory>("SELECT * from SubCategory where IsDeleted = 0 and CategoryId = @CategoryId", new { CategoryId = CategoryId }).ToList();
+                db.Open();
+
+                if (CategoryId > 0)
+                {
+                    result = db.Query<SubCategory>("SELECT * from SubCategory where IsDeleted = 0 and CategoryId = @CategoryId", new { CategoryId = CategoryId }).ToList();
+                }
+                else
+                    result = db.Query<SubCategory>("SELECT * from SubCategory where IsDeleted = 0").ToList();
+
+                db.Close();
             }
-            else
-                result = db.Query<SubCategory>("SELECT * from SubCategory where IsDeleted = 0").ToList();
 
             return result;
         }
@@ -1876,23 +1893,204 @@ namespace FashionWeb.Domain.Repository.Repositories
         public List<ProductType> GetProductTypes(int? SubCategoryId)
         {
             var result = new List<ProductType>();
-            var db = _connectionFactory.GetConnection();
-
-            if(SubCategoryId > 0)
+            using (var db = _connectionFactory.GetConnection())
             {
-                result = db.Query<ProductType>("SELECT * from ProductType where IsDeleted = 0 and SubCategoryId = @SubCategoryId", new { SubCategoryId = SubCategoryId }).ToList();
+                db.Open();
+
+                if (SubCategoryId > 0)
+                {
+                    result = db.Query<ProductType>("SELECT * from ProductType where IsDeleted = 0 and SubCategoryId = @SubCategoryId", new { SubCategoryId = SubCategoryId }).ToList();
+                }
+                else
+                    result = db.Query<ProductType>("SELECT * from ProductType where IsDeleted = 0").ToList();
+
+                db.Close();
             }
-            else
-                result = db.Query<ProductType>("SELECT * from ProductType where IsDeleted = 0").ToList();
 
             return result;
         }
 
-        public List<Tamanho> GetTamanho()
+        public List<Tamanho> GetTamanhos()
         {
-            var db = _connectionFactory.GetConnection();
-            var result = db.Query<Tamanho>("SELECT * from Tamanho where IsDeleted = 0").ToList();
+            var result = new List<Tamanho>();
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                result = db.Query<Tamanho>("SELECT * from Tamanho where IsDeleted = 0").ToList();
+
+                db.Close();
+            }
+            
             return result;
+        }
+
+        public List<ProductTamanho> GetProductTamanhos(int ProductId)
+        {
+            var result = new List<ProductTamanho>();
+            try
+            {
+                var db = _connectionFactory.GetConnection();
+
+                var sql = @"SELECT [ProductTamanho].Id,
+                            [ProductTamanho].[ProductId] AS [ProductId],
+                            [ProductTamanho].[TamanhoId] AS [TamanhoId],
+                            [tamanho].[Id],
+                            [tamanho].[Name]
+                            FROM ProductTamanho ProductTamanho 
+                            INNER JOIN Tamanho tamanho
+                            ON tamanho.Id = ProductTamanho.TamanhoId
+                            where ProductTamanho.ProductId = @ProductId";
+
+                result = db.Query<ProductTamanho, Tamanho, ProductTamanho>(sql, (ProductTamanho, tamanho) =>
+                {
+                    ProductTamanho.Tamanho = tamanho;
+                    return ProductTamanho;
+                }, new { ProductId = ProductId }, splitOn: "TamanhoId").ToList();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            return result;
+        }
+
+        public bool DeleteProductTamanho(int Id)
+        {
+            var queryDeleteProductTamanho = @"DELETE ProductTamanho WHERE Id = @Id";
+            int result = 0;
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                result = db.ExecuteScalar<int>(queryDeleteProductTamanho, new { Id = Id });
+
+                db.Close();
+            }
+
+            return result > 0 ? true : false;
+        }
+
+        public bool InsertProductTamanho(ProductTamanho productTamanho)
+        {
+            var insertProductTamanho = @"INSERT INTO [ProductTamanho] VALUES (@ProductId, @TamanhoId)";
+            int id = 0;
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                id = db.Execute(insertProductTamanho, new
+                {
+                    ProductId = productTamanho.ProductId,
+                    TamanhoId = productTamanho.TamanhoId
+                });
+
+                db.Close();
+            }
+
+            return id > 0 ? true : false;
+        }
+
+        public List<Brand> GetBrand()
+        {
+            var result = new List<Brand>();
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+                result = db.Query<Brand>("SELECT * from Brand where IsDeleted = 0").ToList();
+                db.Close();
+            }
+
+            return result;
+        }
+
+        public List<Cor> GetCores()
+        {
+            var result = new List<Cor>();
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+                result = db.Query<Cor>("SELECT * from Cor where IsDeleted = 0").ToList();
+                db.Close();
+            }
+
+            return result;
+        }
+
+        public List<ProductCor> GetProductCores(int ProductId)
+        {
+            var result = new List<ProductCor>();
+            try
+            {
+                var db = _connectionFactory.GetConnection();
+
+                var sql = @"SELECT [ProductCor].Id,
+                            [ProductCor].[ProductId] AS [ProductId],
+                            [ProductCor].[CorId] AS [CorId],
+                            [cor].[Id],
+                            [cor].[Name]
+                            FROM ProductCor ProductCor 
+                            INNER JOIN Cor cor
+                            ON cor.Id = ProductCor.CorId
+                            where ProductCor.ProductId = @ProductId";
+
+                result = db.Query<ProductCor, Cor, ProductCor>(sql, (ProductCor, cor) =>
+                {
+                    ProductCor.Cor = cor;
+                    return ProductCor;
+                }, new { ProductId = ProductId }, splitOn: "CorId").ToList();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            return result;
+        }
+
+        public bool DeleteProductCor(int Id)
+        {
+            var queryDeleteProductCor = @"DELETE ProductCor WHERE Id = @Id";
+            int result = 0;
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                result = db.ExecuteScalar<int>(queryDeleteProductCor, new { Id = Id });
+
+                db.Close();
+            }
+
+            return result > 0 ? true : false;
+        }
+
+        public bool InsertProductCor(ProductCor productCor)
+        {
+            var insertProductCor = @"INSERT INTO [ProductCor] VALUES (@ProductId, @CorId)";
+            int id = 0;
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                id = db.Execute(insertProductCor, new
+                {
+                    ProductId = productCor.ProductId,
+                    CorId = productCor.CorId
+                });
+
+                db.Close();
+            }
+
+            return id > 0 ? true : false;
         }
 
     }

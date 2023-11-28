@@ -202,14 +202,40 @@
                             </div>
                         </div><br />
 
-                        @*<div class="form-row">
+                        <div class="form-row">
                             <div class="form-group col-md-12">
-                                <label>Tamanho</label>
-                                <select ng-model="entity.productTypeId" class="form-control" ng-options="productType.id as productType.name for productType in productTypes">
+                                <label>Marca</label>
+                                <select ng-model="entity.brandId" class="form-control" ng-options="marca.id as marca.name for marca in marcas">
                                     <option value="" disabled selected hidden>Selecione uma opção</option>
                                 </select>
                             </div>
-                        </div><br />*@
+                        </div><br />
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Tamanhos</label>
+                                <ui-select multiple tagging tagging-label="(custom 'new' label)"
+                                           ng-model="entity.productTamanhos">
+                                    <ui-select-match placeholder="selecione os tamanhos...">{{$item.name}}</ui-select-match>
+                                    <ui-select-choices repeat="tamanho in tamanhos | filter:$select.search">
+                                        {{tamanho.name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Cores</label>
+                                <ui-select multiple tagging tagging-label="(custom 'new' label)"
+                                           ng-model="entity.productCores">
+                                    <ui-select-match placeholder="selecione as cores...">{{$item.name}}</ui-select-match>
+                                    <ui-select-choices repeat="cor in cores | filter:$select.search">
+                                        {{cor.name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
 
                         <br />
                         <div class="form-row">
@@ -221,18 +247,7 @@
                             </div>
                         </div>
 
-                        @*<div class="form-row" ng-show="entity.acceptComplement == true">
-            <div class="form-group col-md-6">
-                <label>Complementos</label>
-                <ui-select multiple tagging tagging-label="(custom 'new' label)"
-                           ng-model="entity.complements">
-                    <ui-select-match placeholder="Selecione complementos...">{{$item.name}}</ui-select-match>
-                    <ui-select-choices repeat="complement in complements | filter:$select.search">
-                        {{complement.name}}
-                    </ui-select-choices>
-                </ui-select>
-            </div>
-        </div>*@
+
                         <br />
                         <div class="form-row"
                              ng-show="entity.image != null && entity.image != ''  && (myImage == null || myImage == '')">

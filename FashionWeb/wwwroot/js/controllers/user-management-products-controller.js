@@ -27,8 +27,10 @@
     $scope.categories = [];
     $scope.subcategories = [];
     $scope.productTypes = [];
+    $scope.tamanhos = [];
+    $scope.marcas = [];
+    $scope.cores = [];
 
-    $scope.complements = [];
 
     $scope.setTab = function (newTab) {
         $scope.tab = newTab;
@@ -156,6 +158,65 @@
             var result = data.data;
 
             $scope.productTypes = result;
+
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+
+        }, function (error) {
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+        });
+
+    }
+
+
+    $scope.getTamanhos = function () {
+
+        $(".spinerStyle").addClass('centerSpinner');
+        $(".spinerBackground").addClass('overlay');
+
+        basicService.getTamanhos().then(function (data) {
+            var result = data.data;
+            $scope.tamanhos = result;
+
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+
+        }, function (error) {
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+        });
+
+    }
+
+
+    $scope.getCores = function () {
+
+        $(".spinerStyle").addClass('centerSpinner');
+        $(".spinerBackground").addClass('overlay');
+
+        basicService.getCores().then(function (data) {
+            var result = data.data;
+            $scope.cores = result;
+
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+
+        }, function (error) {
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+        });
+
+    }
+
+    $scope.getMarcas = function () {
+
+        $(".spinerStyle").addClass('centerSpinner');
+        $(".spinerBackground").addClass('overlay');
+
+        basicService.getMarcas().then(function (data) {
+            var result = data.data;
+            $scope.marcas = result;
 
             $(".spinerStyle").removeClass('centerSpinner');
             $(".spinerBackground").removeClass('overlay');
@@ -388,7 +449,8 @@
                 $scope.paginantion.totalItems = 0;
                 $scope.paginantion.totalPages = 0;
             }
-            
+
+            console.log('produto', $scope.list.products);
 
             $(".spinerStyle").removeClass('centerSpinner');
             $(".spinerBackground").removeClass('overlay');
@@ -460,10 +522,12 @@
 
     $scope.init = function () {
         $scope.getMyProducts();
-        $scope.getComplements();
         $scope.getCategories();
         $scope.loadCategory();
         $scope.loadSubCategory();
+        $scope.getTamanhos();
+        $scope.getMarcas();
+        $scope.getCores();
     }
 
     $scope.init();

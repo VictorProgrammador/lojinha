@@ -23,6 +23,15 @@
         getProductTypes: function (param) {
             return $http.post("/Home/GetProductTypes", param, headers);
         },
+        getTamanhos: function (param) {
+            return $http.post("/Home/GetTamanhos", param, headers);
+        },
+        getMarcas: function (param) {
+            return $http.post("/Home/GetMarcas", param, headers);
+        },
+        getCores: function (param) {
+            return $http.post("/Home/GetCores", param, headers);
+        },
         getMyProfile: function () {
             return $http.get("/User/GetMyProfile");
         },

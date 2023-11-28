@@ -59,6 +59,8 @@ namespace FashionWeb.Domain.BusinessRules
         List<ProductArchive> GetProductArchives(int ProductId);
         List<SubCategory> GetSubCategories(int? CategoryId);
         List<ProductType> GetProductTypes(int? SubCategoryId);
-        List<Tamanho> GetTamanho();
+        List<Tamanho> GetTamanhos();
+        List<Brand> GetBrand();
+        List<Cor> GetCores();
     }
 }

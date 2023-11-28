@@ -23,7 +23,10 @@ namespace FashionWeb.Domain.Entities
         public int CategoryId { get; set; }
         public int SubCategoryId { get; set; }
         public int ProductTypeId { get; set; }
+        public int BrandId { get; set; }
         public List<Product> Complements { get; set; }
         public List<ProductArchive> ProductArchives { get; set; }
+        public List<Tamanho> ProductTamanhos { get; set; }
+        public List<Cor> ProductCores { get; set; }
     }
 }

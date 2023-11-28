@@ -35,3 +35,18 @@ add SubCategoryId int
 
 alter table Product 
 add ProductTypeId int
+
+
+alter table Product
+add BrandId int
+
+
+create table Brand (
+
+Id int primary key identity(1,1),
+Name nvarchar(max),
+IsDeleted bit default 0
+
+);
+
+

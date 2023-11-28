@@ -928,9 +928,22 @@ namespace FashionWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetTamanho()
+        public IActionResult GetTamanhos()
         {
-            return Json(this._coreBusinessRules.GetTamanho());
+            return Json(this._coreBusinessRules.GetTamanhos());
+        }
+
+        [HttpPost]
+        public IActionResult GetMarcas()
+        {
+            return Json(this._coreBusinessRules.GetBrand());
+        }
+
+
+        [HttpPost]
+        public IActionResult GetCores()
+        {
+            return Json(this._coreBusinessRules.GetCores());
         }
 
     }
