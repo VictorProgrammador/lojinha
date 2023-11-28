@@ -1844,7 +1844,7 @@ namespace FashionWeb.Domain.Repository.Repositories
 
             return rowsAffect > 0 ? true : false;
         }
-
+       
         public List<ProductArchive> GetProductArchives(int ProductId)
         {
             var db = _connectionFactory.GetConnection();

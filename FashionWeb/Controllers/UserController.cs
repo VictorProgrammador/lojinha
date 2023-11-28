@@ -450,7 +450,7 @@ namespace FashionWeb.Controllers
                     Directory.CreateDirectory(folderUserPath);
                 }
 
-                if (file.Length > 0)
+                if (file != null && file.Length > 0)
                 {
                     string fileExtension = Path.GetExtension(file.FileName);
                     string newArchive = Guid.NewGuid().ToString() + fileExtension;
@@ -591,6 +591,32 @@ namespace FashionWeb.Controllers
                 if (System.IO.File.Exists(pathLastArchive))
                 {
                     System.IO.File.Delete(pathLastArchive);
+                }
+            }
+
+            var productArchives = this._coreBusinessRules.GetProductArchives(product.Id);
+            if (productArchives != null && productArchives.Count() > 0)
+            {
+                // Deletar arquivo da azure aqui abaixo
+                string connectionString = "DefaultEndpointsProtocol=https;AccountName=armazenamento0;AccountKey=TyXnvuHIe5Bq+Syd0pJX2MwWcYpoq9s1GQLYjpW5l4KbTs7sICAtJ2Hqt0gNhWZLSox2N7j2RDy2+AStz2eXkw==;EndpointSuffix=core.windows.net";
+
+                // Criar cliente BlobServiceClient
+                BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+
+                foreach (var productArchive in productArchives)
+                {
+
+                    string containerName = productArchive.UserPath;
+                    string blobName = productArchive.Name;
+
+                    // Obter BlobClient para o arquivo desejado
+                    BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                    BlobClient blobClient = containerClient.GetBlobClient(blobName);
+
+                    // Excluir o arquivo, se existir
+                    bool deleted = blobClient.DeleteIfExists();
+
+                    this._coreBusinessRules.ExcluirProductArchive(productArchive);
                 }
             }
 
