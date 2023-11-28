@@ -915,5 +915,23 @@ namespace FashionWeb.Controllers
             return Json(productArchives);
         }
 
+        [HttpPost]
+        public IActionResult GetSubCategories([FromBody] int? CategoryId)
+        {
+            return Json(this._coreBusinessRules.GetSubCategories(CategoryId));
+        }
+
+        [HttpPost]
+        public IActionResult GetProductTypes([FromBody] int? SubCategoryId)
+        {
+            return Json(this._coreBusinessRules.GetProductTypes(SubCategoryId));
+        }
+
+        [HttpPost]
+        public IActionResult GetTamanho()
+        {
+            return Json(this._coreBusinessRules.GetTamanho());
+        }
+
     }
 }

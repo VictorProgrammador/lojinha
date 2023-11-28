@@ -15,7 +15,6 @@
       "wwwroot/js/controllers/register-controller.js",
       "wwwroot/js/controllers/recover-password-controller.js",
       "wwwroot/js/controllers/login-controller.js",
-      "wwwroot/js/controllers/home-controller.js",
       "wwwroot/js/controllers/order-controller.js",
       "wwwroot/js/controllers/order-index-controller.js",
       "wwwroot/js/controllers/user-profile-controller.js",

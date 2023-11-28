@@ -763,7 +763,9 @@ namespace FashionWeb.Domain.Repository.Repositories
                                     [Product].Image,
                                     [Product].CreateDate,
                                     [Product].PersonBusinessId,
-                                    [Product].CategoryId
+                                    [Product].CategoryId,
+                                    [Product].SubCategoryId,
+                                    [Product].ProductTypeId
                                     FROM [Product] 
                                     WHERE [PersonBusinessId] = @PersonBusinessId";
 
@@ -807,7 +809,7 @@ namespace FashionWeb.Domain.Repository.Repositories
 
         public bool InsertProduct(Product product)
         {
-            var insertProduct = @"INSERT INTO [Product] VALUES (@Name, @Value, @CreateDate, @PersonBusinessId, @Description, @Image, @AcceptComplement, @IsComplement, @MaxComplement, @CategoryId, @IsDigitalShop)";
+            var insertProduct = @"INSERT INTO [Product] VALUES (@Name, @Value, @CreateDate, @PersonBusinessId, @Description, @Image, @AcceptComplement, @IsComplement, @MaxComplement, @CategoryId, @IsDigitalShop, @SubCategoryId, @ProductTypeId)";
             int id = 0;
 
             using (var db = _connectionFactory.GetConnection())
@@ -826,7 +828,9 @@ namespace FashionWeb.Domain.Repository.Repositories
                     IsComplement = product.IsComplement,
                     MaxComplement = product.MaxComplement,
                     CategoryId = product.CategoryId,
-                    IsDigitalShop = true
+                    IsDigitalShop = true,
+                    SubCategoryId = product.SubCategoryId,
+                    ProductTypeId = product.ProductTypeId
                 });
 
                 db.Close();
@@ -837,7 +841,7 @@ namespace FashionWeb.Domain.Repository.Repositories
 
         public bool UpdateProduct(Product product)
         {
-            var updateProduct = @"UPDATE [Product] SET Name = @Name, Description = @Description, Value = @Value, Image = @Image, AcceptComplement = @AcceptComplement, IsComplement = @IsComplement, MaxComplement = @MaxComplement, CategoryId = @CategoryId WHERE Id = @Id";
+            var updateProduct = @"UPDATE [Product] SET Name = @Name, Description = @Description, Value = @Value, Image = @Image, AcceptComplement = @AcceptComplement, IsComplement = @IsComplement, MaxComplement = @MaxComplement, CategoryId = @CategoryId, SubCategoryId = @SubCategoryId, ProductTypeId = @ProductTypeId WHERE Id = @Id";
 
             int rowsAffect = 0;
 
@@ -855,7 +859,9 @@ namespace FashionWeb.Domain.Repository.Repositories
                     IsComplement = product.IsComplement,
                     MaxComplement = product.MaxComplement,
                     Id = product.Id,
-                    CategoryId = product.CategoryId
+                    CategoryId = product.CategoryId,
+                    SubCategoryId = product.SubCategoryId,
+                    ProductTypeId = product.ProductTypeId
                 });
 
                 db.Close();
@@ -1849,6 +1855,43 @@ namespace FashionWeb.Domain.Repository.Repositories
         {
             var db = _connectionFactory.GetConnection();
             var result = db.Query<ProductArchive>("SELECT * from ProductArchive where ProductId = @ProductId", new { ProductId = ProductId }).ToList();
+            return result;
+        }
+
+        public List<SubCategory> GetSubCategories(int? CategoryId)
+        {
+            var result = new List<SubCategory>();
+            var db = _connectionFactory.GetConnection();
+
+            if(CategoryId > 0)
+            {
+                result = db.Query<SubCategory>("SELECT * from SubCategory where IsDeleted = 0 and CategoryId = @CategoryId", new { CategoryId = CategoryId }).ToList();
+            }
+            else
+                result = db.Query<SubCategory>("SELECT * from SubCategory where IsDeleted = 0").ToList();
+
+            return result;
+        }
+
+        public List<ProductType> GetProductTypes(int? SubCategoryId)
+        {
+            var result = new List<ProductType>();
+            var db = _connectionFactory.GetConnection();
+
+            if(SubCategoryId > 0)
+            {
+                result = db.Query<ProductType>("SELECT * from ProductType where IsDeleted = 0 and SubCategoryId = @SubCategoryId", new { SubCategoryId = SubCategoryId }).ToList();
+            }
+            else
+                result = db.Query<ProductType>("SELECT * from ProductType where IsDeleted = 0").ToList();
+
+            return result;
+        }
+
+        public List<Tamanho> GetTamanho()
+        {
+            var db = _connectionFactory.GetConnection();
+            var result = db.Query<Tamanho>("SELECT * from Tamanho where IsDeleted = 0").ToList();
             return result;
         }
 

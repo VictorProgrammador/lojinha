@@ -3,9 +3,7 @@
 
 <head>
     <script src="/lib/jquery-mask-plugin-master/dist/jquery.mask.min.js"></script>
-    <script>
-        $('.money').mask('#.##0,00', { reverse: true });
-    </script>
+
     <style>
         .fixed-top {
             /* position: fixed; */
@@ -29,10 +27,9 @@
             margin: auto;
         }
 
-        .ui-select-search{
+        .ui-select-search {
             width: 100% !important
         }
-
     </style>
 </head>
 
@@ -118,7 +115,7 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="productArchive in entity.productArchives">
-                                    <td><img src="{{productArchive.url}}" width="25"/></td>
+                                    <td><img src="{{productArchive.url}}" width="25" /></td>
                                     <td>{{productArchive.description}}</td>
                                     <td><button class="btn btn-sm" ng-click="excludeProductArchive(productArchive)"><i class="bi bi-trash"></i></button></td>
                                 </tr>
@@ -177,14 +174,44 @@
                                 <textarea class="form-control" ng-model="entity.description" id="inputEmail4"></textarea>
                             </div>
                         </div>
+
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <span ng-repeat="category in categories">
-                                    <input type="radio" ng-model="entity.categoryId" ng-value="category.id">
-                                    {{category.name}}
-                                </span>
+                            <div class="form-group col-md-12">
+                                <label>Categoria</label>
+                                <select ng-model="entity.categoryId" class="form-control" ng-change="loadCategory()" ng-options="category.id as category.name for category in categories">
+                                    <option value="" disabled selected hidden>Selecione uma opção</option>
+                                </select>
                             </div>
-                        </div>
+                        </div><br />
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Sub-Categoria</label>
+                                <select ng-model="entity.subCategoryId" class="form-control" ng-change="loadSubCategory()" ng-options="subcategory.id as subcategory.name for subcategory in subcategories">
+                                    <option value="" disabled selected hidden>Selecione uma opção</option>
+                                </select>
+                            </div>
+                        </div><br />
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Tipo de produto</label>
+                                <select ng-model="entity.productTypeId" class="form-control" ng-options="productType.id as productType.name for productType in productTypes">
+                                    <option value="" disabled selected hidden>Selecione uma opção</option>
+                                </select>
+                            </div>
+                        </div><br />
+
+                        @*<div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Tamanho</label>
+                                <select ng-model="entity.productTypeId" class="form-control" ng-options="productType.id as productType.name for productType in productTypes">
+                                    <option value="" disabled selected hidden>Selecione uma opção</option>
+                                </select>
+                            </div>
+                        </div><br />*@
+
+                        <br />
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label for="inputEmail4">R$</label>
@@ -193,44 +220,19 @@
                                        class="form-control money">
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="inputEmail4">Produto é um complemento ?</label>
-                                <md-radio-group ng-model="entity.isComplement" layout="row">
-                                    <md-radio-button ng-value="true">Sim</md-radio-button>
-                                    <md-radio-button ng-value="false">Não</md-radio-button>
-                                </md-radio-group>
-                            </div>
-                        </div>
-                        <div class="form-row" ng-show="entity.isComplement == false">
-                            <div class="form-group col-md-12">
-                                <label for="inputEmail4">Produto pode receber complementos ?</label>
-                                <md-radio-group ng-model="entity.acceptComplement" layout="row">
-                                    <md-radio-button ng-value="true">Sim</md-radio-button>
-                                    <md-radio-button ng-value="false">Não</md-radio-button>
-                                </md-radio-group>
-                            </div>
-                        </div>
-                        <div class="form-row" ng-show="entity.acceptComplement == true">
-                            <div class="form-group col-md-12">
-                                <label for="inputEmail4">Cliente pode adicionar até quantos complementos ?</label>
-                                <input type="text"
-                                       ng-model="entity.maxComplement" id="inputEmail4"
-                                       class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-row" ng-show="entity.acceptComplement == true">
-                            <div class="form-group col-md-6">
-                                <label>Complementos</label>
-                                <ui-select multiple tagging tagging-label="(custom 'new' label)"
-                                           ng-model="entity.complements">
-                                    <ui-select-match placeholder="Selecione complementos...">{{$item.name}}</ui-select-match>
-                                    <ui-select-choices repeat="complement in complements | filter:$select.search">
-                                        {{complement.name}}
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
-                        </div>
+
+                        @*<div class="form-row" ng-show="entity.acceptComplement == true">
+            <div class="form-group col-md-6">
+                <label>Complementos</label>
+                <ui-select multiple tagging tagging-label="(custom 'new' label)"
+                           ng-model="entity.complements">
+                    <ui-select-match placeholder="Selecione complementos...">{{$item.name}}</ui-select-match>
+                    <ui-select-choices repeat="complement in complements | filter:$select.search">
+                        {{complement.name}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>*@
                         <br />
                         <div class="form-row"
                              ng-show="entity.image != null && entity.image != ''  && (myImage == null || myImage == '')">
@@ -267,6 +269,10 @@
     </div>
 </div>
 
+<script>
+    $('.money').mask('#.##0,00', { reverse: true });
+</script>
 
 <!-- Template Main JS File -->
 <script src="/js/main.js"></script>
+

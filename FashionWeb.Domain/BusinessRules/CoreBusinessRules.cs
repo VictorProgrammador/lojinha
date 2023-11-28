@@ -677,5 +677,20 @@ namespace FashionWeb.Domain.BusinessRules
             return this._coreRepository.GetProductArchives(ProductId);
         }
 
+        public List<SubCategory> GetSubCategories(int? CategoryId)
+        {
+            return this._coreRepository.GetSubCategories(CategoryId);
+        }
+
+        public List<ProductType> GetProductTypes(int? SubCategoryId)
+        {
+            return this._coreRepository.GetProductTypes(SubCategoryId);
+        }
+
+        public List<Tamanho> GetTamanho()
+        {
+            return this._coreRepository.GetTamanho();
+        }
+
     }
 }

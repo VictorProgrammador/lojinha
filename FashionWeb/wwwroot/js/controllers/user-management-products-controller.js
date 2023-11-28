@@ -25,6 +25,8 @@
     };
 
     $scope.categories = [];
+    $scope.subcategories = [];
+    $scope.productTypes = [];
 
     $scope.complements = [];
 
@@ -117,6 +119,52 @@
 
     excluirProduto = function (param) {
         return $http.post("/User/ExcluirProduto", param, headers);
+    }
+
+    $scope.loadCategory = function () {
+
+        $(".spinerStyle").addClass('centerSpinner');
+        $(".spinerBackground").addClass('overlay');
+
+        if ($scope.entity.categoryId == undefined)
+            $scope.entity.categoryId = 0;
+
+        basicService.getSubCategories($scope.entity.categoryId).then(function (data) {
+            var result = data.data;
+
+            $scope.subcategories = result;
+
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+
+        }, function (error) {
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+        });
+
+    }
+
+    $scope.loadSubCategory = function () {
+
+        $(".spinerStyle").addClass('centerSpinner');
+        $(".spinerBackground").addClass('overlay');
+
+        if ($scope.entity.subCategoryId == undefined)
+            $scope.entity.subCategoryId = 0;
+
+        basicService.getProductTypes($scope.entity.subCategoryId).then(function (data) {
+            var result = data.data;
+
+            $scope.productTypes = result;
+
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+
+        }, function (error) {
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+        });
+
     }
 
     $scope.getProductArchives = function () {
@@ -414,6 +462,8 @@
         $scope.getMyProducts();
         $scope.getComplements();
         $scope.getCategories();
+        $scope.loadCategory();
+        $scope.loadSubCategory();
     }
 
     $scope.init();

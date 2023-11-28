@@ -80,6 +80,9 @@ namespace FashionWeb.Domain.Repository.Interfaces
         bool SaveProductArchive(ProductArchive productArchive);
         bool ExcluirProductArchive(ProductArchive productArchive);
         List<ProductArchive> GetProductArchives(int ProductId);
+        List<SubCategory> GetSubCategories(int? CategoryId);
+        List<ProductType> GetProductTypes(int? SubCategoryId);
 
+        List<Tamanho> GetTamanho();
     }
 }

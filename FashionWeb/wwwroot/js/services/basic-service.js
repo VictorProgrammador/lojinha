@@ -17,6 +17,12 @@
         getCategories: function () {
             return $http.get("/Home/GetCategories");
         },
+        getSubCategories: function (param) {
+            return $http.post("/Home/GetSubCategories", param, headers);
+        },
+        getProductTypes: function (param) {
+            return $http.post("/Home/GetProductTypes", param, headers);
+        },
         getMyProfile: function () {
             return $http.get("/User/GetMyProfile");
         },

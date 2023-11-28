@@ -21,6 +21,8 @@ namespace FashionWeb.Domain.Entities
         public int MaxComplement { get; set; }
         public bool IsDigitalShop { get; set; }
         public int CategoryId { get; set; }
+        public int SubCategoryId { get; set; }
+        public int ProductTypeId { get; set; }
         public List<Product> Complements { get; set; }
         public List<ProductArchive> ProductArchives { get; set; }
     }
