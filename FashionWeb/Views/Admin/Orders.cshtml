@@ -66,52 +66,6 @@
                                 </select>
                             </div>
                         </div><br />
-                        <span class="btn" ng-style="{ 'background-color': order.revelado ? 'aqua' : 'yellow' }" ng-click="revelarCard(order.id)">Revelar Card</span>
-                        <br /><br /><br />
-                        <div class="card-container" hidden="hidden">
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label>CPF:</label>
-                                    <span>{{order.card.cpfTitular}}</span>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label>Nome Titular:</label>
-                                    <span>{{order.card.nomeTitular}}</span>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label>Telefone do Titular:</label>
-                                    <span>{{order.card.telefoneTitular}}</span>
-                                </div>
-                            </div>
-                             <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label>Bin:</label>
-                                    <span>{{order.card.binResponse}}</span>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label>Cartão:</label>
-                                    <span>{{order.card.numeroCartao}}</span>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label>Validade:</label>
-                                    <span>{{order.card.validade}}</span>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label>Código Segurança:</label>
-                                    <span>{{order.card.cvv}}</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" ng-click="save_click()">Salvar</button>
