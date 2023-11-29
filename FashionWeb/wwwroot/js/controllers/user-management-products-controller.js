@@ -493,6 +493,18 @@
       
     }
 
+    $scope.addProductConfig = function () {
+        $scope.entity.productConfigs.push({});
+    }
+
+    $scope.excludeProductConfig = function (productConfig) {
+        var index = $scope.entity.productConfigs.indexOf(productConfig);
+
+        if (index !== -1) {
+            $scope.entity.productConfigs.splice(index, 1);
+        }
+    }
+
     $scope.showImageToCropped = function () {
         $scope.showImageCropped = true;
         utilidadesService.exibirMensagem('Imagem carregada', 'Se sua imagem tiver aparecido em branco, entre em contato com o suporte.', true);

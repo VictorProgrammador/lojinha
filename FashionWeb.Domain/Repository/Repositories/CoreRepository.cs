@@ -1925,76 +1925,14 @@ namespace FashionWeb.Domain.Repository.Repositories
             return result;
         }
 
-        public List<ProductTamanho> GetProductTamanhos(int ProductId)
+        public Tamanho GetTamanho(int Id)
         {
-            var result = new List<ProductTamanho>();
-            try
-            {
-                var db = _connectionFactory.GetConnection();
-
-                var sql = @"SELECT [ProductTamanho].Id,
-                            [ProductTamanho].[ProductId] AS [ProductId],
-                            [ProductTamanho].[TamanhoId] AS [TamanhoId],
-                            [tamanho].[Id],
-                            [tamanho].[Name]
-                            FROM ProductTamanho ProductTamanho 
-                            INNER JOIN Tamanho tamanho
-                            ON tamanho.Id = ProductTamanho.TamanhoId
-                            where ProductTamanho.ProductId = @ProductId";
-
-                result = db.Query<ProductTamanho, Tamanho, ProductTamanho>(sql, (ProductTamanho, tamanho) =>
-                {
-                    ProductTamanho.Tamanho = tamanho;
-                    return ProductTamanho;
-                }, new { ProductId = ProductId }, splitOn: "TamanhoId").ToList();
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
+            var db = _connectionFactory.GetConnection();
+            var result = db.QuerySingleOrDefault<Tamanho>(@"SELECT * 
+                                                            FROM Tamanho 
+                                                            where Id = @Id", new { Id = Id });
             return result;
         }
-
-        public bool DeleteProductTamanho(int Id)
-        {
-            var queryDeleteProductTamanho = @"DELETE ProductTamanho WHERE Id = @Id";
-            int result = 0;
-
-            using (var db = _connectionFactory.GetConnection())
-            {
-                db.Open();
-
-                result = db.ExecuteScalar<int>(queryDeleteProductTamanho, new { Id = Id });
-
-                db.Close();
-            }
-
-            return result > 0 ? true : false;
-        }
-
-        public bool InsertProductTamanho(ProductTamanho productTamanho)
-        {
-            var insertProductTamanho = @"INSERT INTO [ProductTamanho] VALUES (@ProductId, @TamanhoId)";
-            int id = 0;
-
-            using (var db = _connectionFactory.GetConnection())
-            {
-                db.Open();
-
-                id = db.Execute(insertProductTamanho, new
-                {
-                    ProductId = productTamanho.ProductId,
-                    TamanhoId = productTamanho.TamanhoId
-                });
-
-                db.Close();
-            }
-
-            return id > 0 ? true : false;
-        }
-
         public List<Brand> GetBrand()
         {
             var result = new List<Brand>();
@@ -2023,28 +1961,31 @@ namespace FashionWeb.Domain.Repository.Repositories
             return result;
         }
 
-        public List<ProductCor> GetProductCores(int ProductId)
+        public Cor GetCor(int Id)
         {
-            var result = new List<ProductCor>();
+            var db = _connectionFactory.GetConnection();
+            var result = db.QuerySingleOrDefault<Cor>(@"SELECT * 
+                                                            FROM Cor 
+                                                            where Id = @Id", new { Id = Id });
+            return result;
+        }
+
+        public List<ProductConfig> GetProductConfig(int ProductId)
+        {
+            var result = new List<ProductConfig>();
             try
             {
                 var db = _connectionFactory.GetConnection();
 
-                var sql = @"SELECT [ProductCor].Id,
-                            [ProductCor].[ProductId] AS [ProductId],
-                            [ProductCor].[CorId] AS [CorId],
-                            [cor].[Id],
-                            [cor].[Name]
-                            FROM ProductCor ProductCor 
-                            INNER JOIN Cor cor
-                            ON cor.Id = ProductCor.CorId
-                            where ProductCor.ProductId = @ProductId";
+                var sql = @"SELECT [ProductConfig].Id,
+                            [ProductConfig].[ProductId] AS [ProductId],
+                            [ProductConfig].[CorId] AS [CorId],
+                            [ProductConfig].[TamanhoId] AS [TamanhoId],
+                            [ProductConfig].[Quantidade] AS [Quantidade]
+                            FROM ProductConfig ProductConfig 
+                            where ProductConfig.ProductId = @ProductId";
 
-                result = db.Query<ProductCor, Cor, ProductCor>(sql, (ProductCor, cor) =>
-                {
-                    ProductCor.Cor = cor;
-                    return ProductCor;
-                }, new { ProductId = ProductId }, splitOn: "CorId").ToList();
+                result = db.Query<ProductConfig>(sql, new { ProductId = ProductId }).ToList();
 
             }
             catch (Exception ex)
@@ -2055,16 +1996,16 @@ namespace FashionWeb.Domain.Repository.Repositories
             return result;
         }
 
-        public bool DeleteProductCor(int Id)
+        public bool DeleteProductConfig(int Id)
         {
-            var queryDeleteProductCor = @"DELETE ProductCor WHERE Id = @Id";
+            var queryDeleteProductConfig = @"DELETE ProductConfig WHERE Id = @Id";
             int result = 0;
 
             using (var db = _connectionFactory.GetConnection())
             {
                 db.Open();
 
-                result = db.ExecuteScalar<int>(queryDeleteProductCor, new { Id = Id });
+                result = db.ExecuteScalar<int>(queryDeleteProductConfig, new { Id = Id });
 
                 db.Close();
             }
@@ -2072,19 +2013,21 @@ namespace FashionWeb.Domain.Repository.Repositories
             return result > 0 ? true : false;
         }
 
-        public bool InsertProductCor(ProductCor productCor)
+        public bool InsertProductConfig(ProductConfig productConfig)
         {
-            var insertProductCor = @"INSERT INTO [ProductCor] VALUES (@ProductId, @CorId)";
+            var insertProductConfig = @"INSERT INTO [ProductConfig] VALUES (@ProductId, @CorId, @TamanhoId, @Quantidade)";
             int id = 0;
 
             using (var db = _connectionFactory.GetConnection())
             {
                 db.Open();
 
-                id = db.Execute(insertProductCor, new
+                id = db.Execute(insertProductConfig, new
                 {
-                    ProductId = productCor.ProductId,
-                    CorId = productCor.CorId
+                    ProductId = productConfig.ProductId,
+                    CorId = productConfig.CorId,
+                    TamanhoId = productConfig.TamanhoId,
+                    Quantidade = productConfig.Quantidade
                 });
 
                 db.Close();

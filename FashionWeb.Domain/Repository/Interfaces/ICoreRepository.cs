@@ -83,13 +83,12 @@ namespace FashionWeb.Domain.Repository.Interfaces
         List<SubCategory> GetSubCategories(int? CategoryId);
         List<ProductType> GetProductTypes(int? SubCategoryId);
         List<Tamanho> GetTamanhos();
-        List<ProductTamanho> GetProductTamanhos(int ProductId);
-        bool DeleteProductTamanho(int Id);
-        bool InsertProductTamanho(ProductTamanho productTamanho);
+        Tamanho GetTamanho(int Id);
         List<Brand> GetBrand();
         List<Cor> GetCores();
-        List<ProductCor> GetProductCores(int ProductId);
-        bool DeleteProductCor(int Id);
-        bool InsertProductCor(ProductCor productCor);
+        Cor GetCor(int Id);
+        List<ProductConfig> GetProductConfig(int ProductId);
+        bool DeleteProductConfig(int Id);
+        bool InsertProductConfig(ProductConfig productConfig);
     }
 }

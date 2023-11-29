@@ -211,31 +211,32 @@
                             </div>
                         </div><br />
 
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label>Tamanhos</label>
-                                <ui-select multiple tagging tagging-label="(custom 'new' label)"
-                                           ng-model="entity.productTamanhos">
-                                    <ui-select-match placeholder="selecione os tamanhos...">{{$item.name}}</ui-select-match>
-                                    <ui-select-choices repeat="tamanho in tamanhos | filter:$select.search">
-                                        {{tamanho.name}}
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
+                        <div>
+                            <span class="btn btn-success" ng-click="addProductConfig()">Adicionar</span>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label>Cores</label>
-                                <ui-select multiple tagging tagging-label="(custom 'new' label)"
-                                           ng-model="entity.productCores">
-                                    <ui-select-match placeholder="selecione as cores...">{{$item.name}}</ui-select-match>
-                                    <ui-select-choices repeat="cor in cores | filter:$select.search">
-                                        {{cor.name}}
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
-                        </div>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Cor</th>
+                                <th>Tamanho</th>
+                                <th>Qtd</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-repeat="productConfig in entity.productConfigs">
+                                <td>
+                                    <select ng-model="productConfig.corId" class="form-control" ng-options="cor.id as cor.name for cor in cores">
+                                        <option value="" disabled selected hidden>Selecione uma cor</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select ng-model="productConfig.tamanhoId" class="form-control" ng-options="tamanho.id as tamanho.name for tamanho in tamanhos">
+                                        <option value="" disabled selected hidden>Selecione um tamanho</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="form-control" ng-model="productConfig.quantidade" /></td>
+                                <td><button class="btn btn-sm" ng-click="excludeProductConfig(productConfig)"><i class="bi bi-trash"></i></button></td>
+                            </tr>
+                        </table>
 
                         <br />
                         <div class="form-row">

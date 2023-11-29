@@ -28,5 +28,8 @@ namespace FashionWeb.Domain.Entities
         public List<ProductArchive> ProductArchives { get; set; }
         public List<Tamanho> ProductTamanhos { get; set; }
         public List<Cor> ProductCores { get; set; }
+        public List<ProductConfig> ProductConfigs { get; set; }
+        public int ColorId { get; set; }
+        public int TamanhoId { get; set; }
     }
 }

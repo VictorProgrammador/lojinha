@@ -120,6 +120,25 @@
             </div>
         </div><br />
 
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Cor</label>
+                <select ng-model="entity.colorId" class="form-control" ng-change="changeCor()" ng-options="cor.id as cor.name for cor in entity.productCores">
+                    <option value="" disabled selected hidden>Selecione uma cor</option>
+                </select>
+            </div>
+             <div class="form-group col-md-6">
+                <label>Tamanho</label>
+                <select ng-model="entity.tamanhoId" class="form-control" ng-change="changeTamanho()" ng-options="tamanho.id as tamanho.name for tamanho in entity.productTamanhos">
+                    <option value="" disabled selected hidden>Selecione um tamanho</option>
+                </select>
+            </div>
+        </div><br />
+
+        <div ng-show="quantidadeDisponivel > 0">
+            <span>Quantidade de peças disponíveis na loja: {{quantidadeDisponivel}}</span>
+        </div><br />
+
         <div>
             <span>
                 <strong>Vendido e entregue por Modas Online.</strong>

@@ -20,6 +20,8 @@
     $scope.previewSelected = '';
     $scope.previewSelectedImage = '';
 
+    $scope.quantidadeDisponivel = 0;
+
     $scope.getProductArchives = function () {
         $(".spinerStyle").addClass('centerSpinner');
         $(".spinerBackground").addClass('overlay');
@@ -53,7 +55,8 @@
             var result = data.data;
 
             if (result != null && result != undefined) {
-                $scope.entity = result;                
+                $scope.entity = result;
+
                 $scope.previewImages.push('/' + $scope.entity.image);
                 $scope.previewSelected = '/' + $scope.entity.image;
                 $scope.getProductArchives();
@@ -63,6 +66,7 @@
                 $scope.addErrorAlert("Produto buscado não encontrada na base de dados!");
             }
 
+
             $(".spinerStyle").removeClass('centerSpinner');
             $(".spinerBackground").removeClass('overlay');
 
@@ -71,6 +75,32 @@
             $(".spinerBackground").removeClass('overlay');
         });
 
+    }
+
+    $scope.changeCor = function () {
+        $scope.entity.productTamanhos = [];
+        $scope.entity.tamanhoId = null;
+        $scope.quantidadeDisponivel = 0;
+
+        $scope.entity.productConfigs.map(function (data) {
+
+            if (data.corId == $scope.entity.colorId) {
+                $scope.entity.productTamanhos.push(data.tamanho);
+            }
+
+        });
+
+    }
+
+    $scope.changeTamanho = function () {
+        $scope.entity.productConfigs.map(function (data) {
+
+            if (data.corId == $scope.entity.colorId &&
+                data.tamanhoId == $scope.entity.tamanhoId) {
+                $scope.quantidadeDisponivel = data.quantidade;
+            }
+
+        });
     }
 
     function adicionarAoCarrinho() {

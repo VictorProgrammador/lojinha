@@ -10,13 +10,21 @@ IsDeleted bit default 0
 INSERT INTO Cor VALUES ('Branca', 0)
 
 
-create table ProductCor (
+create table ProductConfig (
 
 Id int primary key identity(1,1),
 ProductId int,
 CorId int,
+TamanhoId int,
+Quantidade int,
 
 FOREIGN KEY (ProductId) REFERENCES Product(Id),
-FOREIGN KEY (CorId) REFERENCES Cor(Id)
+FOREIGN KEY (CorId) REFERENCES Cor(Id),
+FOREIGN KEY (TamanhoId) REFERENCES Tamanho(Id)
 
 );
+
+
+select * from Cor
+
+insert into Cor values ('Padrão', 0)

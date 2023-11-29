@@ -308,30 +308,7 @@ namespace FashionWeb.Domain.BusinessRules
                         }
                     }
 
-                    var productTamanhos = this._coreRepository.GetProductTamanhos(product.Id);
-                    product.ProductTamanhos = new List<Tamanho>();
-
-                    foreach(var productTamanho in productTamanhos)
-                    {
-                        product.ProductTamanhos.Add(new Tamanho()
-                        {
-                            Id = productTamanho.Tamanho.Id,
-                            Name = productTamanho.Tamanho.Name
-                        });
-                    }
-
-                    var productCores = this._coreRepository.GetProductCores(product.Id);
-                    product.ProductCores = new List<Cor>();
-
-                    foreach (var productCor in productCores)
-                    {
-                        product.ProductCores.Add(new Cor()
-                        {
-                            Id = productCor.Cor.Id,
-                            Name = productCor.Cor.Name
-                        });
-                    }
-
+                    product.ProductConfigs = this._coreRepository.GetProductConfig(product.Id);
                 }
             }
 
@@ -390,82 +367,41 @@ namespace FashionWeb.Domain.BusinessRules
                 }
             }
 
-            //Cuidando dos tamanhos do produto !
-            var productTamanhos = this._coreRepository.GetProductTamanhos(product.Id);
-
-            //Deleta os tamanhos existentes caso na nova lista nao tiver nenhum.
-            if (product.ProductTamanhos == null || product.ProductTamanhos.Count() == 0)
+            var productConfigs = this._coreRepository.GetProductConfig(product.Id);
+            if (product.ProductConfigs == null || product.ProductConfigs.Count() == 0)
             {
-                foreach (var productTamanho in productTamanhos)
+                foreach (var productConfig in productConfigs)
                 {
-                    this._coreRepository.DeleteProductTamanho(productTamanho.Id);
+                    this._coreRepository.DeleteProductConfig(productConfig.Id);
                 }
             }
             else
             {
-                //Verificando existentes
-                foreach (var productTamanho in productTamanhos)
+
+                foreach (var productConfig in productConfigs)
                 {
-                    //O tamanho antigo nao está na lista atual
-                    if (product.ProductTamanhos.Where(x => x.Id == productTamanho.Tamanho.Id).Count() == 0)
+
+                    if (product.ProductConfigs.Where(x => x.CorId == productConfig.CorId && x.TamanhoId == productConfig.TamanhoId).Count() == 0)
                     {
-                        //Removendo ele 
-                        this._coreRepository.DeleteProductTamanho(productTamanho.Id);
+
+                        this._coreRepository.DeleteProductConfig(productConfig.Id);
                     }
                 }
 
-                foreach (var tamanho in product.ProductTamanhos)
+                foreach (var productConfig in product.ProductConfigs)
                 {
-                    //O tamanho atual nao está na lista existente
-                    if (productTamanhos.Where(x => x.Tamanho.Id == tamanho.Id).Count() == 0)
+
+                    if (productConfigs.Where(x => x.CorId == productConfig.CorId && x.TamanhoId == productConfig.TamanhoId).Count() == 0)
                     {
-                        ProductTamanho productTamanho = new ProductTamanho()
+                        ProductConfig ProductConfig = new ProductConfig()
                         {
-                            TamanhoId = tamanho.Id,
-                            ProductId = product.Id
+                            CorId = productConfig.CorId,
+                            TamanhoId = productConfig.TamanhoId,
+                            ProductId = product.Id,
+                            Quantidade = productConfig.Quantidade
                         };
 
-                        this._coreRepository.InsertProductTamanho(productTamanho);
-                    }
-                }
-            }
-
-            //Cuidando das cores do produto !
-            var productCores = this._coreRepository.GetProductCores(product.Id);
-
-            //Deleta as cores existentes caso na nova lista nao tiver nenhum.
-            if (product.ProductCores == null || product.ProductCores.Count() == 0)
-            {
-                foreach (var productCor in productCores)
-                {
-                    this._coreRepository.DeleteProductCor(productCor.Id);
-                }
-            }
-            else
-            {
-                //Verificando existentes
-                foreach (var productCor in productCores)
-                {
-                    //A cor antiga nao está na lista atual
-                    if (product.ProductCores.Where(x => x.Id == productCor.Cor.Id).Count() == 0)
-                    {
-                        //Removendo ela 
-                        this._coreRepository.DeleteProductCor(productCor.Id);
-                    }
-                }
-
-                foreach (var cor in product.ProductCores)
-                {
-                    //A cor atual nao está na lista existente
-                    if (productCores.Where(x => x.Cor.Id == cor.Id).Count() == 0)
-                    {
-                        ProductCor productCor = new ProductCor()
-                        {
-                            CorId = cor.Id,
-                            ProductId = product.Id
-                        };
-
-                        this._coreRepository.InsertProductCor(productCor);
+                        this._coreRepository.InsertProductConfig(ProductConfig);
                     }
                 }
             }
@@ -652,7 +588,22 @@ namespace FashionWeb.Domain.BusinessRules
 
         public Product GetProduct(int Id)
         {
-            return this._coreRepository.GetProduct(Id);
+            var product = this._coreRepository.GetProduct(Id);
+            product.ProductConfigs = this._coreRepository.GetProductConfig(product.Id);
+            product.ProductCores = new List<Cor>();
+
+            foreach (var productConfig in product.ProductConfigs)
+            {
+                if(product.ProductCores.Where(x=> x.Id == productConfig.CorId).Count() == 0)
+                {
+                    product.ProductCores.Add(this._coreRepository.GetCor(productConfig.CorId));
+                }
+
+                productConfig.Tamanho = this._coreRepository.GetTamanho(productConfig.TamanhoId);
+
+            }
+
+            return product;
         }
 
         public Cart GetCart(int PersonId)
