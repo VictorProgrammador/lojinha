@@ -41,10 +41,9 @@
 
 
     @*
-        Não Deleta esse trecho comentado pls
-        <link rel="stylesheet" href="/css/site.css">
-        <link rel="stylesheet" href="/css/style-contact.css">*@
-
+    Não Deleta esse trecho comentado pls
+    <link rel="stylesheet" href="/css/site.css">
+    <link rel="stylesheet" href="/css/style-contact.css">*@
     <link rel="stylesheet" href="/bundles/site.min.css">
     <link rel="stylesheet" href="/lib/angular-bootstrap/ui-bootstrap-csp.css">
     <link rel="stylesheet" href="/lib/angular-material/angular-material.min.css">
@@ -129,16 +128,17 @@
     </script>
     <noscript>
         <img height="1" width="1" style="display:none"
-             src="https://www.facebook.com/tr?id=1407793976438198&ev=PageView&noscript=1" />
+            src="https://www.facebook.com/tr?id=1407793976438198&ev=PageView&noscript=1" />
     </noscript>
     <!-- End Meta Pixel Code -->
 
 </head>
 
 <body>
-    <header id="header" class="fixed-top">
+    <header id="header" class="">
         <div class="container d-flex align-items-center justify-content-between py-2">
-            <h6 class="logo"><a href="/"><img src="/img/digitalShop.jpeg" width="50" alt="Descrição do SVG"> Modas Online</a></h6>
+            <h6 class="logo"><a href="/"><img src="/img/digitalShop.jpeg" width="50" alt="Descrição do SVG"> Modas
+                    Online</a></h6>
             <nav id="navbar" class="navbar">
                 <ul>
                     <li><a class="nav-link scrollto active" href="/">Início</a></li>
@@ -148,6 +148,38 @@
             </nav>
         </div>
     </header>
+    <div class="contentNavigation">
+        <nav class="container">
+            <div class="navbar-collapse" id="navbarColor03">
+                <ul class="">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-filter iconCategory"></i> Todas as Categorias</a>
+                        <div class="dropdown-menu">
+                            <div class="dropCategories">
+                                <a href="#!" class="dropdown-item" ng-repeat="category in list.categories"
+                                    ng-value="category.id" data-target="#categoria{{category.id}}">
+                                    <img ng-show="category.icon != null && category.icon != ''"
+                                        ng-src="{{category.icon}}" height="25" style="text-align:right;">
+                                    <span>{{category.name}}</span>
+                                </a>
+                            </div>
+                            <div class="dropSubcategories">
+                                <div class="content__subcategories" ng-repeat="category in list.categories"
+                                    id="categoria{{category.id}}">
+                                    <a href="#!" ng-repeat="subcategory in subcategories" ng-value="subcategory.id">
+                                        <span>{{subcategory.name}}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
     <div>
         <main role="main" class="pb-3">
             @RenderBody()
@@ -169,7 +201,8 @@
                 <div class="modal-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            <button type="button" class="black-button" data-dismiss="modal" onclick="$('#installApp').modal('hide');">Fechar</button>
+                            <button type="button" class="black-button" data-dismiss="modal"
+                                onclick="$('#installApp').modal('hide');">Fechar</button>
                         </div>
                     </div>
                 </div>
@@ -185,7 +218,8 @@
                 <a href="#" target="_blank" class="instagram"><i class="bx bxl-instagram"></i></a>
             </div>
             <div style="text-align:center;">
-                <span style="color: white"> <img src="~/img/visa2.png" />, <img src="~/img/master.png" />, <img src="~/img/amex.png" />, <img src="~/img/elo.png" />, <img src="~/img/hipercard.png" /></span>
+                <span style="color: white"> <img src="~/img/visa2.png" />, <img src="~/img/master.png" />, <img
+                        src="~/img/amex.png" />, <img src="~/img/elo.png" />, <img src="~/img/hipercard.png" /></span>
             </div><br />
         </div>
     </footer><!-- End Footer -->

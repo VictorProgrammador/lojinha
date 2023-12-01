@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/lib/swiper/swiper-bundle.min.css">
 
-<body>
+<body ng-app="myApp" class="contentBody" ng-controller="HomeController">
     <div class="spinerBackground">
         <div class="spinerStyle" id="loading-bar-container">
 
@@ -15,78 +15,111 @@
     <div id="popupContainer">
 
     </div>
-    <div ng-app="myApp" ng-controller="HomeController">
+    <div>
         <section class="section_main">
             <div class="container position-relative">
-                <div class="banner-desk" style="text-align:center">
-
+                <!-- Swiper -->
+                <div class="swiper mySwiperBanner">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="~/img/banner-prin.png" alt="">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
                 </div>
             </div>
         </section>
-        <section id="filtragem" style="padding:0px !important">
-            <div class="container">
-                <div class="content-filter">
-                    <br />
+        <section class="sectionBanners">
+            <div class="container contentBanners">
+                <div class="contentOffers">
+                    <div class="offer">
+                        <a href="#!">
+                            <img src="~/img/bannerOffer.webp" alt="">
+                        </a>
+                    </div>
+                    <div class="offer">
+                        <a href="#!">
+                            <img src="~/img/bannerOffer.webp" alt="">
+                        </a>
+                    </div>
+                    <div class="offer">
+                        <a href="#!">
+                            <img src="~/img/offer2.webp" alt="">
+                        </a>
+                    </div>
 
-                    <div class="collapse show" id="collapseExample">
-                        <div class="swiper container-categorias">
-                            <div class="header-catergorias">
-                                <h3></h3>
-                            </div>
-                            <div class="content-pagination-buttons">
-                                <div class="button-next"><i class="bi bi-arrow-left-circle"></i></div>
-                                <div class="button-prev"><i class="bi bi-arrow-right-circle"></i></div>
-                            </div>
-                            <div class="contegorias swiper-wrapper" ng-model="filter.Category">
-                                <label class="categoria swiper-slide" ng-repeat="category in list.categories"
-                                       ng-value="category.id" ng-class="{'active': filter.Category.id == category.id}">
-                                    <img ng-show="category.icon != null && category.icon != ''"
-                                         ng-src="{{category.icon}}" height="25" style="text-align:right;">
-                                    <span>{{category.name}}</span>
-                                    <input type="radio" ng-model="filter.Category"
-                                           ng-change="changeCategory();getProducts();" ng-value="category">
-                                </label>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="content-filter-category">
-                                <span class="see-all" ng-click="clearFilter()" style="font-weight: bold;">
-                                    Ver todas<i class="bi bi-eye"></i>
-                                </span>
-                            </div>
-
-                        </div>
+                    <div class="offer">
+                        <a href="#!">
+                            <img src="~/img/offer3.webp" alt="">
+                        </a>
+                    </div>
+                    <div class="offer">
+                        <a href="#!">
+                            <img src="~/img/bannerOffer.webp" alt="">
+                        </a>
                     </div>
                 </div>
-                <div class="text-center mt-5"
-                     ng-show="list.products == null || list.products.length == 0">
-                    <span>Nenhum registro foi encontrado, tente outro filtro.</span>
-                </div>
-            </div>
-            <div class="container position-relative">
-
-                <div class="person-list">
-                    <div class="person-item" ng-repeat="item in list.products"
-                         ng-click="visitProduct(item.id)">
-                        <img ng-src="{{ item.image }}" alt="{{ item.name }}" class="person-image">
-                        <div class="person-content">
-                            <div>
-                                <h2 class="person-name">
-                                    {{ item.name }}
-                                </h2>
-                                <p class="person-description" style="color: green;">{{item.value | currency:"R$"}}</p>
+                <div class="contentDestack">
+                    <div class="destaqueMes">
+                        <div class="header">
+                            <h5><i class="bi bi-stopwatch"></i> Destaques do mês</h5>
+                            <div class="timer">
+                                <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
                             </div>
-                            <div type="button" class="button--link">
-                                <span>Visitar <i class="bi bi-arrow-right-short"></i></span>
+                        </div>
+                        <div class="bodyDestack">
+                            <!-- Swiper -->
+                            <div class="swiper mySwiperDestack">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <a href="#!">
+                                            <img src="~/img/relogio.webp" alt="">
+                                            <div class="info">
+                                                <h5>Relógio tecnologico</h5>
+                                                <span class="beforeValue">R$ 199,00</span>
+                                                <span class="actualeValue">R$ 110,00</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row" ng-show="list.products != null && list.products.length > 0">
-                    <div class="col-md-12" style="text-align:center">
-                        <ul uib-pagination ng-model="filter.PageNumber" total-items="entity.totalItems"
-                            items-per-page="9" max-size="5" previous-text="<<" next-text=">>" rotate="true"
-                            ng-change="getProducts()" class="pagination-sm justify-content-center"></ul>
+                    <div class="marcasDetaques">
+                        <div class="marcas">
+                            <a href="#!">
+                                <img src="~/img/marca1.webp" alt="">
+                            </a>
+                        </div>
+                        <div class="marcas">
+                            <a href="#!">
+                                <img src="~/img/marca2.webp" alt="">
+                            </a>
+                        </div>
+                        <div class="marcas">
+                            <a href="#!">
+                                <img src="~/img/marca3.webp" alt="">
+                            </a>
+                        </div>
+                        <div class="marcas">
+                            <a href="#!">
+                                <img src="~/img/marca4.webp" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contentOffersMarcas">
+                        <div class="offerMarcas">
+                            <a href="#!">
+                                <img src="~/img/offer3.webp" alt="">
+                            </a>
+                        </div>
+                        <div class="offer">
+                            <a href="#!">
+                                <img src="~/img/bannerOffer.webp" alt="">
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -99,7 +132,13 @@
 <script src="/js/main.js"></script>
 <script src="/lib/swiper/swiper-bundle.min.js"></script>
 <script>
-
+    var swiper = new Swiper(".mySwiperBanner", {
+        loop: true,
+        pagination: {
+            el: ".swiper-pagination",
+            dynamicBullets: true,
+        },
+    });
     var swiper = new Swiper(".mySwiper", {
         loop: true,
         grabCursor: true,
@@ -123,6 +162,7 @@
     var swiperCategory = new Swiper(".container-categorias", {
         grabCursor: true,
         freeMode: true,
+        loop: true,
         pagination: {
             el: ".swiper-pagination",
             dynamicBullets: true,
@@ -141,6 +181,17 @@
             }
         }
     });
+    var mySwiperDestack = new Swiper(".mySwiperDestack", {
+        loop: true,
+        autoplay: {
+            delay: 3500,
+            disableOnInteraction: false
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+        }
+
+    });
 
 </script>
-
