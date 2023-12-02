@@ -72,7 +72,7 @@
     }
 
     $scope.expandAllCategories = function () {
-        $scope.viewSubCategory = false;
+        $scope.viewSubCategory = true;
         $scope.viewProductType = false;
         $scope.viewCategories = true;
         $scope.subcategories = [];
