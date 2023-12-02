@@ -12,13 +12,35 @@
 
     $scope.list = {
         products: [],
-        categories: []
+        categories: [],
+        marcas: []
     };
 
     $scope.entity = {
         totalItems: 4,
         totalPages: 0
     };
+
+    $scope.getMarcas = function () {
+
+        $(".spinerStyle").addClass('centerSpinner');
+        $(".spinerBackground").addClass('overlay');
+
+        basicService.getMarcas().then(function (data) {
+            var result = data.data;
+            $scope.list.marcas = result;
+
+            console.log('marcas', result);
+
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+
+        }, function (error) {
+            $(".spinerStyle").removeClass('centerSpinner');
+            $(".spinerBackground").removeClass('overlay');
+        });
+
+    }
 
     $scope.visitProduct = function (Id) {
         $(".spinerStyle").addClass('centerSpinner');
@@ -74,5 +96,7 @@
         });
 
     }
+
+    $scope.getMarcas();
 
 }]);

@@ -175,18 +175,19 @@
                                         <span>{{category.name}}</span>
                                     </span>
                                 </div>
-                            </div><br />
-                            <div ng-repeat="subcategory in categorySelected.subcategories">
-                                <span>
-                                    {{subcategory.name}}
-                                </span>
+                            </div>
+                            <div class="containerSubcategorias">
+                                <div ng-repeat="subcategory in categorySelected.subcategories">
+                                    <strong>
+                                        {{subcategory.name}}
+                                    </strong>
 
-                                <div ng-repeat="productType in subcategory.productTypes">
-                                    <span ng-click="pesquisarProdutos(productType.id)">
-                                        {{productType.name}}
-                                    </span>
+                                    <div ng-repeat="productType in subcategory.productTypes">
+                                        <span class="tiposProduto" ng-click="pesquisarProdutos(productType.id)">
+                                            {{productType.name}}
+                                        </span>
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
                     </li>

@@ -50,6 +50,20 @@ a.navbar-brand {
     border-bottom: 2px solid red;
 }
 
+.tiposProduto {
+    cursor: pointer;
+}
+
+.tiposProduto:hover{
+    text-decoration:underline;
+}
+
+.containerSubcategorias {
+    display: flex;
+    gap: 30px;
+    margin-top: 20px
+}
+
 .dropdown-menu .dropCategories .dropdown-item {
     padding: 0;
     cursor: pointer;

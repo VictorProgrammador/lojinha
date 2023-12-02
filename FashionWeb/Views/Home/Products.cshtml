@@ -80,6 +80,9 @@
     </div>
     <div id="popupContainer">
     </div>
+    <div ng-repeat="marca in list.marcas">
+        <span>{{marca.name}}</span>
+    </div>
     <div class="text-center mt-5"
          ng-show="list.products == null || list.products.length == 0">
         <span>Nenhum produto foi encontrado, tente outro tipo de produto.</span>

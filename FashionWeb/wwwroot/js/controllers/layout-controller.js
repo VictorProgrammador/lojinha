@@ -100,6 +100,7 @@
         });
 
         $scope.categorySelected = $scope.list.categories[0];
+        $scope.categorySelected.isActive = true;
     }
 
     $scope.getCategories = function () {
