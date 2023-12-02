@@ -103,7 +103,18 @@
         });
     }
 
-    function adicionarAoCarrinho() {
+    $scope.adicionarAoCarrinho = function() {
+
+        if ($scope.entity.colorId == null || $scope.entity.colorId == 0) {
+            utilidadesService.exibirMensagem('Atenção!', 'Selecione uma cor!', false);
+            return false;
+        }
+
+        if ($scope.entity.tamanhoId == null || $scope.entity.tamanhoId == 0) {
+            utilidadesService.exibirMensagem('Atenção!', 'Selecione um tamanho!', false);
+            return false;
+        }
+
         fbq('track', 'AddToCart', {
             value: $scope.entity.value,
             currency: 'BRL'

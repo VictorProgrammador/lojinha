@@ -27,4 +27,4 @@ FOREIGN KEY (TamanhoId) REFERENCES Tamanho(Id)
 
 select * from Cor
 
-insert into Cor values ('Padrão', 0)
+update Cor set Name = 'Padrão (da imagem)' where Id = 2
