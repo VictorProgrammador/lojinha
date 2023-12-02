@@ -13,7 +13,17 @@
 
     $scope.list = {
         products: [],
-        categories: []
+        categories: [],
+        subcategories: []
+    };
+
+    $scope.subcategories = [];
+    $scope.productTypes = [];
+
+    $scope.filter = {
+        categories: [],
+        subcategories: [],
+        productTypes: []
     };
 
     $scope.viewSubCategory = false;
@@ -38,14 +48,16 @@
 
     $scope.changeCategory = function (categoryId) {
         $scope.viewSubCategory = true;
-        $scope.viewCategories = true;
-        $scope.loadSubCategory(categoryId);
+        $scope.viewCategories = false;
+
+        $scope.filter.subcategories = $filter('filter')($scope.list.subcategories, { categoryId: categoryId });
     }
 
     $scope.changeSubCategory = function (subCategoryId) {
         $scope.viewProductType = true;
         $scope.viewSubCategory = false;
-        $scope.loadProductType(subCategoryId);
+
+        $scope.filter.productTypes = $filter('filter')($scope.productTypes, { subCategoryId: subCategoryId });
     }
 
     $scope.voltarCategorias = function () {
@@ -66,35 +78,6 @@
         $scope.subcategories = [];
     }
 
-    $scope.getProducts = function () {
-        $(".spinerStyle").addClass('centerSpinner');
-        $(".spinerBackground").addClass('overlay');
-
-        basicService.getProducts($scope.filter).then(function (data) {
-            var result = data.data;
-
-            if (result != null && result != undefined && result.results.length > 0) {
-                $scope.list.products = result.results;
-                $scope.entity.totalItems = result.totalResults;
-                $scope.filter.PageNumber = result.pageNumber;
-                $scope.entity.totalPages = result.totalPages;
-            }
-            else {
-                $scope.list.products = [];
-                $scope.entity.totalItems = 0;
-                $scope.filter.PageNumber = 1;
-                $scope.entity.totalPages = 0;
-            }
-
-            $(".spinerStyle").removeClass('centerSpinner');
-            $(".spinerBackground").removeClass('overlay');
-
-        }, function (error) {
-            $(".spinerStyle").removeClass('centerSpinner');
-            $(".spinerBackground").removeClass('overlay');
-        });
-    }
-
     $scope.getCategories = function () {
         basicService.getCategories().then(function (data) {
             var result = data.data;
@@ -102,60 +85,40 @@
             if (result != null && result != undefined)
                 $scope.list.categories = result;
 
-            console.log('list.categories', $scope.list.categories);
-
         }, function (error) {
             $scope.addErrorAlert("Falha ao carregar categorias. Entre em contato com o suporte!");
         });
     }
 
     $scope.loadSubCategory = function (categoryId) {
-
-        $(".spinerStyle").addClass('centerSpinner');
-        $(".spinerBackground").addClass('overlay');
-
         
         basicService.getSubCategories(categoryId).then(function (data) {
             var result = data.data;
 
-            $scope.subcategories = result;
-            console.log('subcategories', $scope.subcategories);
-
-            $(".spinerStyle").removeClass('centerSpinner');
-            $(".spinerBackground").removeClass('overlay');
+            $scope.list.subcategories = result;
+            $scope.filter.subcategories = result;
 
         }, function (error) {
-            $(".spinerStyle").removeClass('centerSpinner');
-            $(".spinerBackground").removeClass('overlay');
+     
         });
 
     }
 
     $scope.loadProductType = function (subCategoryId) {
 
-        $(".spinerStyle").addClass('centerSpinner');
-        $(".spinerBackground").addClass('overlay');
-
-
         basicService.getProductTypes(subCategoryId).then(function (data) {
             var result = data.data;
 
             $scope.productTypes = result;
-            console.log('productTypes', $scope.productTypes);
-
-            $(".spinerStyle").removeClass('centerSpinner');
-            $(".spinerBackground").removeClass('overlay');
+            $scope.filter.productTypes = result;
 
         }, function (error) {
-            $(".spinerStyle").removeClass('centerSpinner');
-            $(".spinerBackground").removeClass('overlay');
+
         });
 
     }
 
     $scope.pesquisarProdutos = function (Id) {
-        $(".spinerStyle").addClass('centerSpinner');
-        $(".spinerBackground").addClass('overlay');
 
         // Obtem a URL completa
         var url = $location.absUrl();
@@ -169,13 +132,14 @@
         var url = resultado + '/' + 'Home/Products?Id=' + Id;
         window.open(url, "_blank");
 
-        $(".spinerStyle").removeClass('centerSpinner');
-        $(".spinerBackground").removeClass('overlay');
+
     }
 
 
     $scope.init = function () {
         $scope.getCategories();
+        $scope.loadSubCategory(0);
+        $scope.loadProductType(0);
     }
 
     $scope.init();
