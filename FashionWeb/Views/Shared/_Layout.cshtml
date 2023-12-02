@@ -41,9 +41,9 @@
 
 
     @*
-        Não Deleta esse trecho comentado pls
-        <link rel="stylesheet" href="/css/site.css">
-        <link rel="stylesheet" href="/css/style-contact.css">*@
+    Não Deleta esse trecho comentado pls
+    <link rel="stylesheet" href="/css/site.css">
+    <link rel="stylesheet" href="/css/style-contact.css">*@
     <link rel="stylesheet" href="/bundles/site.min.css">
     <link rel="stylesheet" href="/lib/angular-bootstrap/ui-bootstrap-csp.css">
     <link rel="stylesheet" href="/lib/angular-material/angular-material.min.css">
@@ -130,7 +130,7 @@
     </script>
     <noscript>
         <img height="1" width="1" style="display:none"
-             src="https://www.facebook.com/tr?id=1407793976438198&ev=PageView&noscript=1" />
+            src="https://www.facebook.com/tr?id=1407793976438198&ev=PageView&noscript=1" />
     </noscript>
     <!-- End Meta Pixel Code -->
 
@@ -139,7 +139,8 @@
 <body ng-app="myApp" ng-controller="LayoutController">
     <header id="header" class="">
         <div class="container d-flex align-items-center justify-content-between py-2">
-            <h6 class="logo"><a href="/"><img src="/img/vestirbembr.png" width="50" alt="Descrição do SVG"> Vestir Bem BR</a></h6>
+            <h6 class="logo"><a href="/"><img src="/img/vestirbembr.png" width="50" alt="Descrição do SVG"> Vestir Bem
+                    BR</a></h6>
             <nav id="navbar" class="navbar">
                 <ul>
                     <li><a class="nav-link scrollto active" href="/">Início</a></li>
@@ -154,28 +155,29 @@
             <div class="navbar-collapse" id="navbarColor03">
                 <ul class="">
                     <li class="nav-item dropdown">
-                        <span class="nav-link dropdown-toggle" data-bs-toggle="dropdown" ng-click="expandAllCategories()" role="button"
-                            aria-haspopup="true" aria-expanded="false">
+                        <span class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                            ng-click="expandAllCategories()" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="bi bi-filter iconCategory"></i> Todas as Categorias</span>
                         <div class="dropdown-menu">
                             <div class="dropCategories">
-                                <span ng-show="viewCategories" ng-click="changeCategory(category.id)" class="dropdown-item" ng-repeat="category in list.categories"
-                                    ng-value="category.id" data-target="#categoria{{category.id}}">
+                                <span ng-show="viewCategories" ng-mouseenter="changeCategory(category.id)"
+                                    class="dropdown-item" ng-repeat="category in list.categories" ng-value="category.id"
+                                    data-target="#categoria{{category.id}}">
                                     <img ng-show="category.icon != null && category.icon != ''"
                                         ng-src="{{category.icon}}" height="25" style="text-align:right;">
                                     <span>{{category.name}}</span>
                                 </span>
                             </div><br />
-                        <div ng-show="viewSubCategory">
-                            <span ng-click="voltarCategorias()">Voltar para categorias</span><br /><br />
-                            <span ng-click="changeSubCategory(subcategory.id)" ng-repeat="subcategory in filter.subcategories">
-                                {{subcategory.name}}
-                            </span>
-                        </div>
+                            <div ng-show="viewSubCategory">
+                                <span ng-mouseenter="changeSubCategory(subcategory.id)"
+                                    ng-repeat="subcategory in filter.subcategories">
+                                    {{subcategory.name}}
+                                </span>
+                            </div>
 
                             <div ng-show="viewProductType">
-                                <span ng-click="voltarSubCategorias()">Voltar para subcategorias</span><br /><br />
-                                <span ng-click="pesquisarProdutos(productType.id)" ng-repeat="productType in filter.productTypes">
+                                <span ng-click="pesquisarProdutos(productType.id)"
+                                    ng-repeat="productType in filter.productTypes">
                                     {{productType.name}}
                                 </span>
                             </div>
