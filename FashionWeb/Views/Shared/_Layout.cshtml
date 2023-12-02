@@ -168,10 +168,9 @@
                                     <span>{{category.name}}</span>
                                 </span>
                             </div><br />
-                            <div ng-show="viewSubCategory" ng-class="activeSubCategory">
-                                <span ng-click="voltarCategorias()">Voltar para categorias </span><br /><br />
-                                <span ng-click="changeSubCategory(subcategory.id)"
-                                    ng-repeat="subcategory in subcategories">
+                            <div ng-show="viewSubCategory">
+                                <span ng-mouseenter="changeSubCategory(subcategory.id)"
+                                    ng-repeat="subcategory in filter.subcategories">
                                     {{subcategory.name}}
                                 </span>
                             </div>
@@ -180,6 +179,8 @@
                                 <span ng-click="voltarSubCategorias()">Voltar para subcategorias</span><br /><br />
                                 <span ng-click="pesquisarProdutos(productType.id)"
                                     ng-repeat="productType in productTypes">
+                                <span ng-click="pesquisarProdutos(productType.id)"
+                                    ng-repeat="productType in filter.productTypes">
                                     {{productType.name}}
                                 </span>
                             </div>

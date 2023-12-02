@@ -48,14 +48,14 @@
 
     $scope.changeCategory = function (categoryId) {
         $scope.viewSubCategory = true;
-        $scope.viewCategories = false;
+        $scope.viewCategories = true;
 
         $scope.filter.subcategories = $filter('filter')($scope.list.subcategories, { categoryId: categoryId });
     }
 
     $scope.changeSubCategory = function (subCategoryId) {
         $scope.viewProductType = true;
-        $scope.viewSubCategory = false;
+        $scope.viewSubCategory = true;
 
         $scope.filter.productTypes = $filter('filter')($scope.productTypes, { subCategoryId: subCategoryId });
     }
