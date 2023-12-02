@@ -38,7 +38,7 @@
 
     $scope.changeCategory = function (categoryId) {
         $scope.viewSubCategory = true;
-        $scope.viewCategories = false;
+        $scope.viewCategories = true;
         $scope.loadSubCategory(categoryId);
     }
 
@@ -60,7 +60,7 @@
     }
 
     $scope.expandAllCategories = function () {
-        $scope.viewSubCategory = false;
+        $scope.viewSubCategory = true;
         $scope.viewProductType = false;
         $scope.viewCategories = true;
         $scope.subcategories = [];
