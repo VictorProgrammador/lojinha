@@ -88,6 +88,15 @@ namespace FashionWeb.Controllers
             return View();
         }
 
+
+        [HttpGet]
+        public IActionResult Products(int Id)
+        {
+            ViewBag.Id = Id;
+            return View();
+        }
+
+
         [HttpGet]
         public IActionResult Login(bool isConfirmed)
         {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Modas Online</title>
+    <title>@ViewData["Title"] - Vestir Bem BR</title>
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -41,9 +41,9 @@
 
 
     @*
-    Não Deleta esse trecho comentado pls
-    <link rel="stylesheet" href="/css/site.css">
-    <link rel="stylesheet" href="/css/style-contact.css">*@
+        Não Deleta esse trecho comentado pls
+        <link rel="stylesheet" href="/css/site.css">
+        <link rel="stylesheet" href="/css/style-contact.css">*@
     <link rel="stylesheet" href="/bundles/site.min.css">
     <link rel="stylesheet" href="/lib/angular-bootstrap/ui-bootstrap-csp.css">
     <link rel="stylesheet" href="/lib/angular-material/angular-material.min.css">
@@ -64,6 +64,7 @@
     <script src="/js/controllers/home-controller.js" type="text/javascript"></script>
     <script src="/js/controllers/user-management-products-controller.js" type="text/javascript"></script>
     <script src="/js/controllers/home-profile-controller.js" type="text/javascript"></script>
+    <script src="/js/controllers/layout-controller.js" type="text/javascript"></script>
 
     <script>
         function addToHome() {
@@ -129,17 +130,16 @@
     </script>
     <noscript>
         <img height="1" width="1" style="display:none"
-            src="https://www.facebook.com/tr?id=1407793976438198&ev=PageView&noscript=1" />
+             src="https://www.facebook.com/tr?id=1407793976438198&ev=PageView&noscript=1" />
     </noscript>
     <!-- End Meta Pixel Code -->
 
 </head>
 
-<body>
+<body ng-app="myApp" ng-controller="LayoutController">
     <header id="header" class="">
         <div class="container d-flex align-items-center justify-content-between py-2">
-            <h6 class="logo"><a href="/"><img src="/img/digitalShop.jpeg" width="50" alt="Descrição do SVG"> Modas
-                    Online</a></h6>
+            <h6 class="logo"><a href="/"><img src="/img/vestirbembr.png" width="50" alt="Descrição do SVG"> Vestir Bem BR</a></h6>
             <nav id="navbar" class="navbar">
                 <ul>
                     <li><a class="nav-link scrollto active" href="/">Início</a></li>
@@ -154,25 +154,30 @@
             <div class="navbar-collapse" id="navbarColor03">
                 <ul class="">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                        <span class="nav-link dropdown-toggle" data-bs-toggle="dropdown" ng-click="expandAllCategories()" role="button"
                             aria-haspopup="true" aria-expanded="false">
-                            <i class="bi bi-filter iconCategory"></i> Todas as Categorias</a>
+                            <i class="bi bi-filter iconCategory"></i> Todas as Categorias</span>
                         <div class="dropdown-menu">
                             <div class="dropCategories">
-                                <a href="#!" class="dropdown-item" ng-repeat="category in list.categories"
+                                <span ng-show="viewCategories" ng-click="changeCategory(category.id)" class="dropdown-item" ng-repeat="category in list.categories"
                                     ng-value="category.id" data-target="#categoria{{category.id}}">
                                     <img ng-show="category.icon != null && category.icon != ''"
                                         ng-src="{{category.icon}}" height="25" style="text-align:right;">
                                     <span>{{category.name}}</span>
-                                </a>
-                            </div>
-                            <div class="dropSubcategories">
-                                <div class="content__subcategories" ng-repeat="category in list.categories"
-                                    id="categoria{{category.id}}">
-                                    <a href="#!" ng-repeat="subcategory in subcategories" ng-value="subcategory.id">
-                                        <span>{{subcategory.name}}</span>
-                                    </a>
-                                </div>
+                                </span>
+                            </div><br />
+                        <div ng-show="viewSubCategory">
+                            <span ng-click="voltarCategorias()">Voltar para categorias</span><br /><br />
+                            <span ng-click="changeSubCategory(subcategory.id)" ng-repeat="subcategory in subcategories">
+                                {{subcategory.name}}
+                            </span>
+                        </div>
+
+                            <div ng-show="viewProductType">
+                                <span ng-click="voltarSubCategorias()">Voltar para subcategorias</span><br /><br />
+                                <span ng-click="pesquisarProdutos(productType.id)" ng-repeat="productType in productTypes">
+                                    {{productType.name}}
+                                </span>
                             </div>
                         </div>
                     </li>
@@ -214,7 +219,7 @@
     <!-- ======= Footer ======= -->
     <footer id="footer">
         <div class="container footer-content">
-            <strong style="text-align:center"><span>comercial@@modasonline.com</span></strong>
+            <strong style="text-align:center"><span>comercial@@vestirbembr.com</span></strong>
             <div class="social-links text-center text-md-right pt-3 pt-md-0">
                 <a href="#" target="_blank" class="instagram"><i class="bx bxl-instagram"></i></a>
             </div>

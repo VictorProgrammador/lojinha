@@ -1337,14 +1337,14 @@ namespace FashionWeb.Domain.Repository.Repositories
             var result = new PagedResult<Product>();
             var countSql = $"SELECT COUNT(*) FROM Product Product WHERE IsDigitalShop = 1 ";
 
-            if (searchPersonBusinessProducts.CategoryId > 0)
-                countSql += " AND CategoryId = @CategoryId";
+            if (searchPersonBusinessProducts.ProductTypeId > 0)
+                countSql += " AND ProductTypeId = @ProductTypeId";
 
             using (var db = _connectionFactory.GetConnection())
             {
                 db.Open();
 
-                var totalCount = db.ExecuteScalar<int>(countSql, new { CategoryId = searchPersonBusinessProducts.CategoryId });
+                var totalCount = db.ExecuteScalar<int>(countSql, new { ProductTypeId = searchPersonBusinessProducts.ProductTypeId });
                 var totalPages = (int)Math.Ceiling((double)totalCount / searchPersonBusinessProducts.PageSize);
 
                 var orderBy = $"CreateDate DESC";
@@ -1365,16 +1365,14 @@ namespace FashionWeb.Domain.Repository.Repositories
                                     ON category.Id = [Product].CategoryId
                                     WHERE [Product].[IsDigitalShop] = 1 ";
 
-                if(searchPersonBusinessProducts.CategoryId > 0)
+                if(searchPersonBusinessProducts.ProductTypeId > 0)
                 {
-                    sql += " AND [CategoryId] = @CategoryId";
+                    sql += " AND [ProductTypeId] = @ProductTypeId";
                 }
 
-                sql += " GROUP BY category.Id, [Product].Id, [Product].Name, [Product].Value, [Product].Description, [Product].Image, [Product].CreateDate";
+                sql += $" ORDER BY [Product].Id asc OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY ";
 
-                sql += $" ORDER BY [category].Id asc OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY ";
-
-                var entities = db.Query<Product>(sql, new { CategoryId = searchPersonBusinessProducts.CategoryId, Offset = Offset, Limit = Limit }).ToList();
+                var entities = db.Query<Product>(sql, new { ProductTypeId = searchPersonBusinessProducts.ProductTypeId, Offset = Offset, Limit = Limit }).ToList();
 
                 if (entities.Count == 0)
                 {
