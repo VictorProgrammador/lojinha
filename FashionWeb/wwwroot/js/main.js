@@ -126,6 +126,24 @@
         }
     }, true)
 
+    on('click', '.dropdown-toggle', function (e) {
+        let iconCategory = select('.iconCategory');
+
+        if (iconCategory) {
+            iconCategory.classList.toggle('bi-filter');
+            iconCategory.classList.toggle('bi-x-lg');
+        }
+
+        select('.dropdown-menu').classList.toggle('dropdown-menu-active');
+    });
+
+    on('click', 'main', function () {
+        select('.dropdown-menu').classList.remove('dropdown-menu-active');
+        let iconCategory = select('.iconCategory');
+        iconCategory.classList.remove('bi-x-lg')
+        iconCategory.classList.add('bi-filter')
+    })
+
     /**
      * Scrool with ofset on links with a class name .scrollto
      */
@@ -272,5 +290,56 @@
     //  * Initiate Pure Counter 
     //  */
     // new PureCounter();
+
+    class Timer {
+        constructor() {
+            this.hours = 7; // Inicia em 7 horas
+            this.minutes = 0;
+            this.seconds = 0;
+            this.timerInterval = null;
+        }
+
+        start() {
+            this.timerInterval = setInterval(() => {
+                if (this.hours === 0 && this.minutes === 0 && this.seconds === 0) {
+                    clearInterval(this.timerInterval);
+                    return;
+                }
+
+                if (this.seconds === 0) {
+                    if (this.minutes > 0) {
+                        this.seconds = 59;
+                        this.minutes--;
+                    } else {
+                        this.seconds = 59;
+                        if (this.hours > 0) {
+                            this.hours--;
+                            this.minutes = 59;
+                        }
+                    }
+                } else {
+                    this.seconds--;
+                }
+
+                this.displayTime();
+            }, 1000);
+        }
+
+        displayTime() {
+            const hoursDisplay = this.formatTime(this.hours);
+            const minutesDisplay = this.formatTime(this.minutes);
+            const secondsDisplay = this.formatTime(this.seconds);
+            document.getElementById('hours').innerText = hoursDisplay;
+            document.getElementById('minutes').innerText = minutesDisplay;
+            document.getElementById('seconds').innerText = secondsDisplay;
+        }
+
+        formatTime(time) {
+            return time < 10 ? `0${time}` : time;
+        }
+    }
+
+    const timer = new Timer();
+    timer.start();
 
 })()
