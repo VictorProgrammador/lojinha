@@ -11,6 +11,8 @@
     $scope.tags = [];
     $scope.tagSelecionada = {};
 
+    $scope.categorySelected = {};
+
     $scope.list = {
         products: [],
         categories: [],
@@ -46,19 +48,25 @@
         $scope.getProducts();
     }
 
-    $scope.changeCategory = function (categoryId) {
+    $scope.changeCategory = function (category) {
         $scope.viewSubCategory = true;
         $scope.viewCategories = true;
 
-        $scope.filter.subcategories = $filter('filter')($scope.list.subcategories, { categoryId: categoryId });
+        $scope.categorySelected = category;
+
+        $scope.list.categories.map(function (category) {
+            category.isActive = false;
+        });
+        category.isActive = true;
+
     }
 
-    $scope.changeSubCategory = function (subCategoryId) {
-        $scope.viewProductType = true;
-        $scope.viewSubCategory = true;
+    //$scope.changeSubCategory = function (subCategoryId) {
+    //    $scope.viewProductType = true;
+    //    $scope.viewSubCategory = true;
 
-        $scope.filter.productTypes = $filter('filter')($scope.productTypes, { subCategoryId: subCategoryId });
-    }
+    //    $scope.filter.productTypes = $filter('filter')($scope.productTypes, { subCategoryId: subCategoryId });
+    //}
 
     $scope.voltarCategorias = function () {
         $scope.viewProductType = false;
@@ -78,12 +86,30 @@
         $scope.subcategories = [];
     }
 
+    $scope.reorderCategories = function () {
+        $scope.list.categories.map(function (category) {
+
+            category.subcategories = [];
+            category.subcategories = $filter('filter')($scope.list.subcategories, { categoryId: category.id });
+
+            category.subcategories.map(function (subCategory) {
+                subCategory.productTypes = [];
+                subCategory.productTypes = $filter('filter')($scope.productTypes, { subCategoryId: subCategory.id });
+            });
+
+        });
+
+        $scope.categorySelected = $scope.list.categories[0];
+    }
+
     $scope.getCategories = function () {
         basicService.getCategories().then(function (data) {
             var result = data.data;
 
-            if (result != null && result != undefined)
+            if (result != null && result != undefined) {
                 $scope.list.categories = result;
+                $scope.loadSubCategory(0);                
+            }
 
         }, function (error) {
             $scope.addErrorAlert("Falha ao carregar categorias. Entre em contato com o suporte!");
@@ -98,6 +124,8 @@
             $scope.list.subcategories = result;
             $scope.filter.subcategories = result;
 
+            $scope.loadProductType(0);
+
         }, function (error) {
      
         });
@@ -111,6 +139,8 @@
 
             $scope.productTypes = result;
             $scope.filter.productTypes = result;
+
+            $scope.reorderCategories();
 
         }, function (error) {
 
@@ -138,8 +168,6 @@
 
     $scope.init = function () {
         $scope.getCategories();
-        $scope.loadSubCategory(0);
-        $scope.loadProductType(0);
     }
 
     $scope.init();

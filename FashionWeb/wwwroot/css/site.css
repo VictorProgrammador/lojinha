@@ -46,15 +46,19 @@ a.navbar-brand {
   gap: 20px;
 }
 
+.categoria-selecionada {
+    border-bottom: 2px solid red;
+}
+
 .dropdown-menu .dropCategories .dropdown-item {
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  width: 200px;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 200px;
 }
 
 /* Provide sufficient contrast against white background */
