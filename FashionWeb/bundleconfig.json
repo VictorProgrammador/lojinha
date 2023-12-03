@@ -23,9 +23,9 @@
       "wwwroot/js/controllers/user-gallery-controller.js",
       "wwwroot/js/controllers/user-cart-controller.js",
       "wwwroot/js/controllers/user-management-products-controller.js",
-      "wwwroot/js/controllers/home-profile-controller.js",
       "wwwroot/js/controllers/layout-controller.js",
-      "wwwroot/js/controllers/home-controller.js"
+      "wwwroot/js/controllers/home-controller.js",
+      "wwwroot/js/controllers/home-profile-controller.js"
     ]
   }
 ]

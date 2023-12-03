@@ -30,7 +30,7 @@
             var result = data.data;
 
             result.map(function (data) {
-                $scope.previewImages.push(data.url);
+                $scope.previewImages.push($scope.encodeURI(data.url));
             });
 
             $(".spinerStyle").removeClass('centerSpinner');
@@ -41,6 +41,10 @@
             $(".spinerBackground").removeClass('overlay');
         });
     }
+
+    $scope.encodeURI = function (url) {
+        return encodeURI(url);
+    };
 
     $scope.changePreviewImage = function (image) {
         $scope.previewSelected = image;
