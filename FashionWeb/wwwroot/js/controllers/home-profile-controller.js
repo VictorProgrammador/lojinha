@@ -39,8 +39,6 @@
 
             $scope.$apply();
 
-            console.log('imagens', $scope.previewImages);
-
             $(".spinerStyle").removeClass('centerSpinner');
             $(".spinerBackground").removeClass('overlay');
 

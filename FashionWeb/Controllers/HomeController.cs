@@ -914,18 +914,6 @@ namespace FashionWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetProductArchives([FromBody] Domain.Entities.Product product)
-        {
-            //Se o usuário estiver logado, não acessa essa página.
-            if (!User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home");
-
-            var productArchives = this._coreBusinessRules.GetProductArchives(product.Id);
-
-            return Json(productArchives);
-        }
-
-        [HttpPost]
         public IActionResult GetSubCategories([FromBody] int? CategoryId)
         {
             return Json(this._coreBusinessRules.GetSubCategories(CategoryId));
@@ -954,6 +942,13 @@ namespace FashionWeb.Controllers
         public IActionResult GetCores()
         {
             return Json(this._coreBusinessRules.GetCores());
+        }
+
+        [HttpPost]
+        public IActionResult GetProductArchives([FromBody] Domain.Entities.Product product)
+        {
+            var productArchives = this._coreBusinessRules.GetProductArchives(product.Id);
+            return Json(productArchives);
         }
 
     }
