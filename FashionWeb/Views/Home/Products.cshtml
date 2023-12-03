@@ -120,7 +120,7 @@
 
     <div class="row" ng-show="list.products != null && list.products.length > 0">
         <div class="col-md-12" style="text-align:center">
-            <ul uib-pagination ng-model="filter.PageNumber" total-items="entity.totalItems" items-per-page="9"
+            <ul uib-pagination ng-model="filter.PageNumber" total-items="entity.totalItems" items-per-page="5"
                 max-size="5" previous-text="<<" next-text=">>" rotate="true" ng-change="loadProducts('@ViewBag.Id')"
                 class="pagination-sm justify-content-center"></ul>
         </div>

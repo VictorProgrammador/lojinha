@@ -8,7 +8,7 @@
         ProductTypeId: 0,
         Marcas: [],
         PageNumber: 1,
-        PageSize: 9
+        PageSize: 5
     };
 
     $scope.list = {
