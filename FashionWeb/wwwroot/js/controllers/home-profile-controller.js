@@ -30,7 +30,7 @@
             var result = data.data;
 
             result.map(function (data) {
-                $scope.previewImages.push(data.url);
+                $scope.previewImages.push(data.url + '?' + new Date().getTime());
             });
 
             $scope.$apply();
