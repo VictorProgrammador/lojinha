@@ -93,11 +93,11 @@
                 <h6>Filtre por marcas</h6>
                 <div class="marcas item" ng-repeat="marca in list.marcas">
                     <div class="marca form-check form-check-inline">
-                        <input type="checkbox" class="form-check-input" id={{marca.name}}>
+                        <input type="checkbox" ng-model="marca.isSelected" class="form-check-input" id={{marca.name}}>
                         <label class="form-check-label" for={{marca.name}}>{{marca.name}}</label>
                     </div>
                 </div>
-                <button class="btnFilter">Filtrar</button>
+                <button class="btnFilter" ng-click="loadProducts('@ViewBag.Id')">Filtrar</button>
             </div>
 
         </div>

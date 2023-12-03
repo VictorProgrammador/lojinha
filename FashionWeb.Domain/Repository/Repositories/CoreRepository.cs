@@ -23,7 +23,7 @@ namespace FashionWeb.Domain.Repository.Repositories
         public IEnumerable<Category> GetAllCategories()
         {
             var db = _connectionFactory.GetConnection();
-            var result = db.Query<Category>("SELECT * FROM Category where IsNull(IsDeleted, 0) = 0 and IsDigitalShop = 1 order by Name");
+            var result = db.Query<Category>("SELECT * FROM Category where IsNull(IsDeleted, 0) = 0 and IsDigitalShop = 1");
             return result;
         }
         public Category GetCategory(int Id)
@@ -1335,16 +1335,28 @@ namespace FashionWeb.Domain.Repository.Repositories
         public PagedResult<Product> GetProductsByCategoryId(SearchPersonBusinessProducts searchPersonBusinessProducts)
         {
             var result = new PagedResult<Product>();
+            List<int> brands = new List<int>();
+
             var countSql = $"SELECT COUNT(*) FROM Product Product WHERE IsDigitalShop = 1 ";
 
             if (searchPersonBusinessProducts.ProductTypeId > 0)
                 countSql += " AND ProductTypeId = @ProductTypeId";
 
+            if(searchPersonBusinessProducts.Marcas != null && searchPersonBusinessProducts.Marcas.Count() > 0)
+            {
+                countSql += " AND BrandId IN @BrandId";
+
+                foreach(var brand in searchPersonBusinessProducts.Marcas)
+                {
+                    brands.Add(brand.Id);
+                }
+            }
+
             using (var db = _connectionFactory.GetConnection())
             {
                 db.Open();
 
-                var totalCount = db.ExecuteScalar<int>(countSql, new { ProductTypeId = searchPersonBusinessProducts.ProductTypeId });
+                var totalCount = db.ExecuteScalar<int>(countSql, new { ProductTypeId = searchPersonBusinessProducts.ProductTypeId, BrandId = brands.AsList() });
                 var totalPages = (int)Math.Ceiling((double)totalCount / searchPersonBusinessProducts.PageSize);
 
                 var orderBy = $"CreateDate DESC";
@@ -1370,9 +1382,14 @@ namespace FashionWeb.Domain.Repository.Repositories
                     sql += " AND [ProductTypeId] = @ProductTypeId";
                 }
 
+                if (searchPersonBusinessProducts.Marcas != null && searchPersonBusinessProducts.Marcas.Count() > 0)
+                {
+                    sql += " AND [BrandId] IN @BrandId";
+                }
+
                 sql += $" ORDER BY [Product].Id asc OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY ";
 
-                var entities = db.Query<Product>(sql, new { ProductTypeId = searchPersonBusinessProducts.ProductTypeId, Offset = Offset, Limit = Limit }).ToList();
+                var entities = db.Query<Product>(sql, new { ProductTypeId = searchPersonBusinessProducts.ProductTypeId, BrandId = brands.AsList(), Offset = Offset, Limit = Limit }).ToList();
 
                 if (entities.Count == 0)
                 {

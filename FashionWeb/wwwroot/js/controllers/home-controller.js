@@ -6,6 +6,7 @@
         CategoryId: 0,
         SubCategoryId: 0,
         ProductTypeId: 0,
+        Marcas: [],
         PageNumber: 1,
         PageSize: 9
     };
@@ -21,6 +22,8 @@
         totalPages: 0
     };
 
+    $scope.searchProductsByBrandAndType = {};
+
     $scope.getMarcas = function () {
 
         $(".spinerStyle").addClass('centerSpinner');
@@ -29,8 +32,6 @@
         basicService.getMarcas().then(function (data) {
             var result = data.data;
             $scope.list.marcas = result;
-
-            console.log('marcas', result);
 
             $(".spinerStyle").removeClass('centerSpinner');
             $(".spinerBackground").removeClass('overlay');
@@ -41,6 +42,7 @@
         });
 
     }
+
 
     $scope.visitProduct = function (Id) {
         $(".spinerStyle").addClass('centerSpinner');
@@ -68,6 +70,7 @@
         $(".spinerBackground").addClass('overlay');
 
         $scope.filter.ProductTypeId = Id;
+        $scope.filter.Marcas = $filter('filter')($scope.list.marcas, { isSelected: true });
 
         basicService.getProducts($scope.filter).then(function (data) {
             var result = data.data;

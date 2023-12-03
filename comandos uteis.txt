@@ -17,6 +17,7 @@ sudo systemctl status nginx
 
 sudo rm -rf /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/
 
+
 rodar em ordem
 sudo rm -rf /home/azure/backupLoja
 sudo cp -r /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/publish/wwwroot/uploads /home/azure/backupLoja

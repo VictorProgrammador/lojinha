@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FashionWeb.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace FashionWeb.Domain.InfraStructure.Request
         public int PersonId { get; set; }
         public int CategoryId { get; set; }
         public int ProductTypeId { get; set; }
+        public List<Brand> Marcas { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public string sortColumn { get; set; }

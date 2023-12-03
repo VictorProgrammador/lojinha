@@ -425,6 +425,16 @@ namespace FashionWeb.Domain.BusinessRules
                     }
                 }
 
+                var productConfigs = this._coreRepository.GetProductConfig(product.Id);
+
+                if(productConfigs != null && productConfigs.Count() > 0)
+                {
+                    foreach (var productConfig in productConfigs)
+                    {
+                        this._coreRepository.DeleteProductConfig(productConfig.Id);
+                    }
+                }
+
             }
 
             return this._coreRepository.ExcluirProduto(product);
