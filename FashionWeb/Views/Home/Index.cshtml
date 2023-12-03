@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/lib/swiper/swiper-bundle.min.css">
 
-<body class="contentBody" >
+<body class="contentBody">
     <div class="spinerBackground">
         <div class="spinerStyle" id="loading-bar-container">
 
@@ -193,5 +193,61 @@
         }
 
     });
+
+    // /**
+    //  * Initiate Pure Counter 
+    //  */
+    // new PureCounter();
+
+    class Timer {
+        constructor() {
+            this.hours = 7; // Inicia em 7 horas
+            this.minutes = 0;
+            this.seconds = 0;
+            this.timerInterval = null;
+        }
+
+        start() {
+            this.timerInterval = setInterval(() => {
+                if (this.hours === 0 && this.minutes === 0 && this.seconds === 0) {
+                    clearInterval(this.timerInterval);
+                    return;
+                }
+
+                if (this.seconds === 0) {
+                    if (this.minutes > 0) {
+                        this.seconds = 59;
+                        this.minutes--;
+                    } else {
+                        this.seconds = 59;
+                        if (this.hours > 0) {
+                            this.hours--;
+                            this.minutes = 59;
+                        }
+                    }
+                } else {
+                    this.seconds--;
+                }
+
+                this.displayTime();
+            }, 1000);
+        }
+
+        displayTime() {
+            const hoursDisplay = this.formatTime(this.hours);
+            const minutesDisplay = this.formatTime(this.minutes);
+            const secondsDisplay = this.formatTime(this.seconds);
+            document.getElementById('hours').innerText = hoursDisplay;
+            document.getElementById('minutes').innerText = minutesDisplay;
+            document.getElementById('seconds').innerText = secondsDisplay;
+        }
+
+        formatTime(time) {
+            return time < 10 ? `0${time}` : time;
+        }
+    }
+
+    const timer = new Timer();
+    timer.start();
 
 </script>

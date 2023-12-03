@@ -41,9 +41,9 @@
 
 
     @*
-        Não Deleta esse trecho comentado pls
-        <link rel="stylesheet" href="/css/site.css">
-        <link rel="stylesheet" href="/css/style-contact.css">*@
+    Não Deleta esse trecho comentado pls
+    <link rel="stylesheet" href="/css/site.css">
+    <link rel="stylesheet" href="/css/style-contact.css">*@
     @*<link rel="stylesheet" href="/bundles/site.min.css">*@
     <link rel="stylesheet" href="/css/site.css">
     <link rel="stylesheet" href="/lib/angular-bootstrap/ui-bootstrap-csp.css">
@@ -131,7 +131,7 @@
     </script>
     <noscript>
         <img height="1" width="1" style="display:none"
-             src="https://www.facebook.com/tr?id=1407793976438198&ev=PageView&noscript=1" />
+            src="https://www.facebook.com/tr?id=1407793976438198&ev=PageView&noscript=1" />
     </noscript>
     <!-- End Meta Pixel Code -->
 
@@ -141,18 +141,22 @@
     <header id="header" class="">
         <div class="container d-flex align-items-center justify-content-between py-2">
             <h6 class="logo">
+                <i class="bi bi-list mobile-nav-toggle"></i>
                 <a href="/">
                     <img src="/img/vestirbembr.png" width="50" alt="Descrição do SVG"> Vestir Bem
                     BR
                 </a>
             </h6>
-            <nav id="navbar" class="navbar">
-                <ul>
-                    <li><a class="nav-link scrollto active" href="/">Início</a></li>
-                    <partial name="_LoginPartial" />
-                </ul>
-                <i class="bi bi-list mobile-nav-toggle"></i>
-            </nav>
+            <div class="partRight">
+                <nav id="navbar" class="navbar">
+                    <ul>
+                        <li><a class="nav-link scrollto active" href="/">Início</a></li>
+                        <partial name="_LoginPartial" />
+                    </ul>
+                </nav>
+                <a class="cartMenu" asp-controller="Home" asp-action="Cart"><i class="bi bi-cart"></i> <span class="textCart">Carrinho</span> <span class="valueCart"></span></a>
+            </div>
+
         </div>
     </header>
     <div class="contentNavigation">
@@ -161,17 +165,17 @@
                 <ul class="">
                     <li class="nav-item dropdown">
                         <span class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
-                              ng-click="expandAllCategories()" role="button" aria-haspopup="true" aria-expanded="false">
+                            ng-click="expandAllCategories()" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="bi bi-filter iconCategory"></i> Todas as Categorias
                         </span>
                         <div class="dropdown-menu">
                             <div class="dropCategories">
-                                <div ng-repeat="category in list.categories" ng-class="{ 'categoria-selecionada': category.isActive }">
-                                    <span ng-mouseenter="changeCategory(category)"
-                                          class="dropdown-item" ng-value="category.id"
-                                          data-target="#categoria{{category.id}}">
+                                <div ng-repeat="category in list.categories"
+                                    ng-class="{ 'categoria-selecionada': category.isActive }">
+                                    <span ng-mouseenter="changeCategory(category)" class="dropdown-item"
+                                        ng-value="category.id" data-target="#categoria{{category.id}}">
                                         <img ng-show="category.icon != null && category.icon != ''"
-                                             ng-src="{{category.icon}}" height="25" style="text-align:right;">
+                                            ng-src="{{category.icon}}" height="25" style="text-align:right;">
                                         <span>{{category.name}}</span>
                                     </span>
                                 </div>
@@ -218,7 +222,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <button type="button" class="black-button" data-dismiss="modal"
-                                    onclick="$('#installApp').modal('hide');">
+                                onclick="$('#installApp').modal('hide');">
                                 Fechar
                             </button>
                         </div>

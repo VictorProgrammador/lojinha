@@ -1,345 +1,139 @@
-/**
-* Template Name: OnePage
-* Updated: Mar 10 2023 with Bootstrap v5.2.3
-* Template URL: https://bootstrapmade.com/onepage-multipurpose-bootstrap-template/
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-(function () {
-    "use strict";
-
-    /**
-     * Easy selector helper function
-     */
-    const select = (el, all = false) => {
-        el = el.trim()
-        if (all) {
-            return [...document.querySelectorAll(el)]
-        } else {
-            return document.querySelector(el)
-        }
-    }
-
-    /**
-     * Easy event listener function
-     */
-    const on = (type, el, listener, all = false) => {
-        let selectEl = select(el, all)
-        if (selectEl) {
-            if (all) {
-                selectEl.forEach(e => e.addEventListener(type, listener))
-            } else {
-                selectEl.addEventListener(type, listener)
-            }
-        }
-    }
-
-    /**
-     * Easy on scroll event listener 
-     */
-    const onscroll = (el, listener) => {
-        el.addEventListener('scroll', listener)
-    }
-
+$(document).ready(function() {
     /**
      * Navbar links active state on scroll
      */
-    let navbarlinks = select('#navbar .scrollto', true)
+    let navbarlinks = $('#navbar .scrollto');
     const navbarlinksActive = () => {
-        let position = window.scrollY + 200
-        navbarlinks.forEach(navbarlink => {
-            if (!navbarlink.hash) return
-            let section = select(navbarlink.hash)
-            if (!section) return
-            if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
-                navbarlink.classList.add('active')
+        let position = $(window).scrollTop() + 200;
+        navbarlinks.each(function() {
+            let section = $($(this).attr('href'));
+            if (section.length && position >= section.offset().top && position <= (section.offset().top + section.outerHeight())) {
+                $(this).addClass('active');
             } else {
-                navbarlink.classList.remove('active')
+                $(this).removeClass('active');
             }
-        })
-    }
-    window.addEventListener('load', navbarlinksActive)
-    onscroll(document, navbarlinksActive)
+        });
+    };
+    $(window).on('load', navbarlinksActive);
+    $(window).on('scroll', navbarlinksActive);
 
     /**
      * Scrolls to an element with header offset
      */
     const scrollto = (el) => {
-        let header = select('#header')
-        let offset = header.offsetHeight
+        let header = $('#header');
+        let offset = header.outerHeight() || 0;
 
-        let elementPos = select(el).offsetTop
-        window.scrollTo({
-            top: elementPos - offset,
-            behavior: 'smooth'
-        })
-    }
+        let elementPos = $(el).offset().top;
+        $('html, body').animate({
+            scrollTop: elementPos - offset
+        }, 'slow');
+    };
 
     /**
      * Toggle .header-scrolled class to #header when page is scrolled
      */
-    let selectHeader = select('#header')
-    if (selectHeader) {
+    let selectHeader = $('#header');
+    if (selectHeader.length) {
         const headerScrolled = () => {
-            if (window.scrollY > 100) {
-                selectHeader.classList.add('header-scrolled')
+            if ($(window).scrollTop() > 100) {
+                selectHeader.addClass('header-scrolled');
             } else {
-                selectHeader.classList.remove('header-scrolled')
+                selectHeader.removeClass('header-scrolled');
             }
-        }
-        window.addEventListener('load', headerScrolled)
-        onscroll(document, headerScrolled)
+        };
+        $(window).on('load', headerScrolled);
+        $(window).on('scroll', headerScrolled);
     }
 
     /**
      * Back to top button
      */
-    let backtotop = select('.back-to-top')
-    if (backtotop) {
+    let backtotop = $('.back-to-top');
+    if (backtotop.length) {
         const toggleBacktotop = () => {
-            if (window.scrollY > 100) {
-                backtotop.classList.add('active')
+            if ($(window).scrollTop() > 100) {
+                backtotop.addClass('active');
             } else {
-                backtotop.classList.remove('active')
+                backtotop.removeClass('active');
             }
-        }
-        window.addEventListener('load', toggleBacktotop)
-        onscroll(document, toggleBacktotop)
+        };
+        $(window).on('load', toggleBacktotop);
+        $(window).on('scroll', toggleBacktotop);
     }
 
     /**
      * Mobile nav toggle
      */
-    on('click', '.mobile-nav-toggle', function (e) {
-        select('#navbar').classList.toggle('navbar-mobile')
-        this.classList.toggle('bi-list')
-        this.classList.toggle('bi-x')
-    })
+    $(document).on('click', '.mobile-nav-toggle', function (e) {
+        $('#navbar').toggleClass('navbar-mobile');
+        $('.mobile-nav-toggle').toggleClass('bi-list bi-x');
+    });
 
     /**
      * Mobile nav dropdowns activate
      */
-    on('click', '.navbar .dropdown > a', function (e) {
-        if (select('#navbar').classList.contains('navbar-mobile')) {
-            e.preventDefault()
-            this.nextElementSibling.classList.toggle('dropdown-active')
+    $(document).on('click', '.navbar .dropdown > a', function (e) {
+        if ($('#navbar').hasClass('navbar-mobile')) {
+            e.preventDefault();
+            $(this).next('.dropdown-menu').toggleClass('dropdown-active');
         }
-    }, true)
-
-    on('click', '.dropdown-toggle', function (e) {
-        let iconCategory = select('.iconCategory');
-
-        if (iconCategory) {
-            iconCategory.classList.toggle('bi-filter');
-            iconCategory.classList.toggle('bi-x-lg');
-        }
-
-        select('.dropdown-menu').classList.toggle('dropdown-menu-active');
     });
 
-    on('click', 'main', function () {
-        select('.dropdown-menu').classList.remove('dropdown-menu-active');
-        let iconCategory = select('.iconCategory');
-        iconCategory.classList.remove('bi-x-lg')
-        iconCategory.classList.add('bi-filter')
-    })
+    $(document).on('click', '.dropdown-toggle', function (e) {
+        let iconCategory = $('.iconCategory');
+        if (iconCategory.length) {
+            iconCategory.toggleClass('bi-filter bi-x-lg');
+        }
+        $('.dropdown-menu').toggleClass('dropdown-menu-active');
+    });
+
+    $(document).on('click', 'main', function (e) {
+        $('.dropdown-menu').removeClass('dropdown-menu-active');
+        let iconCategory = $('.iconCategory');
+        iconCategory.removeClass('bi-x-lg').addClass('bi-filter');
+    });
+
+    $(document).on('click', '.headerFilter', function (e) {
+        $('.contentMarca').toggleClass('openMarcas')
+        // Adicione sua lógica aqui para manipular o clique em '.contentMarcas'
+    });
+
+    $(document).on('click', '.btnFilter', function (e) {
+        $('.contentMarca').removeClass('openMarcas')
+        // Adicione sua lógica aqui para manipular o clique em '.contentMarcas'
+    });
 
     /**
      * Scrool with ofset on links with a class name .scrollto
      */
+    $(document).on('click', '.scrollto', function (e) {
+        if ($($(this).attr('href')).length) {
+            e.preventDefault();
 
-    on('click', '.scrollto', function (e) {
-        if (select(this.hash)) {
-            e.preventDefault()
-
-            let navbar = select('#navbar')
-            if (navbar.classList.contains('navbar-mobile')) {
-                navbar.classList.remove('navbar-mobile')
-                let navbarToggle = select('.mobile-nav-toggle')
-                navbarToggle.classList.toggle('bi-list')
-                navbarToggle.classList.toggle('bi-x')
+            let navbar = $('#navbar');
+            if (navbar.hasClass('navbar-mobile')) {
+                navbar.removeClass('navbar-mobile');
+                $('.mobile-nav-toggle').toggleClass('bi-list bi-x');
             }
-            scrollto(this.hash)
-        }
-    }, true)
-
-    /**
-     * Scroll with ofset on page load with hash links in the url
-     */
-    window.addEventListener('load', () => {
-        if (window.location.hash) {
-            if (select(window.location.hash)) {
-                scrollto(window.location.hash)
-            }
+            scrollto($(this).attr('href'));
         }
     });
+
+    /**
+     * Scroll with offset on page load with hash links in the URL
+     */
+    if (window.location.hash && $($(window.location.hash)).length) {
+        scrollto(window.location.hash);
+    }
 
     /**
      * Preloader
      */
-    let preloader = select('#preloader');
-    if (preloader) {
-        window.addEventListener('load', () => {
-            preloader.remove()
+    let preloader = $('#preloader');
+    if (preloader.length) {
+        $(window).on('load', function () {
+            preloader.remove();
         });
     }
-
-    /**
-     * Initiate glightbox 
-     */
-    const glightbox = GLightbox({
-        selector: '.glightbox'
-    });
-
-    /**
-     * Testimonials slider
-     */
-    new Swiper('.testimonials-slider', {
-        speed: 600,
-        loop: true,
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false
-        },
-        slidesPerView: 'auto',
-        pagination: {
-            el: '.swiper-pagination',
-            type: 'bullets',
-            clickable: true
-        },
-        breakpoints: {
-            320: {
-                slidesPerView: 1,
-                spaceBetween: 20
-            },
-
-            1200: {
-                slidesPerView: 3,
-                spaceBetween: 20
-            }
-        }
-    });
-
-    /**
-     * Porfolio isotope and filter
-     */
-    window.addEventListener('load', () => {
-        let portfolioContainer = select('.portfolio-container');
-        if (portfolioContainer) {
-            let portfolioIsotope = new Isotope(portfolioContainer, {
-                itemSelector: '.portfolio-item'
-            });
-
-            let portfolioFilters = select('#portfolio-flters li', true);
-
-            on('click', '#portfolio-flters li', function (e) {
-                e.preventDefault();
-                portfolioFilters.forEach(function (el) {
-                    el.classList.remove('filter-active');
-                });
-                this.classList.add('filter-active');
-
-                portfolioIsotope.arrange({
-                    filter: this.getAttribute('data-filter')
-                });
-                portfolioIsotope.on('arrangeComplete', function () {
-                    AOS.refresh()
-                });
-            }, true);
-        }
-
-    });
-
-    /**
-     * Initiate portfolio lightbox 
-     */
-    const portfolioLightbox = GLightbox({
-        selector: '.portfolio-lightbox'
-    });
-
-    /**
-     * Portfolio details slider
-     */
-    new Swiper('.portfolio-details-slider', {
-        speed: 400,
-        loop: true,
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            type: 'bullets',
-            clickable: true
-        }
-    });
-
-    /**
-     * Animation on scroll
-     */
-    window.addEventListener('load', () => {
-        AOS.init({
-            duration: 1000,
-            easing: 'ease-in-out',
-            once: true,
-            mirror: false
-        })
-    });
-
-    // /**
-    //  * Initiate Pure Counter 
-    //  */
-    // new PureCounter();
-
-    class Timer {
-        constructor() {
-            this.hours = 7; // Inicia em 7 horas
-            this.minutes = 0;
-            this.seconds = 0;
-            this.timerInterval = null;
-        }
-
-        start() {
-            this.timerInterval = setInterval(() => {
-                if (this.hours === 0 && this.minutes === 0 && this.seconds === 0) {
-                    clearInterval(this.timerInterval);
-                    return;
-                }
-
-                if (this.seconds === 0) {
-                    if (this.minutes > 0) {
-                        this.seconds = 59;
-                        this.minutes--;
-                    } else {
-                        this.seconds = 59;
-                        if (this.hours > 0) {
-                            this.hours--;
-                            this.minutes = 59;
-                        }
-                    }
-                } else {
-                    this.seconds--;
-                }
-
-                this.displayTime();
-            }, 1000);
-        }
-
-        displayTime() {
-            const hoursDisplay = this.formatTime(this.hours);
-            const minutesDisplay = this.formatTime(this.minutes);
-            const secondsDisplay = this.formatTime(this.seconds);
-            document.getElementById('hours').innerText = hoursDisplay;
-            document.getElementById('minutes').innerText = minutesDisplay;
-            document.getElementById('seconds').innerText = secondsDisplay;
-        }
-
-        formatTime(time) {
-            return time < 10 ? `0${time}` : time;
-        }
-    }
-
-    const timer = new Timer();
-    timer.start();
-
-})()
+});
