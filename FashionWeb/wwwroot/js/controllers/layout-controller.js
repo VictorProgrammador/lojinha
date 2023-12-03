@@ -61,12 +61,6 @@
 
     }
 
-    //$scope.changeSubCategory = function (subCategoryId) {
-    //    $scope.viewProductType = true;
-    //    $scope.viewSubCategory = true;
-
-    //    $scope.filter.productTypes = $filter('filter')($scope.productTypes, { subCategoryId: subCategoryId });
-    //}
 
     $scope.voltarCategorias = function () {
         $scope.viewProductType = false;
@@ -160,8 +154,8 @@
 
         var resultado = https + "//" + domain;
 
-        var url = resultado + '/' + 'Home/Products?Id=' + Id;
-        window.open(url, "_blank");
+        var url = resultado + '/' + 'Home/Products?ProductTypeId=' + Id + '&Category=' + $scope.categorySelected.name;
+        window.open(url, "_self");
 
 
     }

@@ -494,6 +494,10 @@
     }
 
     $scope.addProductConfig = function () {
+
+        if ($scope.entity.productConfigs == null)
+            $scope.entity.productConfigs = [];
+
         $scope.entity.productConfigs.push({});
     }
 

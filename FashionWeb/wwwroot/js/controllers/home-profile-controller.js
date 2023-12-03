@@ -119,6 +119,11 @@
             value: $scope.entity.value,
             currency: 'BRL'
         });
+
+        var formulario = document.getElementById("meuFormulario");
+        formulario.submit();
+
+
     }
 
   

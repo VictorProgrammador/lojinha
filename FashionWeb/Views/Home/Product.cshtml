@@ -115,7 +115,7 @@
             </div>
         </div><br />
         <div class="produto-descricao" style="text-align:center">{{entity.name}}</div><br />
-
+        <div class="produto-descricao" style="font-size:13px !important">Categoria: {{entity.category.name}}</div><br />
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label>Cor</label>
@@ -137,14 +137,14 @@
 
         <div>
             <div class="produto-descricao" data-toggle="collapse" data-target="#minhaDiv" aria-expanded="false" aria-controls="minhaDiv">
-            Descrição <span class="pull-right"><i class="bi bi-chevron-down"></i></span>
+                Descrição <span class="pull-right"><i class="bi bi-chevron-down"></i></span>
             </div>
             <div class="collapse" id="minhaDiv">
-                <span>{{entity.name}}, {{entity.description}}</span>               
+                <span>{{entity.name}}, {{entity.description}}</span>
             </div><br />
         </div>
 
-        <form action="@Url.Action("SaveProductCart", "Home")" method="post">
+        <form id="meuFormulario" action="@Url.Action("SaveProductCart", "Home")" method="post">
             <input type="hidden" name="id" value="{{entity.id}}">
             <div class="produto-descricao" style="text-align:center">
                 {{entity.value | currency:"R$"}}
@@ -152,7 +152,7 @@
             <div class="row" style="text-align:center">
                 <div class="col-md-12">
                     <div class="produto-valor">
-                        <button type="submit" class="botao-preto" ng-click="adicionarAoCarrinho()"> Adicionar ao carrinho </button>
+                        <button type="button" class="botao-preto" ng-click="adicionarAoCarrinho()"> Adicionar ao carrinho </button>
                     </div>
                 </div>
             </div>

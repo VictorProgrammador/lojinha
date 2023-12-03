@@ -808,16 +808,16 @@ namespace FashionWeb.Domain.Repository.Repositories
             return result;
         }
 
-        public bool InsertProduct(Product product)
+        public int InsertProduct(Product product)
         {
-            var insertProduct = @"INSERT INTO [Product] VALUES (@Name, @Value, @CreateDate, @PersonBusinessId, @Description, @Image, @AcceptComplement, @IsComplement, @MaxComplement, @CategoryId, @IsDigitalShop, @SubCategoryId, @ProductTypeId, @BrandId)";
+            var insertProduct = @"INSERT INTO [Product] OUTPUT INSERTED.Id VALUES (@Name, @Value, @CreateDate, @PersonBusinessId, @Description, @Image, @AcceptComplement, @IsComplement, @MaxComplement, @CategoryId, @IsDigitalShop, @SubCategoryId, @ProductTypeId, @BrandId)";
             int id = 0;
 
             using (var db = _connectionFactory.GetConnection())
             {
                 db.Open();
 
-                id = db.Execute(insertProduct, new
+                id = db.QuerySingle<int>(insertProduct, new
                 {
                     PersonBusinessId = product.PersonBusinessId,
                     Name = product.Name,
@@ -838,7 +838,7 @@ namespace FashionWeb.Domain.Repository.Repositories
                 db.Close();
             }
 
-            return id > 0 ? true : false;
+            return id;
         }
 
         public bool UpdateProduct(Product product)

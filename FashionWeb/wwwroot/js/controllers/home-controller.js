@@ -56,7 +56,7 @@
         var resultado = https + "//" + domain;
 
         var url = resultado + '/' + 'Home/Product?Id=' + Id;
-        window.open(url, "_blank");
+        window.open(url, "_self");
 
         $(".spinerStyle").removeClass('centerSpinner');
         $(".spinerBackground").removeClass('overlay');

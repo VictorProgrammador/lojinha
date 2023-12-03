@@ -36,7 +36,7 @@ namespace FashionWeb.Domain.Repository.Interfaces
         Product GetProduct(int Id);
         List<Product> GetPersonBusinessComplements(int PersonBusinessId);
         PagedResult<Product> GetProductsByPersonBusinessId(SearchPersonBusinessProducts searchPersonBusinessProducts);
-        bool InsertProduct(Product product);
+        int InsertProduct(Product product);
         bool UpdateProduct(Product product);
         bool ExcluirProduto(Product product);
         List<ProductComplement> GetProductComplements(int ProductId);

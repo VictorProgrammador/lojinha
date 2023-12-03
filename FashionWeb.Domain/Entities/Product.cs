@@ -31,5 +31,6 @@ namespace FashionWeb.Domain.Entities
         public List<ProductConfig> ProductConfigs { get; set; }
         public int ColorId { get; set; }
         public int TamanhoId { get; set; }
+        public Category Category { get; set; }
     }
 }

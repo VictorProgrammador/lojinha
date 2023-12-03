@@ -27,7 +27,7 @@ namespace FashionWeb.Domain.Utils
 
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("comercial@oshopdigital.com", "O Shop Digital"),
+                    From = new MailAddress("comercial@oshopdigital.com", "Vestir Bem Br"),
                     Subject = subject,
                     Body = html,
                     IsBodyHtml = true,

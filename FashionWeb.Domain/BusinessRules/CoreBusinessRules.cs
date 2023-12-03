@@ -320,7 +320,7 @@ namespace FashionWeb.Domain.BusinessRules
             if(product != null && product.Id == 0)
             {
                 product.CreateDate = DateTime.Now;
-                this._coreRepository.InsertProduct(product);
+                product.Id = this._coreRepository.InsertProduct(product);
             }
             else
             {
@@ -589,6 +589,7 @@ namespace FashionWeb.Domain.BusinessRules
         public Product GetProduct(int Id)
         {
             var product = this._coreRepository.GetProduct(Id);
+            product.Category = this._coreRepository.GetCategory(product.CategoryId);
             product.ProductConfigs = this._coreRepository.GetProductConfig(product.Id);
             product.ProductCores = new List<Cor>();
 

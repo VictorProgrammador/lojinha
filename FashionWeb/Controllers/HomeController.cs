@@ -90,9 +90,10 @@ namespace FashionWeb.Controllers
 
 
         [HttpGet]
-        public IActionResult Products(int Id)
+        public IActionResult Products(int ProductTypeId, string Category)
         {
-            ViewBag.Id = Id;
+            ViewBag.Id = ProductTypeId;
+            ViewBag.Category = Category;
             return View();
         }
 
