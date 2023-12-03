@@ -97,7 +97,7 @@
 
     <div class="produto-container">
         <div style="text-align:center">
-            <img class="produto-img" id="zoomable-image" ng-src="{{previewSelected}}" alt="{{previewSelected}}">
+            <img class="produto-img" id="zoomable-image" ng-if="true" ng-src="{{encodeURI(previewSelected)}}" alt="{{previewSelected}}">
         </div><br />
 
         <div class="swiper container-categorias">
@@ -110,7 +110,7 @@
             </div>
             <div class="contegorias swiper-wrapper">
                 <label class="categoria swiper-slide" ng-repeat="previewImage in previewImages" ng-class="{'active': previewImage == previewSelected}">
-                    <img ng-src="{{previewImage}}" width="100" style="text-align:right;" ng-click="changePreviewImage(previewImage)">
+                    <img ng-if="true" ng-src="{{encodeURI(previewImage)}}" width="100" style="text-align:right;" ng-click="changePreviewImage(previewImage)">
                 </label>
             </div>
         </div><br />

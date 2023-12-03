@@ -30,8 +30,10 @@
             var result = data.data;
 
             result.map(function (data) {
-                $scope.previewImages.push($scope.encodeURI(data.url));
+                $scope.previewImages.push(data.url);
             });
+
+            $scope.$apply();
 
             $(".spinerStyle").removeClass('centerSpinner');
             $(".spinerBackground").removeClass('overlay');
