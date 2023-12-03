@@ -39,7 +39,7 @@
 
             $scope.$apply();
 
-            console.log($scope.previewImages);
+            console.log('imagens', $scope.previewImages);
 
             $(".spinerStyle").removeClass('centerSpinner');
             $(".spinerBackground").removeClass('overlay');
