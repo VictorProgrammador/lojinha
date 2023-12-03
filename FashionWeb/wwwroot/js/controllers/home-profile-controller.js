@@ -22,6 +22,10 @@
 
     $scope.quantidadeDisponivel = 0;
 
+    $scope.trustSrc = function (src) {
+        return $sce.trustAsResourceUrl(src);
+    }
+
     $scope.getProductArchives = function () {
         $(".spinerStyle").addClass('centerSpinner');
         $(".spinerBackground").addClass('overlay');
@@ -30,7 +34,7 @@
             var result = data.data;
 
             result.map(function (data) {
-                $scope.previewImages.push(data.url + '?' + new Date().getTime());
+                $scope.previewImages.push($scope.trustSrc(data.url));
             });
 
             $scope.$apply();
