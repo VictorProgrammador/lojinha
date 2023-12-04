@@ -65,7 +65,9 @@ a.navbar-brand {
   display: block !important;
   padding: 10px;
 }
-
+.dropdown-menu{
+  padding: 20px!important;
+}
 .dropdown-menu .dropCategories {
   display: flex;
   gap: 20px;
@@ -85,7 +87,6 @@ a.navbar-brand {
 
 .containerSubcategorias {
   display: flex;
-  gap: 30px;
   margin-top: 20px
 }
 
@@ -97,7 +98,6 @@ a.navbar-brand {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  width: 200px;
 }
 
 /* Provide sufficient contrast against white background */
@@ -679,10 +679,6 @@ input {
 
   .banner-desk .btn-search {
     width: 100%;
-  }
-
-  .dropdown-menu .dropCategories .dropdown-item {
-    width: 150px;
   }
 }
 
@@ -1461,12 +1457,14 @@ main {
 .member .member-img img {
   border-radius: 10px 5px 0 0;
 }
-
+.contentList{
+  width: 70%;
+}
 .person-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
-  width: 70%;
+  width: 100%;
 }
 
 .person-item {
@@ -1620,13 +1618,13 @@ main {
   margin-top: 15px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
 }
 
 .contentMarca button {
   border: 0;
   border-radius: 5px;
   padding: 5px;
+  margin-top: 20px;
 }
 
 .person-content {
@@ -2194,6 +2192,7 @@ md-toolbar-tools {
   .contentProducts {
     flex-direction: column;
     margin-top: 15px;
+    align-items: center;
   }
   .contentMarcas{
     width: 100%;

@@ -1,11 +1,11 @@
-$(document).ready(function() {
+$(document).ready(function () {
     /**
      * Navbar links active state on scroll
      */
     let navbarlinks = $('#navbar .scrollto');
     const navbarlinksActive = () => {
         let position = $(window).scrollTop() + 200;
-        navbarlinks.each(function() {
+        navbarlinks.each(function () {
             let section = $($(this).attr('href'));
             if (section.length && position >= section.offset().top && position <= (section.offset().top + section.outerHeight())) {
                 $(this).addClass('active');
@@ -136,4 +136,70 @@ $(document).ready(function() {
             preloader.remove();
         });
     }
+    $(window).on('load', function () {
+        Grade($('.box'));
+    });
+
+    $('#zoomable-image').on('mouseenter', function () {
+        $(this).css('width', '300px'); // Largura aumentada ao passar o mouse
+    });
+
+    $('#zoomable-image').on('mouseleave', function () {
+        $(this).css('width', '200px'); // Largura inicial ao retirar o mouse
+    });
+
+    var swiperCategories = new Swiper(".mySwiperCategories", {
+        slidesPerView: 1,
+        spaceBetween: 10,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            "@0.00": {
+                slidesPerView: 4,
+                spaceBetween: 10,
+            },
+            "@0.75": {
+                slidesPerView: 4,
+                spaceBetween: 20,
+            },
+            "@1.00": {
+                slidesPerView: 7,
+                spaceBetween: 40,
+            },
+            "@1.50": {
+                slidesPerView: 10,
+                spaceBetween: 50,
+            },
+        },
+    });
+
+    var swiperSubCategories = new Swiper(".mySwiperSubCategories", {
+        slidesPerView: 1,
+        spaceBetween: 10,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            "@0.00": {
+                slidesPerView: 2,
+                spaceBetween: 0,
+            },
+            "@0.75": {
+                slidesPerView: 5,
+                spaceBetween: 20,
+            },
+            "@1.00": {
+                slidesPerView: 7,
+                spaceBetween: 40,
+            },
+            "@1.50": {
+                slidesPerView: 10,
+                spaceBetween: 50,
+            },
+        },
+    });
+
 });
