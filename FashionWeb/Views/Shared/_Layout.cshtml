@@ -165,34 +165,36 @@
                             ng-click="expandAllCategories()" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="bi bi-filter iconCategory"></i> Todas as Categorias
                         </span>
-                        <div class="dropdown-menu swiper mySwiperCategories">
-                            <div class="dropCategories swiper-wrapper">
-                                <div class="swiper-slide" ng-repeat="category in list.categories"
-                                    ng-class="{ 'categoria-selecionada': category.isActive }">
-                                    <span ng-mouseenter="changeCategory(category)" class="dropdown-item"
-                                        ng-value="category.id" data-target="#categoria{{category.id}}">
-                                        <img ng-show="category.icon != null && category.icon != ''"
-                                            ng-src="{{category.icon}}" height="25" style="text-align:right;">
-                                        <span>{{category.name}}</span>
-                                    </span>
+                        <div class="dropdown-menu">
+                            <div class="dropSlide swiper mySwiperCategories">
+                                <div class="dropCategories swiper-wrapper">
+                                    <div class="swiper-slide" ng-repeat="category in list.categories"
+                                        ng-class="{ 'categoria-selecionada': category.isActive }">
+                                        <span ng-mouseenter="changeCategory(category)" class="dropdown-item"
+                                            ng-value="category.id" data-target="#categoria{{category.id}}">
+                                            <img ng-show="category.icon != null && category.icon != ''"
+                                                ng-src="{{category.icon}}" height="25" style="text-align:right;">
+                                            <span>{{category.name}}</span>
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="swiper mySwiperSubCategories">
-                                <div class="containerSubcategorias swiper-wrapper">
-                                    <div class="swiper-slide" ng-repeat="subcategory in categorySelected.subcategories">
-                                        <strong>
-                                            {{subcategory.name}}
-                                        </strong>
+                                <div class="swiper mySwiperSubCategories">
+                                    <div class="containerSubcategorias swiper-wrapper">
+                                        <div class="swiper-slide"
+                                            ng-repeat="subcategory in categorySelected.subcategories">
+                                            <strong>
+                                                {{subcategory.name}}
+                                            </strong>
 
-                                        <div ng-repeat="productType in subcategory.productTypes">
-                                            <span class="tiposProduto" ng-click="pesquisarProdutos(productType.id)">
-                                                {{productType.name}}
-                                            </span>
+                                            <div ng-repeat="productType in subcategory.productTypes">
+                                                <span class="tiposProduto" ng-click="pesquisarProdutos(productType.id)">
+                                                    {{productType.name}}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </li>
                 </ul>

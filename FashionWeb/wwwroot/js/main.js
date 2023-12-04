@@ -141,11 +141,11 @@ $(document).ready(function () {
     });
 
     $('#zoomable-image').on('mouseenter', function () {
-        $(this).css('width', '300px'); // Largura aumentada ao passar o mouse
+        $(this).css('width', '500px'); // Largura aumentada ao passar o mouse
     });
 
     $('#zoomable-image').on('mouseleave', function () {
-        $(this).css('width', '200px'); // Largura inicial ao retirar o mouse
+        $(this).css('width', '300px'); // Largura inicial ao retirar o mouse
     });
 
     var swiperCategories = new Swiper(".mySwiperCategories", {
@@ -169,8 +169,8 @@ $(document).ready(function () {
                 spaceBetween: 40,
             },
             "@1.50": {
-                slidesPerView: 10,
-                spaceBetween: 50,
+                slidesPerView: 8,
+                spaceBetween: 30,
             },
         },
     });
@@ -202,4 +202,22 @@ $(document).ready(function () {
         },
     });
 
+    var swiperContainerCategories = new Swiper(".container-categorias", {
+        slidesPerView: 1,
+        spaceBetween: 10,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            "@0.00": {
+                slidesPerView: 4,
+                spaceBetween: 10,
+            },
+            "@0.75": {
+                slidesPerView: 4,
+                spaceBetween: 20,
+            }
+        },
+    });
 });

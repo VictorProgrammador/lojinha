@@ -60,13 +60,12 @@ a.navbar-brand {
   transition: all 0.6s ease;
   /* Aqui você pode ajustar a duração e o tipo da transição conforme necessário */
 }
-
+.dropdown-menu{
+  width: 100%;
+}
 .dropdown-menu-active {
   display: block !important;
-  padding: 10px;
-}
-.dropdown-menu{
-  padding: 20px!important;
+  padding: 20px;
 }
 .dropdown-menu .dropCategories {
   display: flex;
@@ -233,7 +232,7 @@ html {
 
 @media screen and (min-width: 968px) {
   :root {
-    --big-font-size: 3rem;
+    --big-font-size: 2rem;
     --h1-font-size: 2.25rem;
     --h2-font-size: 1.5rem;
     --h3-font-size: 1.25rem;
@@ -1014,29 +1013,29 @@ main {
 
 .container-categorias .contegorias {
   display: flex;
+  justify-content: center;
   gap: 12px;
 }
 
+.container-categorias .contegorias.swiper-wrapper {
+  height: max-content;
+}
+
 .container-categorias .contegorias .categoria {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  width: 100px !important;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  border-radius: 10px;
-  position: relative;
-  transition: .5s;
+  width: 70px;
+  border: .5px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .container-categorias .contegorias .categoria:hover {
-  background: linear-gradient(135deg, var(--first-color), var(--first-color-second));
+  border: 1px solid #333;
 }
 
 .container-categorias .contegorias .categoria img {
   margin-bottom: 5px;
+  width: 100%;
+  border-radius: 5px;
 }
 
 .container-categorias .contegorias .categoria:hover img {}
@@ -1051,7 +1050,7 @@ main {
 }
 
 .container-categorias .contegorias .categoria.active {
-  background: linear-gradient(135deg, var(--first-color), var(--first-color-second));
+  border: 1px solid #333;
 }
 
 .container-categorias .contegorias .categoria.active span {
@@ -1661,6 +1660,67 @@ main {
   font-weight: var(--font-medium);
 }
 
+
+.produto-container {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.produto-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.produto-descricao {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.produto-descricao .pull-right i{
+  transition: .3s;
+}
+.produto-descricao .pull-right i{
+  transform: rotate(180deg);
+}
+
+.produto-valor {
+  font-size: 8px;
+}
+
+.botao-preto {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #000;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.container-categorias .contegorias .categoria.active img {
+  filter: 0 !important;
+}
+
+#zoomable-image {
+  width: 300px;
+  /* Largura inicial da imagem */
+  transition: width 0.3s ease-in-out;
+  /* Adiciona uma transição suave */
+}
+
+/* Estilo quando o mouse está sobre a imagem */
+#zoomable-image:hover {
+  width: 400px;
+  /* Largura aumentada ao passar o mouse */
+}
+
 @media (max-width: 768px) {
   .person-list {
     grid-template-columns: repeat(2, 1fr);
@@ -1684,7 +1744,9 @@ main {
   .content-info {
     align-items: center;
   }
-
+  .produto-container{
+    grid-template-columns: 1fr;
+  }
 
 }
 
@@ -2237,6 +2299,10 @@ md-toolbar-tools {
 
   .content-product .product-box {
     max-width: 150px;
+  }
+
+  .container-categorias .contegorias .categoria{
+    width: 50px;
   }
 }
 
