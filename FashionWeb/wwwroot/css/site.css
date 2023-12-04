@@ -1466,6 +1466,7 @@ main {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
+  width: 70%;
 }
 
 .person-item {
@@ -1489,7 +1490,7 @@ main {
 }
 
 .person-image {
-  height: 400px;
+  height: 220px;
 }
 
 .container-videos {
@@ -1603,7 +1604,7 @@ main {
 }
 
 .contentMarcas {
-  width: 100%;
+  width: 30%;
   max-width: 300px;
   display: flex;
   flex-direction: column;
@@ -1706,7 +1707,17 @@ main {
 
 @media (max-width: 600px) {
   .person-list {
+    width: 100%;
     grid-template-columns: 1fr;
+  }
+
+  .items_footer{
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .payments{
+    margin-top: 30px;
   }
 }
 
@@ -2164,7 +2175,7 @@ md-toolbar-tools {
   }
 
   .person-image {
-    height: 340px;
+    height: 200px;
   }
 }
 
@@ -2185,6 +2196,7 @@ md-toolbar-tools {
     margin-top: 15px;
   }
   .contentMarcas{
+    width: 100%;
     max-width: 100%;
   }
   .headerFilter{
