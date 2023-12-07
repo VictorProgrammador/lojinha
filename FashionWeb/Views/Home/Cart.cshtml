@@ -336,13 +336,13 @@
             </tr>
         </table>
 
-        <div class="form-row" ng-show="hasDigitalFrete">
+        <div class="form-row">
             <div class="form-group col-md-6">
                 <span ng-style="{'color' : cupomAplicado ? 'green' : ''}">Cupom {{ cupomAplicado ? 'aplicado com sucesso' : '' }}</span>
                 <input type="text" id="cupom" ng-disabled="cupomAplicado" ng-model="cupom" name="cupom">
             </div>
         </div>
-        <div class="form-row" ng-show="hasDigitalFrete">
+        <div class="form-row">
             <div class="form-group col-md-6">
                 <span style="color:white" class="botao-preto" ng-click="aplicarCupom()">Aplicar Cupom</span>
             </div>

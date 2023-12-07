@@ -599,19 +599,23 @@ namespace FashionWeb.Domain.BusinessRules
         public Product GetProduct(int Id)
         {
             var product = this._coreRepository.GetProduct(Id);
-            product.Category = this._coreRepository.GetCategory(product.CategoryId);
-            product.ProductConfigs = this._coreRepository.GetProductConfig(product.Id);
-            product.ProductCores = new List<Cor>();
 
-            foreach (var productConfig in product.ProductConfigs)
+            if(product != null && product.Id > 0)
             {
-                if(product.ProductCores.Where(x=> x.Id == productConfig.CorId).Count() == 0)
+                product.Category = this._coreRepository.GetCategory(product.CategoryId);
+                product.ProductConfigs = this._coreRepository.GetProductConfig(product.Id);
+                product.ProductCores = new List<Cor>();
+
+                foreach (var productConfig in product.ProductConfigs)
                 {
-                    product.ProductCores.Add(this._coreRepository.GetCor(productConfig.CorId));
+                    if (product.ProductCores.Where(x => x.Id == productConfig.CorId).Count() == 0)
+                    {
+                        product.ProductCores.Add(this._coreRepository.GetCor(productConfig.CorId));
+                    }
+
+                    productConfig.Tamanho = this._coreRepository.GetTamanho(productConfig.TamanhoId);
+
                 }
-
-                productConfig.Tamanho = this._coreRepository.GetTamanho(productConfig.TamanhoId);
-
             }
 
             return product;

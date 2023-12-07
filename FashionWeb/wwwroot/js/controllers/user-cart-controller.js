@@ -10,7 +10,7 @@
     $scope.card = {};
 
     $scope.cupom = "";
-    $scope.hasDigitalFrete = false;
+    $scope.onlyCamisetas = false;
     $scope.cupomAplicado = false;
 
     $scope.OrderEntity = {};
@@ -84,12 +84,14 @@
 
                 if ($scope.entity.cartProducts != null && $scope.entity.cartProducts.length > 0) {
 
-                    var hasDigitalFrete = $scope.entity.cartProducts.some(function (produto) {
-                        return produto.product.name.includes("Gift");
+                    var onlyCamisetas = $scope.entity.cartProducts.map(function (produto) {
+                        return produto.product.name.includes("Camiseta");
                     });
 
-                    if (hasDigitalFrete)
-                        $scope.hasDigitalFrete = true;
+                    if (onlyCamisetas != null &&
+                        onlyCamisetas.length == 3 &&
+                        $scope.entity.cartProducts.length == 3)
+                        $scope.onlyCamisetas = true;
 
                     var totalValueCheckout = 0;
 
@@ -594,8 +596,6 @@
         $(".spinerStyle").addClass('centerSpinner');
         $(".spinerBackground").addClass('overlay');
 
-        $scope.endereco.hasDigitalFrete = $scope.hasDigitalFrete;
-
         basicService.searchCEP($scope.endereco).then(function (data) {
 
             var result = data.data;
@@ -618,18 +618,17 @@
         }
         else {
 
-            if ($scope.hasDigitalFrete && $scope.cupom == "SHOP50" && $scope.cupomAplicado == false) {
-                $scope.valorTotal = $scope.valorTotal / 2;
-                $scope.cupomAplicado = true;
+            if (!$scope.onlyCamisetas && $scope.cupom == "3CAMISAS") {
+                utilidadesService.exibirMensagem('Atenção', 'Cupom válido se tiver exatamente 3 Camisetas no carrinho!', false);
             }
-            else if ($scope.hasDigitalFrete && $scope.cupom == "SHOP100" && $scope.cupomAplicado == false) {
-                $scope.valorTotal = 0;
+            else if ($scope.onlyCamisetas && $scope.cupom == "3CAMISAS" && $scope.cupomAplicado == false) {
+                $scope.valorTotal = 120;
                 $scope.cupomAplicado = true;
             }
             else {
-                utilidadesService.exibirMensagem('Atenção', 'Cupom não reconhecido!', false);
+                utilidadesService.exibirMensagem('Atenção', 'Cupom não é válido!', false);
             }
-           
+
         }
 
     }
