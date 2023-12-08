@@ -116,6 +116,7 @@
         });
 
     }
+    
 
     $scope.excludeCartProduct = function (id, ProductId) {
 

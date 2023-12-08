@@ -148,6 +148,38 @@ $(document).ready(function () {
         $(this).css('width', '300px'); // Largura inicial ao retirar o mouse
     });
 
+    function increaseQuantity() {
+        var quantityInput = document.getElementById('quantityInput');
+        var productValue = document.getElementById('productValue').getAttribute('data-value');
+
+        var currentValue = parseInt(quantityInput.value);
+        quantityInput.value = currentValue + 1;
+
+        calculateTotal(productValue);
+    }
+
+    function decreaseQuantity() {
+        var quantityInput = document.getElementById('quantityInput');
+        var productValue = document.getElementById('productValue').getAttribute('data-value');
+
+        var currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) {
+            quantityInput.value = currentValue - 1;
+            calculateTotal(productValue);
+        }
+    }
+
+    function calculateTotal(productValue) {
+        var quantityInput = document.getElementById('quantityInput');
+        var totalValue = document.getElementById('totalValue');
+
+        var quantity = parseInt(quantityInput.value);
+        var value = parseFloat(productValue);
+
+        var total = quantity * value;
+        totalValue.innerText = "Total: " + total.toFixed(2); // Exibe o total formatado com 2 casas decimais
+    }
+
     var swiperCategories = new Swiper(".mySwiperCategories", {
         slidesPerView: 1,
         spaceBetween: 10,
