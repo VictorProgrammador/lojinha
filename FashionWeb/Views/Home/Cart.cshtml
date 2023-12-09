@@ -160,8 +160,8 @@
                         </div>
                         <div class="productDetails">
                             <h6>{{ cartProduct.product.name }}</h6>
-                            <span><strong>Tamanho:</strong> </span>
-                            <span><strong>Cor:</strong> </span>
+                            @*<span><strong>Tamanho:</strong> </span>
+                            <span><strong>Cor:</strong> </span>*@
                         </div>
                     </div>
 
@@ -175,7 +175,6 @@
                         </div>
                         {{ cartProduct.product.value | currency:"R$" }}
                     </div>
-                    <a href="/">Continuar comprando</a>
                     <button class="btn btn-sm btn-exclude"
                         ng-click="excludeCartProduct(cartProduct.id, cartProduct.productId)">
                         <i class="bi bi-trash"></i>
@@ -183,16 +182,12 @@
                 </div>
             </div>
         </div>
-        <div class="contentResumo">
+        <div class="contentResumo" ng-show="entity.cartProducts != null && entity.cartProducts.length > 0">
             <h4 class="home_subtitle">Resumo da Compra</h4>
             <div class="contentCompra">
                 <div class="subTotal">
-                    <span><Strong>Subtotal</Strong>(2 itens)</span>
+                    <span><Strong>Subtotal</Strong>({{entity.cartProducts.length}} itens)</span>
                     <span>{{ cartProducts.valorTotal }}</span>
-                </div>
-                <div class="valorTotalCompra">
-                    <span>Valor total</span>
-                    <span>R$ 654,00</span>
                 </div>
                 <div class="itemsPayment">
                     <div class="contentBandeiras">
@@ -213,9 +208,10 @@
                     </span>
                 </div>
                 <div class="links">
+                    <a href="/">Continuar comprando</a>
                     <a href="#" class="buttonBottom"
-                        ng-show="entity.cartProducts != null && entity.cartProducts.length > 0"
-                        ng-click="showFormaPagamento()">Finalizar compra</a>
+                       ng-show="entity.cartProducts != null && entity.cartProducts.length > 0"
+                       ng-click="showFormaPagamento()">Finalizar compra</a>
                 </div>
             </div>
         </div>
@@ -346,8 +342,9 @@
 
     <div class="meioPagamento-container form" hidden="hidden">
         <div class="produto-descricao">Selecione um meio de pagamento</div>
-        <br /><br />
-
+        <br />
+        <span>Se tiver apenas 3 camisetas no carrinho, use o cupom: 3CAMISAS</span>
+        <br />
         <table class="table table-striped">
             <tr>
                 <th></th>
@@ -368,9 +365,11 @@
 
         <div class="form-row contentCupom">
             <div class="group-input">
-                <label ng-for="cupom" ng-style="{'color' : cupomAplicado ? 'green' : ''}">Cupom {{ cupomAplicado ?
+                <label ng-for="cupom" ng-style="{'color' : cupomAplicado ? 'green' : ''}">
+                    Cupom {{ cupomAplicado ?
                     'aplicado com
-                    sucesso' : '' }}</label>
+                    sucesso' : '' }}
+                </label>
                 <input type="text" id="cupom" ng-disabled="cupomAplicado" ng-model="cupom" name="cupom">
             </div>
             <div class="group-input">
@@ -381,9 +380,9 @@
             <div class="col-md-12">
                 <div class="links">
                     <a href="#" class="buttonBottom bgGrey"
-                        ng-click="irEndereco('@User.Identity.Name')">Passo anterior</a>
+                       ng-click="irEndereco('@User.Identity.Name')">Passo anterior</a>
                     <a href="#" class="buttonBottom"
-                        ng-click="irPagamento()">Finalizar pagamento</a>
+                       ng-click="irPagamento()">Finalizar pagamento</a>
                 </div>
             </div>
         </div>

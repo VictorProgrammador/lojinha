@@ -22,7 +22,7 @@
                 <div class="swiper mySwiperBanner">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
-                            <img src="~/img/bannerCamisas.png" alt="">
+                            <a href="@Url.Action("Products", "Home", new { ProductTypeId = 1, Category = "Masculino" })"><img src="~/img/bannerCamisas.png" alt=""></a>
                         </div>
                         <div class="swiper-slide">
                             <img src="~/img/bannerOffer7.png" alt="">
@@ -32,6 +32,7 @@
                 </div>
             </div>
         </section>
+        <div style="text-align:center; color: blue">Na compra de 3 camisetas, use o cupom: 3CAMISAS</div>
         <section class="sectionBanners">
             <div class="container contentBanners">
                 <div class="contentOffers">
@@ -52,7 +53,7 @@
                     </div>
 
                     <div class="offer">
-                        <a href="#!">
+                        <a href="@Url.Action("Products", "Home", new { ProductTypeId = 1, Category = "Masculino" })">
                             <img src="~/img/bannerCamisas.png" alt="">
                         </a>
                     </div>
@@ -119,7 +120,7 @@
                             </a>
                         </div>
                         <div class="offer">
-                            <a href="#!">
+                            <a href="@Url.Action("Products", "Home", new { ProductTypeId = 24, Category = "Masculino" })">
                                 <img src="~/img/camisaPng.png" alt="">
                             </a>
                         </div>
@@ -135,6 +136,13 @@
 <script src="/js/main.js"></script>
 <script src="/lib/swiper/swiper-bundle.min.js"></script>
 <script>
+
+    $("#menuCategorias").addClass("dropdown-menu-active");
+    let iconCategory = $('.iconCategory');
+    if (iconCategory.length) {
+        iconCategory.toggleClass('bi-filter bi-x-lg');
+    }
+
     var swiper = new Swiper(".mySwiperBanner", {
         loop: true,
         autoplay: true,
