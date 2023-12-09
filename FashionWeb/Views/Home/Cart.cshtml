@@ -111,6 +111,7 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            text-align: center;
         }
 
         .links {
@@ -145,8 +146,6 @@
 
     <div class="contentCartItems">
         <div>
-
-
             <h4 class="home_subtitle">Meu Carrinho</h4>
             <div ng-show="entity.cartProducts == null || entity.cartProducts.length == 0">
                 <div>
@@ -214,7 +213,7 @@
                     </span>
                 </div>
                 <div class="links">
-                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
+                    <a href="#" class="buttonBottom"
                         ng-show="entity.cartProducts != null && entity.cartProducts.length > 0"
                         ng-click="showFormaPagamento()">Finalizar compra</a>
                 </div>
@@ -222,14 +221,13 @@
         </div>
     </div>
 
-    <div class="formaPagamento-container" hidden="hidden">
+    <div class="formaPagamento-container form" hidden="hidden">
         <div class="produto-descricao">Endereço de Entrega</div>
         <br /><br />
 
         <div class="form-row">
-            <div class="form-group col-md-12">
+            <div class="group-input">
                 <label for="nomeTitular">Código Postal</label>
-
                 <div class="btn-search" style="width:100%">
                     <input type="text" class="cep" name="cep" ng-model="endereco.cep" placeholder="Digite seu CEP">
                     <button class="btn-bonito" ng-click="consultaViaCep()">
@@ -240,42 +238,39 @@
         </div><br />
 
         <div class="form-row">
-            <div class="form-group col-md-12">
+            <div class="group-input">
                 <label for="nomeTitular">Rua</label>
                 <input type="text" id="rua" name="rua" ng-model="endereco.rua">
             </div>
         </div>
 
         <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="group-input">
                 <label for="numeroRua">Número</label>
                 <input type="text" id="numeroRua" name="numeroCasa" ng-model="endereco.numeroCasa">
             </div>
-            <div class="form-group col-md-6">
+            <div class="group-input">
                 <label for="numeroRua">Complemento</label>
                 <input type="text" id="complemento" name="complemento" ng-model="endereco.complemento">
             </div>
         </div>
 
         <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="group-input">
                 <label for="nomeTitular">Bairro</label>
                 <input type="text" id="bairro" name="bairro" ng-model="endereco.bairro">
             </div>
-            <div class="form-group col-md-6">
+            <div class="group-input">
                 <label for="nomeTitular">Cidade</label>
                 <input type="text" id="cidade" name="cidade" ng-model="endereco.cidade">
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="links">
-                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
-                        ng-click="showContainerCart()">Passo anterior</a>
-                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
-                        ng-click="completePayment()">Ir para metódo de envio</a>
-                </div>
+        <div class="">
+            <div class="links">
+                <a href="#" class="buttonBottom bgGrey"
+                    ng-click="showContainerCart()">Passo anterior</a>
+                <a href="#" class="buttonBottom"
+                    ng-click="completePayment()">Ir para metódo de envio</a>
             </div>
         </div>
     </div>
@@ -302,8 +297,9 @@
             </tr>
             <tr ng-repeat="freteResponse in freteResponseList" ng-click="calculeTotal($index, freteResponse)"
                 ng-class="{ 'linha-colorida': freteResponse.colorida }">
-                <td><input type="radio" ng-model="entity.freteSelecionadoId" class="form-control"
-                        ng-value="freteResponse.id"></td>
+                <td>
+                    <input type="radio" ng-model="entity.freteSelecionadoId" name="frete" ng-value="freteResponse.id">
+                </td>
                 <td>{{freteResponse.name}} - R$ {{freteResponse.price}} - Chega entre:
                     {{freteResponse.delivery_range.min}} e {{freteResponse.delivery_range.max}} dias.</td>
             </tr>
@@ -312,16 +308,16 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="links">
-                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
+                    <a href="#" class="buttonBottom bgGrey"
                         ng-click="showFormaPagamento()">Passo anterior</a>
-                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
+                    <a href="#" class="buttonBottom"
                         ng-click="irRegistro('@User.Identity.Name')">Próxima etapa</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="register-container" hidden="hidden">
+    <div class="register-container form" hidden="hidden">
         <div class="produto-descricao">Registre-se</div>
         <br /><br />
 
@@ -339,16 +335,16 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="links">
-                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
+                    <a href="#" class="buttonBottom bgGrey"
                         ng-click="completePayment()">Passo anterior</a>
-                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
+                    <a href="#" class="buttonBottom"
                         ng-click="validadeUserToMeioPagamento()">Ir para pagamento</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="meioPagamento-container" hidden="hidden">
+    <div class="meioPagamento-container form" hidden="hidden">
         <div class="produto-descricao">Selecione um meio de pagamento</div>
         <br /><br />
 
@@ -370,99 +366,85 @@
             </tr>
         </table>
 
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <span ng-style="{'color' : cupomAplicado ? 'green' : ''}">Cupom {{ cupomAplicado ? 'aplicado com
-                    sucesso' : '' }}</span>
+        <div class="form-row contentCupom">
+            <div class="group-input">
+                <label ng-for="cupom" ng-style="{'color' : cupomAplicado ? 'green' : ''}">Cupom {{ cupomAplicado ?
+                    'aplicado com
+                    sucesso' : '' }}</label>
                 <input type="text" id="cupom" ng-disabled="cupomAplicado" ng-model="cupom" name="cupom">
             </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="group-input">
                 <span style="color:white" class="botao-preto" ng-click="aplicarCupom()">Aplicar Cupom</span>
             </div>
-        </div><br />
-
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="links">
-                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
+                    <a href="#" class="buttonBottom bgGrey"
                         ng-click="irEndereco('@User.Identity.Name')">Passo anterior</a>
-                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
+                    <a href="#" class="buttonBottom"
                         ng-click="irPagamento()">Finalizar pagamento</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="payment-container" hidden="hidden">
+    <div class="payment-container form" hidden="hidden">
         <div class="produto-descricao">Finalize o pagamento</div>
         <br /><br />
 
         <div class="form-row">
-            <div class="form-group col-md-12">
+            <div class="group-input">
                 <label for="nomeTitular">Nome do Titular (exatamente como no cartão):</label>
                 <input type="text" id="nomeTitular" name="nomeTitular" oninput="formatarNome(this)"
                     ng-model="card.nomeTitular">
             </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col-md-12">
+            <div class="group-input">
                 <label for="nomeTitular">CPF do Titular:</label>
                 <input type="text" id="cpfTitular" class="cpfTitular" name="cpfTitular" ng-model="card.cpfTitular">
             </div>
         </div>
 
         <div class="form-row">
-            <div class="form-group col-md-12">
+            <div class="group-input">
                 <label for="nomeTitular">Telefone do Titular (para confirmação bancária caso houver
                     necessidade):</label>
                 <input type="text" id="telefoneTitular" class="telefoneTitular" name="telefoneTitular"
-                    ui-mask="(99) 9999-9999" ng-model="card.telefoneTitular">
+                    ui-mask="(99) 99999-9999" ng-model="card.telefoneTitular">
             </div>
         </div>
-
-        <div class="form-row">
-            <div class="form-group col-md-12">
-                <label>Número de parcelas</label>
-                <select ng-model="parcelamentoSelecionado" class="form-control"
-                    ng-options="parcelamento for parcelamento in parcelamentos">
-                    <option value="">Selecione uma opção</option>
-                </select>
-            </div>
+        <div class="group-input">
+            <label for="numeroCartao">Número do Cartão de Crédito: <img ng-src="/{{bandeiraImg}}" /></label>
+            <input type="text" id="numeroCartao" name="numeroCartao" class="numeroCartaoMask"
+                ng-blur="captureBandeira()" ng-pattern="/^[0-9]*$/" placeholder="**** **** **** ****"
+                ng-model="card.numeroCartao">
         </div>
-
         <div class="form-row">
-            <div class="form-group col-md-12">
-                <label for="numeroCartao">Número do Cartão de Crédito: <img ng-src="/{{bandeiraImg}}" /></label>
-                <div class="input-with-icon">
-                    <input type="text" id="numeroCartao" name="numeroCartao" class="numeroCartaoMask"
-                        ng-blur="captureBandeira()" ng-pattern="/^[0-9]*$/" placeholder="**** **** **** ****"
-                        ng-model="card.numeroCartao">
-                </div>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="group-input">
                 <label for="validade">Data de Validade:</label>
                 <input type="text" id="validade" name="validade" ui-mask="99/99" placeholder="MM/AA"
                     ng-pattern="/^(0[1-9]|1[0-2])\/[0-9]{2}$/" ng-model="card.validade">
             </div>
-            <div class="form-group col-md-6">
+            <div class="group-input">
                 <label for="codigoSeguranca">Código de Segurança:</label>
                 <input type="text" id="codigoSeguranca" name="codigoSeguranca" ui-mask="999" placeholder="***"
                     ng-model="card.cvv">
             </div>
         </div>
+        <div class="group-input">
+            <label>Número de parcelas</label>
+            <select ng-model="parcelamentoSelecionado" class="form-control"
+                ng-options="parcelamento for parcelamento in parcelamentos">
+                <option value="">Selecione uma opção</option>
+            </select>
+        </div>
 
         <div class="row">
             <div class="col-md-12">
                 <div class="links">
-                    <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
+                    <a href="#" class="buttonBottom bgGrey"
                         ng-click="irMeioPagamento()">Passo anterior</a>
-                    <span style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
+                    <span class="buttonBottom"
                         class="botao-preto" ng-click="paid()" onclick="pagarCompra()">Efetuar pedido</span>
                 </div>
             </div>

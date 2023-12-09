@@ -153,7 +153,7 @@
     }
 
     $scope.showContainerCart = function () {
-        var divCart = document.querySelector('.cart-container');
+        var divCart = document.querySelector('.contentCartItems');
         divCart.removeAttribute('hidden');
 
         var divPayment = document.querySelector('.payment-container');
@@ -180,7 +180,7 @@
         var divPayment = document.querySelector('.payment-container');
         divPayment.setAttribute('hidden', 'true');
 
-        var divCart = document.querySelector('.cart-container');
+        var divCart = document.querySelector('.contentCartItems');
         divCart.setAttribute('hidden', 'true');
 
         var divRegistro = document.querySelector('.register-container');
@@ -244,7 +244,7 @@
         }
 
         if (allValidate) {
-            var divCart = document.querySelector('.cart-container');
+            var divCart = document.querySelector('.contentCartItems');
             divCart.setAttribute('hidden', 'true');
 
             var divRegistro = document.querySelector('.register-container');
@@ -270,7 +270,7 @@
 
     $scope.irPagamento = function () {
 
-        var divCart = document.querySelector('.cart-container');
+        var divCart = document.querySelector('.contentCartItems');
         divCart.setAttribute('hidden', 'true');
 
         var divFormaPagamento = document.querySelector('.formaPagamento-container');
@@ -517,7 +517,7 @@
                     var divFormaPagamento = document.querySelector('.formaPagamento-container');
                     divFormaPagamento.setAttribute('hidden', 'true');
 
-                    var divPayment = document.querySelector('.cart-container');
+                    var divPayment = document.querySelector('.contentCartItems');
                     divPayment.setAttribute('hidden', 'true');
 
                     var divMeioPagamento = document.querySelector('.meioPagamento-container');
@@ -577,7 +577,7 @@
         var divFormaPagamento = document.querySelector('.formaPagamento-container');
         divFormaPagamento.setAttribute('hidden', 'true');
 
-        var divPayment = document.querySelector('.cart-container');
+        var divPayment = document.querySelector('.contentCartItems');
         divPayment.setAttribute('hidden', 'true');
 
         var divMeioPagamento = document.querySelector('.meioPagamento-container');
