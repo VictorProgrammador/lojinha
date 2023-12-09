@@ -147,7 +147,7 @@
         <div>
 
 
-            <div class="produto-descricao">Meu Carrinho</div>
+            <h4 class="home_subtitle">Meu Carrinho</h4>
             <div ng-show="entity.cartProducts == null || entity.cartProducts.length == 0">
                 <div>
                     <span>Nenhum produto adicionado ao carrinho.</span>
@@ -177,26 +177,41 @@
                         {{ cartProduct.product.value | currency:"R$" }}
                     </div>
                     <a href="/">Continuar comprando</a>
-                    <button class="btn btn-sm btn-exclude" ng-click="excludeCartProduct(cartProduct.id, cartProduct.productId)">
+                    <button class="btn btn-sm btn-exclude"
+                        ng-click="excludeCartProduct(cartProduct.id, cartProduct.productId)">
                         <i class="bi bi-trash"></i>
                     </button>
                 </div>
             </div>
         </div>
-        <div class="">
-            <div class="">
-                <div>
-                    <span style="color: blue">
-                        Aceitamos pagamento:
-                        <img src="~/img/visa.png" />, <img src="~/img/master.png" />,
-                        <img src="~/img/amex.png" />, <img src="~/img/elo.png" />,
-                        <img src="~/img/hipercard.png" /> <img src="~/img/pagbank.svg" width="80" />
-                    </span>
+        <div class="contentResumo">
+            <h4 class="home_subtitle">Resumo da Compra</h4>
+            <div class="contentCompra">
+                <div class="subTotal">
+                    <span><Strong>Subtotal</Strong>(2 itens)</span>
+                    <span>{{ cartProducts.valorTotal }}</span>
                 </div>
+                <div class="valorTotalCompra">
+                    <span>Valor total</span>
+                    <span>R$ 654,00</span>
+                </div>
+                <div class="itemsPayment">
+                    <div class="contentBandeiras">
+                        <span>Aceitamos pagamento:</span>
+                        <div class="bandeiras">
+                            <img src="~/img/visa.png" />
+                            <img src="~/img/master.png" />
+                            <img src="~/img/amex.png" />
+                            <img src="~/img/elo.png" />
+                            <img src="~/img/hipercard.png" />
+                            <img src="~/img/pagbank.svg" width="50" />
+                        </div>
 
-                <div>
-                    <span style="color: blue"><i class="bi bi-bag-fill"></i> Compra Garantida, receba o produto que está
-                        esperando ou devolvemos seu dinheiro.</span>
+                    </div>
+                    <span>
+                        <i class="bi bi-bag-fill"></i>
+                        Compra Garantida, receba o produto que está esperando ou devolvemos seu dinheiro.
+                    </span>
                 </div>
                 <div class="links">
                     <a href="#" style="color: black; background: #43f300; padding: 10px 30px; border-radius: 10px;"
