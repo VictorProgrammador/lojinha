@@ -37,4 +37,3 @@ sudo chmod -R +rX /home/azure/lojinha/FashionWeb/bin/Release/net5.0/linux-x64/pu
 
 
 
-
