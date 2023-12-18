@@ -160,18 +160,18 @@
                         </div>
                         <div class="productDetails">
                             <h6>{{ cartProduct.product.name }}</h6>
-                            @*<span><strong>Tamanho:</strong> </span>
-                            <span><strong>Cor:</strong> </span>*@
+                            <span><strong>Tamanho: {{cartProduct.color}}</strong> </span>
+                            <span><strong>Cor: {{cartProduct.tamanho}}</strong> </span>
                         </div>
                     </div>
 
-                    <div class="bottomProduct" ng-controller="userCartController">
+                    <div class="bottomProduct">
                         <div class="product-qtd">
                             <span class="product-qtd__label">Quantidade: </span>
-                            <button class="product-qtd__btn decrease"><i class="bi bi-dash-lg"></i></button>
+                            <button ng-disabled="true" class="product-qtd__btn decrease"><i class="bi bi-dash-lg"></i></button>
                             <input type="text" aria-label="quantidade do produto" value="1" readonly="readonly"
                                 class="product-qtd__input">
-                            <button class="product-qtd__btn increase"><i class="bi bi-plus-lg"></i></button>
+                            <button ng-disabled="true" class="product-qtd__btn increase"><i class="bi bi-plus-lg"></i></button>
                         </div>
                         {{ cartProduct.product.value | currency:"R$" }}
                     </div>

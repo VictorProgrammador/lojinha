@@ -93,24 +93,27 @@
         $scope.quantidadeDisponivel = 0;
 
         $scope.entity.productConfigs.map(function (data) {
-
             if (data.corId == $scope.entity.colorId) {
                 $scope.entity.productTamanhos.push(data.tamanho);
             }
-
         });
 
+        $scope.entity.color = $scope.entity.productCores.filter(function (item) {
+            return item.id === $scope.entity.colorId;
+        })[0].name;
     }
 
     $scope.changeTamanho = function () {
         $scope.entity.productConfigs.map(function (data) {
-
             if (data.corId == $scope.entity.colorId &&
                 data.tamanhoId == $scope.entity.tamanhoId) {
                 $scope.quantidadeDisponivel = data.quantidade;
             }
-
         });
+
+        $scope.entity.tamanho = $scope.entity.productTamanhos.filter(function (item) {
+            return item.id === $scope.entity.tamanhoId;
+        })[0].name;
     }
 
     $scope.adicionarAoCarrinho = function() {

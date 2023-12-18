@@ -15,12 +15,12 @@ create table CartProduct (
 Id int primary key identity(1,1),
 ProductId int,
 CartId int,
+Color nvarchar(max),
+Tamanho nvarchar(max),
 
 FOREIGN KEY (CartId) references Cart(Id),
-FOREIGN KEY (ProductId) references Product(Id)
-
+FOREIGN KEY (ProductId) references Product(Id),
 );
 
 
-select * from Cart
-select * from CartProduct
+

@@ -82,15 +82,19 @@
 
             <form id="meuFormulario" action="@Url.Action("SaveProductCart", "Home")" method="post">
                 <input type="hidden" name="id" value="{{entity.id}}">
-                
+                <input type="hidden" name="color" value="{{entity.color}}">
+                <input type="hidden" name="tamanho" value="{{entity.tamanho}}">
+
                 <div class="home__title mb-2 mt-3">
                     {{entity.value | currency:"R$"}}
                 </div>
-                <div class="row" >
+                <div class="row">
                     <div class="col-md-12">
                         <div class="produto-valor">
-                            <button type="button" class="botao-preto" ng-click="adicionarAoCarrinho()"> Adicionar ao
-                                carrinho </button>
+                            <button type="button" class="botao-preto" ng-click="adicionarAoCarrinho()">
+                                Adicionar ao
+                                carrinho
+                            </button>
                         </div>
                     </div>
                 </div>

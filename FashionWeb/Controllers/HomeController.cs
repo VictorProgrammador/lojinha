@@ -537,7 +537,7 @@ namespace FashionWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveProductCart(Int32 Id)
+        public async Task<IActionResult> SaveProductCart(Int32 Id, string Color, string Tamanho)
         {
             Cart cart = new Cart();
 
@@ -572,7 +572,9 @@ namespace FashionWeb.Controllers
                             this._coreBusinessRules.InsertCartProduct(new CartProduct()
                             {
                                 ProductId = Id,
-                                CartId = cart.Id
+                                CartId = cart.Id,
+                                Color = Color,
+                                Tamanho = Tamanho
                             });
                         }
                     }
@@ -582,7 +584,9 @@ namespace FashionWeb.Controllers
                         this._coreBusinessRules.InsertCartProduct(new CartProduct()
                         {
                             ProductId = Id,
-                            CartId = cart.Id
+                            CartId = cart.Id,
+                            Color = Color,
+                            Tamanho = Tamanho
                         });
                     }
                 }
@@ -591,7 +595,9 @@ namespace FashionWeb.Controllers
             cart.CartProducts = new List<CartProduct>();
             cart.CartProducts.Add(new CartProduct()
             {
-                ProductId = Id
+                ProductId = Id,
+                Color = Color,
+                Tamanho = Tamanho
             });
 
             string cartJson = Newtonsoft.Json.JsonConvert.SerializeObject(cart);

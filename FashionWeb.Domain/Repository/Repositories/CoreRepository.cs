@@ -1446,7 +1446,7 @@ namespace FashionWeb.Domain.Repository.Repositories
 
         public bool InsertCartProduct(CartProduct cartProduct)
         {
-            var insertCartProduct = @"INSERT INTO [CartProduct] VALUES (@ProductId, @CartId)";
+            var insertCartProduct = @"INSERT INTO [CartProduct] VALUES (@ProductId, @CartId, @Color, @Tamanho)";
             int id = 0;
 
             using (var db = _connectionFactory.GetConnection())
@@ -1457,6 +1457,8 @@ namespace FashionWeb.Domain.Repository.Repositories
                 {
                     ProductId = cartProduct.ProductId,
                     CartId = cartProduct.CartId,
+                    Color = cartProduct.Color,
+                    Tamanho = cartProduct.Tamanho
                 });
 
                 db.Close();
@@ -1472,7 +1474,8 @@ namespace FashionWeb.Domain.Repository.Repositories
             {
                 var db = _connectionFactory.GetConnection();
 
-                var sql = @"SELECT CartProduct.*,
+                var sql = @"SELECT                      [CartProduct].*,
+                                                        [CartProduct].Color,
                                                         Product.Id,
                                                         Product.Name,
                                                         Product.Value
@@ -1486,7 +1489,7 @@ namespace FashionWeb.Domain.Repository.Repositories
                     CartProduct.ProductId = Product.Id;
                     CartProduct.Product = Product;
                     return CartProduct;
-                }, new { CartId = CartId }, splitOn: "ProductId").ToList();
+                }, new { CartId = CartId }).ToList();
 
             }
             catch (Exception ex)
