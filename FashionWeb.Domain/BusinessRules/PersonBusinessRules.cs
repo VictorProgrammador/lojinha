@@ -102,5 +102,10 @@ namespace FashionWeb.Domain.BusinessRules
         {
             return _userInfoRepository.Get(AspNetUserId);
         }
+
+        public bool UpdateUserCustomer(UserInfo userInfo)
+        {
+            return _userInfoRepository.UpdateUserCustomer(userInfo);
+        }
     }
 }

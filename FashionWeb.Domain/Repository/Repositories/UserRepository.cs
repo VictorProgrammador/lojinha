@@ -18,7 +18,7 @@ namespace FashionWeb.Domain.Repository.Repositories
 
         public int Create(UserInfo entity)
         {
-            var insertUser = @"INSERT INTO [UserInfo] OUTPUT INSERTED.Id VALUES (@PersonId, @AspNetUserId, @UniqueId, @Password)";
+            var insertUser = @"INSERT INTO [UserInfo] OUTPUT INSERTED.Id VALUES (@PersonId, @AspNetUserId, @UniqueId, @Password, @Customer)";
             int id = 0;
 
             using (var db = _connectionFactory.GetConnection())
@@ -30,7 +30,8 @@ namespace FashionWeb.Domain.Repository.Repositories
                     PersonId = entity.PersonId,
                     AspNetUserId = entity.AspNetUserId,
                     UniqueId = entity.UniqueId,
-                    Password = entity.Password
+                    Password = entity.Password,
+                    Customer = entity.Customer
                 });
 
                 db.Close();
@@ -159,6 +160,23 @@ namespace FashionWeb.Domain.Repository.Repositories
             }
 
             return user;
+        }
+
+        public bool UpdateUserCustomer(UserInfo userInfo)
+        {
+            var queryUpdateUserCustomer = @"UPDATE UserInfo SET Customer = @Customer WHERE Id = @Id";
+            int result = 0;
+
+            using (var db = _connectionFactory.GetConnection())
+            {
+                db.Open();
+
+                result = db.ExecuteScalar<int>(queryUpdateUserCustomer, new { Customer = userInfo.Customer, Id = userInfo.Id });
+
+                db.Close();
+            }
+
+            return result > 0 ? true : false;
         }
     }
 }

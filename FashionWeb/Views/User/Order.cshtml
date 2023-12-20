@@ -95,6 +95,8 @@
                     <tr>
                         <th>Produto</th>
                         <th>Valor</th>
+                        <th>Cor</th>
+                        <th>Tamanho</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -102,6 +104,8 @@
                     <tr ng-repeat="orderProduct in order.orderProducts">
                         <td>{{ orderProduct.product.name }}</td>
                         <td>{{ orderProduct.product.value | currency:"R$" }}</td>
+                        <td>{{ orderProduct.color }}</td>
+                        <td>{{ orderProduct.tamanho }}</td>
                         <td><button class="btn btn-danger" ng-click="viewProduct(orderProduct.product.id)">Visualizar</button></td>
                     </tr>
                 </tbody>

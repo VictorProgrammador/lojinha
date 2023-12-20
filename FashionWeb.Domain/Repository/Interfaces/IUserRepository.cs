@@ -17,7 +17,7 @@ namespace FashionWeb.Domain.Repository.Interfaces
         void Delete(int id);
         void EmailConfirmed(string Id);
         bool VerifyEmailConfirmed(string Id);
-
         string GetAspNetUser(Guid Id);
+        bool UpdateUserCustomer(UserInfo userInfo);
     }
 }

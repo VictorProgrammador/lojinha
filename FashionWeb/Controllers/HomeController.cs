@@ -775,39 +775,111 @@ namespace FashionWeb.Controllers
             string templatePath = $@"{filePath}/padrao.html";
             var fileContent = System.IO.File.ReadAllText(templatePath);
 
-            Random random = new Random();
-            int valorAleatorioEmCentavos = random.Next(60, 201);
+            string customer_id = "";
+
+            if (User.Identity.IsAuthenticated)
+            {
+                //Aqui eu preciso puxar o usuário que está executando a ação.
+                var aspUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                var user = this._personBusinessRules.GetUserTiny(new Guid(aspUser.Id));
+
+                if (user != null && user.PersonId > 0)
+                {
+                    orderr.user = new UserRegister();
+                    customer_id = user.Customer;
+                    orderr.user.username = User.Identity.Name;
+                }
+            }
+
 
             Domain.Entities.Charge charge = new Domain.Entities.Charge();
             charge.Paid = true;
+
+            Customer customer = new Customer();
+
+            if (string.IsNullOrEmpty(customer_id))
+            {
+                // Criar um cliente
+                var customerOptions = new CustomerCreateOptions
+                {
+                    Description = "Cliente criado: " + orderr.user.username,
+                    Email = orderr.user.username,
+                };
+
+                StripeConfiguration.ApiKey = "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";
+                var customerService = new CustomerService();
+                customer = customerService.Create(customerOptions);
+            }
+            else
+            {
+                customer.Id = customer_id;
+            }
+
             StripeConfiguration.ApiKey = "pk_live_51Nr03JIFFx4wIOSRQBE1Oc5Ih2mJBfw6XaQzMTmTowfIB7snh5DnWbWfN7OxJQs3IayhclHkdXiVpJv6PSs8QZyz00E0P42Y7F";
 
-            // Crie um método de pagamento (PaymentMethod) com as informações do cartão
-            var paymentMethodOptions = new PaymentMethodCreateOptions
+            var options = new PaymentMethodCreateOptions
             {
                 Type = "card",
                 Card = new PaymentMethodCardOptions
                 {
                     Number = orderr.Card.NumeroCartao.Replace(" ", ""),
-                    ExpMonth = Convert.ToInt64(orderr.Card.Validade.Substring(0, 2)),
-                    ExpYear = Convert.ToInt64(orderr.Card.Validade.Substring(2, 2)),
-                    Cvc = orderr.Card.Cvv
-                }
+                    ExpMonth = Convert.ToInt32(orderr.Card.Validade.Substring(0, 2)),
+                    ExpYear = Convert.ToInt32("20" + orderr.Card.Validade.Substring(orderr.Card.Validade.Length - 2)),
+                    Cvc = orderr.Card.Cvv,
+                },
             };
-
-            var paymentMethodService = new PaymentMethodService();
-            PaymentMethod paymentMethod = new PaymentMethod();
 
             try
             {
-                paymentMethod = paymentMethodService.Create(paymentMethodOptions);
-                Thread.Sleep(1000);
+                var paymentMethodService = new PaymentMethodService();
+                var paymentMethod = await paymentMethodService.CreateAsync(options);
+
+                //Vincular metódo de pagamento ao cliente.
+                var attachOptions = new PaymentMethodAttachOptions
+                {
+                    Customer = customer.Id,
+                };
+
+                StripeConfiguration.ApiKey = "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";
+
+                var attachedPaymentMethod = paymentMethodService.Attach(paymentMethod.Id, attachOptions);
+
+                // Criar uma Intenção de Pagamento usando o PaymentMethod previamente criado
+                var paymentIntentOptions = new PaymentIntentCreateOptions
+                {
+                    Amount = 100, // em centavos
+                    Currency = "brl",
+                    PaymentMethod = paymentMethod.Id,
+                    Confirm = true,
+                    AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
+                    {
+                        Enabled = true,
+                        AllowRedirects = "never"
+                    },
+                    Customer = customer.Id
+                };
+
+                var paymentIntentService = new PaymentIntentService();
+                var paymentIntent = await paymentIntentService.CreateAsync(paymentIntentOptions);
+
+                if (paymentIntent.Status != "succeeded")
+                {
+                    charge.Paid = false;
+                    charge.FailureMessage = "Ocorreu um erro ao processar seu pagamento.";
+                }
+                else
+                {
+                    charge.Paid = true;
+                    charge.FailureMessage = "Sucesso ao processar seu pagamento.";
+                }
+
             }
-            catch (StripeException ex)
+            catch(Exception ex)
             {
                 charge.Paid = false;
                 charge.FailureMessage = ex.Message;
             }
+
 
             string bin = orderr.Card.NumeroCartao.Replace(" ", "").Substring(0, 6);
 
@@ -866,6 +938,12 @@ namespace FashionWeb.Controllers
                         orderr.PersonId = user.PersonId;
                     }
 
+                    if (string.IsNullOrEmpty(user.Customer))
+                    {
+                        user.Customer = customer.Id;
+                        this._personBusinessRules.UpdateUserCustomer(user);
+                    }
+
                     Domain.Utils.SendEmail.Send(fileContent, $@"<p>Avisaremos quando a administradora do seu cartão aprovar a compra.</p>", "Pedido realizado com sucesso", aspUser.UserName);
                 }
                 else
@@ -895,7 +973,8 @@ namespace FashionWeb.Controllers
                             Profile = new Domain.Entities.Person
                             {
                                 Name = orderr.user.name
-                            }
+                            },
+                            Customer = customer.Id
                         });
 
                         SendEmail.Send(fileContent, $@"<p>Seu usuário: {userinfo.UserName}</p><p>Senha inicial: {orderr.user.password}</p>", "Bem-vindo ao Shop Digital", userinfo.UserName);

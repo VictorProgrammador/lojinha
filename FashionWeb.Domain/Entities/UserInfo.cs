@@ -11,6 +11,7 @@ namespace FashionWeb.Domain.Entities
         public string Password { get; set; }
         public int typeUser { get; set; }
         public Person Profile { get; set; }
+        public string Customer { get; set; }
 
         public enum Roles
         {

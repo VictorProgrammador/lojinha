@@ -404,6 +404,8 @@
 
                 var orderProduct = {};
                 orderProduct.productId = data.product.id;
+                orderProduct.color = data.color;
+                orderProduct.tamanho = data.tamanho;
 
                 $scope.OrderEntity.orderProducts.push(orderProduct);
             });

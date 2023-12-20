@@ -1602,7 +1602,7 @@ namespace FashionWeb.Domain.Repository.Repositories
 
         public bool SaveOrderProduct(OrderProduct orderProduct)
         {
-            var insertOrderProduct = @"INSERT INTO [OrderProduct] VALUES (@OrderId, @ProductId)";
+            var insertOrderProduct = @"INSERT INTO [OrderProduct] VALUES (@OrderId, @ProductId, @Color, @Tamanho)";
             int id = 0;
 
             using (var db = _connectionFactory.GetConnection())
@@ -1612,7 +1612,9 @@ namespace FashionWeb.Domain.Repository.Repositories
                 id = db.Execute(insertOrderProduct, new
                 {
                     OrderId = orderProduct.OrderId,
-                    ProductId = orderProduct.ProductId
+                    ProductId = orderProduct.ProductId,
+                    Color = orderProduct.Color,
+                    Tamanho = orderProduct.Tamanho
                 });
 
                 db.Close();
@@ -1657,7 +1659,8 @@ namespace FashionWeb.Domain.Repository.Repositories
             {
                 var db = _connectionFactory.GetConnection();
 
-                var sql = @"SELECT OrderProduct.*,
+                var sql = @"SELECT OrderProduct.Color as 'Color',
+                                                        OrderProduct.Tamanho as 'Tamanho',
                                                         Product.Id,
                                                         Product.Name,
                                                         Product.Value
@@ -1670,7 +1673,7 @@ namespace FashionWeb.Domain.Repository.Repositories
                 {
                     OrderProduct.Product = Product;
                     return OrderProduct;
-                }, new { Id = Id }, splitOn: "ProductId").ToList();
+                }, new { Id = Id }).ToList();
 
             }
             catch (Exception ex)

@@ -15,5 +15,7 @@ namespace FashionWeb.Domain.BusinessRules
         bool UpdatePersonPhoto(int Id, string PhotoUrl);
         bool UpdatePersonBannerPhoto(int Id, string BannerUrl);
         UserInfo GetUserTiny(Guid AspNetUserId);
+        bool UpdateUserCustomer(UserInfo userInfo);
+
     }
 }
